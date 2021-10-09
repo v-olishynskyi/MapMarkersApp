@@ -1,0 +1,47 @@
+import * as React from 'react';
+import { StyleSheet } from 'react-native';
+import { Input, InputProps } from 'react-native-elements';
+
+const CustomTextInput = (props: InputProps) => {
+  return (
+    <Input
+      {...props}
+      label={props.label}
+      labelStyle={[styles.inputLabel, props.labelStyle]}
+      placeholder={props.placeholder}
+      inputStyle={[styles.inputStyle, props.inputStyle]}
+      inputContainerStyle={[
+        styles.inputContainerStyle,
+        props.inputContainerStyle,
+      ]}
+      containerStyle={styles.containerStyle}
+    />
+  );
+};
+
+export default CustomTextInput;
+
+const styles = StyleSheet.create({
+  containerStyle: { paddingHorizontal: 0 },
+  inputStyle: {
+    backgroundColor: '#fff',
+    paddingVertical: 16,
+    borderRadius: 8,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+
+    paddingHorizontal: 20,
+  },
+
+  inputContainerStyle: {
+    borderBottomWidth: 0,
+    marginHorizontal: 0,
+    paddingHorizontal: 0,
+  },
+  inputLabel: {
+    color: '#fff',
+    marginBottom: 10,
+    fontSize: 18,
+    letterSpacing: 0.6,
+  },
+});
