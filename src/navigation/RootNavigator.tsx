@@ -1,0 +1,87 @@
+import * as React from 'react';
+
+import { NavigationContainer } from '@react-navigation/native';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
+import { MainStackParamsList } from './types';
+import { StatusBar } from 'react-native';
+import Screens from '../screens';
+import TabNavigator from './TabNavigator';
+import ProfileSettingsNavigator from './ProfileSettingsNavigator';
+import { BackArrow } from '../components';
+import { hooks } from '../hooks';
+
+const MainStack = createStackNavigator<MainStackParamsList>();
+
+const RootNavigator = () => {
+  const navigation =
+    React.useRef<StackNavigationProp<MainStackParamsList>>(null);
+
+  const { mainStore } = hooks.useStores();
+
+  console.log('mainStore', mainStore);
+
+  React.useEffect(() => {
+    mainStore.getUserInstance().then(isAuth => {
+      if (isAuth) {
+        navigation.current!.navigate('Main');
+      }
+    });
+  });
+
+  return (
+    <NavigationContainer ref={navigation}>
+      <StatusBar barStyle="dark-content" backgroundColor={'#fff'} />
+      <MainStack.Navigator
+        // initialRouteName={'Main'}
+        screenOptions={{
+          headerBackImage: () => <BackArrow />,
+          headerBackTitleVisible: false,
+        }}>
+        <MainStack.Screen
+          name="SignIn"
+          component={Screens.SignIn}
+          options={{
+            headerShown: false,
+            cardStyle: { backgroundColor: '#fff' },
+          }}
+        />
+        <MainStack.Screen
+          name="SignUp"
+          component={Screens.SignUp}
+          options={{
+            headerShown: false,
+            cardStyle: { backgroundColor: '#fff' },
+          }}
+        />
+
+        <MainStack.Screen
+          name="ProfileSettings"
+          component={ProfileSettingsNavigator}
+          options={{ headerShown: false }}
+        />
+
+        <MainStack.Screen
+          name="Comments"
+          component={Screens.Comments}
+          options={{ headerTitle: 'Коментарі', headerTitleAlign: 'center' }}
+        />
+        <MainStack.Screen
+          name="Comment"
+          component={Screens.Comment}
+          options={{ headerTitle: 'Коментар', headerTitleAlign: 'center' }}
+        />
+
+        <MainStack.Screen
+          name="Main"
+          component={TabNavigator}
+          options={{ headerShown: false }}
+        />
+      </MainStack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default RootNavigator;
