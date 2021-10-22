@@ -8,7 +8,6 @@ import { CustomButton } from '../../components/buttons';
 import { CustomTextInput } from '../../components/inputs';
 import { hooks } from '../../hooks';
 import { ProfileSettings } from '../../navigation/types';
-import { wait } from '../../utils/wait';
 
 type Navigation = StackNavigationProp<ProfileSettings>;
 
@@ -16,16 +15,27 @@ const ProfileSettingsScreen = () => {
   const navigation = useNavigation<Navigation>();
 
   const { mainStore } = hooks.useStores();
+  const { user } = mainStore;
 
   const [loadingSave, setLoadingSave] = React.useState(false);
 
+  const [name, setName] = React.useState(user!.name || '');
+  const [familyName, setFamilyName] = React.useState(user!.family_name || '');
+
   const handlePressSave = async () => {
-    setLoadingSave(true);
+    try {
+      setLoadingSave(true);
 
-    await wait(3000);
-    navigation.goBack();
+      user!.setName(name);
+      user!.setFamilyName(familyName);
 
-    setLoadingSave(false);
+      await user!.update(['name', 'family_name']);
+      navigation.goBack();
+
+      setLoadingSave(false);
+    } catch (error) {
+      console.log('erorr', error);
+    }
   };
 
   return (
@@ -49,14 +59,16 @@ const ProfileSettingsScreen = () => {
             placeholder={`Ім'я`}
             labelStyle={{ color: 'gray' }}
             inputStyle={{ borderWidth: 1 }}
-            value={mainStore.user?.name}
+            value={name}
+            onChangeText={setName}
           />
           <CustomTextInput
             label={`Прізвище`}
             placeholder={`Прізвище`}
             labelStyle={{ color: 'gray' }}
             inputStyle={{ borderWidth: 1 }}
-            value={mainStore.user?.family_name}
+            value={familyName}
+            onChangeText={setFamilyName}
           />
           <CustomTextInput
             label={`Електронна пошта`}
