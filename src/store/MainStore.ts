@@ -1,13 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { action, computed, makeObservable, observable } from 'mobx';
-
-type UserModel = {
-  username: string;
-  name: string;
-  family_name: string;
-  email: string;
-};
-
+import { action, makeObservable, observable } from 'mobx';
+import { UserModel } from '../models/UserModel';
 export class MainStore {
   user: UserModel | null = null;
 
@@ -16,24 +9,28 @@ export class MainStore {
       user: observable,
       setUser: action,
 
-      updateUser: action,
+      getUserInstance: action,
     });
   }
 
   setUser = (user: UserModel) => {
-    this.user = { ...user };
+    this.user = user;
   };
 
   getUserInstance = async () => {
     try {
+      // @ts-ignore
       const isAuth: boolean = JSON.parse(await AsyncStorage.getItem('isAuth'));
 
       if (isAuth) {
         const currentAuthenticatedUser: UserModel = JSON.parse(
+          // @ts-ignore
           await AsyncStorage.getItem('currentAuthenticatedUser'),
         );
 
-        this.setUser(currentAuthenticatedUser);
+        const user = new UserModel(currentAuthenticatedUser);
+
+        this.setUser(user);
       }
 
       return isAuth;
@@ -41,6 +38,4 @@ export class MainStore {
       console.log('error getUserInstance', { error });
     }
   };
-
-  updateUser = async input => {};
 }

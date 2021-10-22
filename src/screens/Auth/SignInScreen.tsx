@@ -51,6 +51,15 @@ const SignInScreen = () => {
       await mainStore.getUserInstance();
       navigation.navigate('Main', { screen: 'КАРТА' });
 
+      if (rememberMe) {
+        await AsyncStorage.setItem(
+          'authData',
+          JSON.stringify({
+            email: authStore.email,
+            password: authStore.password,
+          }),
+        );
+      }
       !rememberMe && authStore.clear();
       setLoadinSignIn(false);
     } catch (error) {
@@ -70,15 +79,25 @@ const SignInScreen = () => {
 
   React.useEffect(() => {
     (async function () {
-      const result = await checkIfRememberUserLogin();
+      try {
+        const result = await checkIfRememberUserLogin();
 
-      if (result) {
-        setRememberMe(result);
+        if (result) {
+          setRememberMe(result);
+          const authData: { email: string; password: string } = JSON.parse(
+            await AsyncStorage.getItem('authData'),
+          );
+
+          if (authData) {
+            authStore.setEmail(authData.email);
+            authStore.setPassword(authData.password);
+          }
+        }
+      } catch (error) {
+        console.log('error', error);
       }
     })();
-  }, []);
 
-  React.useEffect(() => {
     StatusBar.setBarStyle('light-content');
   }, []);
 

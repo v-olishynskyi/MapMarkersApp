@@ -103,6 +103,7 @@ export default class AuthStore {
   fakeSignIn = async () => {
     const { email, password } = this;
     let users: [{ email: string; password: string }] | null = JSON.parse(
+      //@ts-ignore
       await AsyncStorage.getItem('users'),
     );
 
@@ -144,16 +145,22 @@ export default class AuthStore {
 
   fakeSignUp = async () => {
     try {
-      const { email, password, name, family_name } = this;
+      const { email, password, name, family_name, username } = this;
 
-      const data = { email, password, name, family_name };
+      const data = { email, password, name, family_name, username };
       let users: [{ email: string; password: string }] | null = JSON.parse(
+        //@ts-ignore
         await AsyncStorage.getItem('users'),
       );
 
       if (!users) {
         users = [{ ...data }];
         await AsyncStorage.setItem('users', JSON.stringify(users));
+
+        await AsyncStorage.multiSet([
+          ['currentAuthenticatedUser', JSON.stringify(data)],
+          ['isAuth', JSON.stringify(true)],
+        ]);
         return;
       }
 
@@ -163,11 +170,13 @@ export default class AuthStore {
         throw new Error('EmailExistsException');
       }
 
-      await AsyncStorage.setItem(
-        'users',
-        JSON.stringify([...users, { ...data }]),
-      );
+      await AsyncStorage.multiSet([
+        ['users', JSON.stringify([...users, { ...data }])],
+        ['currentAuthenticatedUser', JSON.stringify(data)],
+        ['isAuth', JSON.stringify(true)],
+      ]);
 
+      //@ts-ignore
       console.log('USERS', JSON.parse(await AsyncStorage.getItem('users')));
     } catch (error) {
       console.log('error sign up', { error });

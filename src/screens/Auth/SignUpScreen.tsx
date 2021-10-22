@@ -18,7 +18,7 @@ type Navigation = StackNavigationProp<MainStackParamsList>;
 
 const SignUpScreen = () => {
   const navigation = useNavigation<Navigation>();
-  const { authStore } = hooks.useStores();
+  const { authStore, mainStore } = hooks.useStores();
 
   const [loadingSignUp, setLoadingSignUp] = React.useState(false);
 
@@ -28,6 +28,10 @@ const SignUpScreen = () => {
 
       await authStore.fakeSignUp();
       authStore.setIsAuth(true);
+      console.log('authStot', authStore);
+      console.log('mainStore', mainStore);
+
+      await mainStore.getUserInstance();
       navigation.navigate('Main', { screen: 'КАРТА' });
 
       authStore.clear();
