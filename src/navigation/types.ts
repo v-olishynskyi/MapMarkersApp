@@ -5,6 +5,7 @@ export type MainStackParamsList = {
   ProfileSettings: undefined;
   Comments: undefined;
   Comment: { commentId: string };
+  Markers: undefined;
 
   Main: undefined;
 };

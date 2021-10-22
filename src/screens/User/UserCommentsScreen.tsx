@@ -42,7 +42,7 @@ const Comment = ({ item }) => {
           title={`CW`}
           titleStyle={{ color: '#fff' }}
           containerStyle={{ backgroundColor: 'gray' }}
-          // source={require('../../../assets/BluredMap.jpg')}
+          source={{ uri: 'https://picsum.photos/200/300' }}
         />
         <View style={{ flexDirection: 'column' }}>
           <Text style={{ fontSize: 18, marginBottom: 6 }}>{name}</Text>

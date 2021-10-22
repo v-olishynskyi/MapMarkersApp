@@ -21,8 +21,6 @@ const RootNavigator = () => {
 
   const { mainStore } = hooks.useStores();
 
-  console.log('mainStore', mainStore);
-
   React.useEffect(() => {
     mainStore.getUserInstance().then(isAuth => {
       if (isAuth) {
@@ -35,7 +33,6 @@ const RootNavigator = () => {
     <NavigationContainer ref={navigation}>
       <StatusBar barStyle="dark-content" backgroundColor={'#fff'} />
       <MainStack.Navigator
-        // initialRouteName={'Main'}
         screenOptions={{
           headerBackImage: () => <BackArrow />,
           headerBackTitleVisible: false,
@@ -68,9 +65,16 @@ const RootNavigator = () => {
           component={Screens.Comments}
           options={{ headerTitle: 'Коментарі', headerTitleAlign: 'center' }}
         />
+
+        <MainStack.Screen
+          name="Markers"
+          component={Screens.Markers}
+          options={{ headerTitle: 'Маркери', headerTitleAlign: 'center' }}
+        />
+
         <MainStack.Screen
           name="Comment"
-          component={Screens.Comment}
+          component={Screens.Comments}
           options={{ headerTitle: 'Коментар', headerTitleAlign: 'center' }}
         />
 

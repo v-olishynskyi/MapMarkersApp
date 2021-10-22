@@ -5,6 +5,7 @@ import SignUpScreen from './Auth/SignUpScreen';
 import ProfileSettingsScreen from './ProfileSettings/PanelScreen';
 import UserCommentsScreen from './User/UserCommentsScreen';
 import CommentScreen from './User/CommentScreen';
+import UserMarkersScreen from './User/UserMarkersScreen';
 
 const Screens = {
   // Auth
@@ -14,6 +15,7 @@ const Screens = {
   // user
   Comments: UserCommentsScreen,
   Comment: CommentScreen,
+  Markers: UserMarkersScreen,
 };
 
 const TabScreen = {
