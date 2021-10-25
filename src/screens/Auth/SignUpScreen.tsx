@@ -13,6 +13,7 @@ import { MainStackParamsList } from '../../navigation/types';
 import { theme } from '../../theme';
 import * as MobX from 'mobx-react-lite';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { IS_ANDROID } from '../../utils/constants';
 
 type Navigation = StackNavigationProp<MainStackParamsList>;
 
@@ -49,6 +50,7 @@ const SignUpScreen = () => {
 
   React.useEffect(() => {
     StatusBar.setBarStyle('light-content');
+    IS_ANDROID && StatusBar.setBackgroundColor('#000');
   }, []);
 
   return (

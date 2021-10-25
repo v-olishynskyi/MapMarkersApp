@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 import { Coordinates } from '../types';
 import { Marker } from './models';
 import { UserModel } from './UserModel';
@@ -26,6 +26,10 @@ export class MarkerModel {
       setName: action,
       setDescription: action,
       setAuthor: action,
+      setId: action,
+
+      coordinates: computed,
+      coordinatesString: computed,
     });
 
     this.id = marker.id;
@@ -36,24 +40,40 @@ export class MarkerModel {
     this.author = marker.author;
   }
 
-  setCoordinates({ latitude, longitude }: Coordinates) {
+  setCoordinates = ({ latitude, longitude }: Coordinates) => {
     this.latitude = latitude;
     this.longitude = longitude;
-  }
+  };
 
-  setName(name: string) {
+  setName = (name: string) => {
     this.name = name;
-  }
+    console.log('this.name', this.name);
+  };
 
-  setDescription(description: string) {
+  setDescription = (description: string) => {
     this.description = description;
-  }
+  };
 
-  setAuthor(author: UserModel) {
+  setAuthor = (author: UserModel) => {
     this.author = author;
-  }
+  };
+
+  setId = (id: string) => {
+    this.id = id;
+  };
 
   static create(input: Marker) {
     return new MarkerModel(input);
+  }
+
+  get coordinatesString() {
+    return `${this.latitude}, ${this.longitude}`;
+  }
+
+  get coordinates() {
+    return {
+      latitude: this.latitude,
+      longitude: this.longitude,
+    };
   }
 }

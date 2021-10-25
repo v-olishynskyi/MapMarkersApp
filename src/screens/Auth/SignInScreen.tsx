@@ -19,6 +19,7 @@ import { MainStackParamsList } from '../../navigation/types';
 import { theme } from '../../theme';
 import { wait } from '../../utils/wait';
 import * as MobX from 'mobx-react-lite';
+import { IS_ANDROID } from '../../utils/constants';
 
 const checkIfRememberUserLogin = async () => {
   const deviceRememberMe = JSON.parse(
@@ -99,6 +100,7 @@ const SignInScreen = () => {
     })();
 
     StatusBar.setBarStyle('light-content');
+    IS_ANDROID && StatusBar.setBackgroundColor('#000');
   }, []);
 
   return (

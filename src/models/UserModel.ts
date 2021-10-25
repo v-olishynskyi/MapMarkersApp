@@ -75,8 +75,6 @@ export class UserModel {
   }
 
   get fullName() {
-    console.log('THIS?', this);
-
     return `${this.name || ''} ${this.family_name || ''}`;
   }
 

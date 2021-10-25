@@ -4,9 +4,10 @@ import { Icon } from 'react-native-elements';
 
 import { MainStackParamsList, TabParamsList } from './types';
 import { TabScreen as Screen } from '../screens';
-import { View } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { IS_ANDROID } from '../utils/constants';
 
 const Tabs = createBottomTabNavigator<TabParamsList>();
 
@@ -18,6 +19,11 @@ const TabNavigator = () => {
   const handlePressProfileSettings = () => {
     navigation.push('ProfileSettings');
   };
+
+  React.useEffect(() => {
+    StatusBar.setBarStyle('dark-content');
+    IS_ANDROID && StatusBar.setBackgroundColor('#fff');
+  }, []);
 
   return (
     <Tabs.Navigator initialRouteName={'ПРОФІЛЬ'}>
