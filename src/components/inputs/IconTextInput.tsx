@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { Input, InputProps } from 'react-native-elements';
 
 const CustomIconTextInput = (props: InputProps) => {
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   rightIconStyle: {
     backgroundColor: '#fff',
-    height: 54,
+    height: Platform.OS === 'ios' ? 54 : 60,
     borderTopRightRadius: 8,
     borderBottomRightRadius: 8,
     paddingRight: 20,
