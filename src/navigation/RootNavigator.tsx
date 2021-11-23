@@ -19,14 +19,17 @@ const RootNavigator = () => {
   const navigation =
     React.useRef<StackNavigationProp<MainStackParamsList>>(null);
 
-  const { mainStore } = hooks.useStores();
+  const { mainStore, dataStore } = hooks.useStores();
 
   React.useEffect(() => {
-    mainStore.getUserInstance().then(isAuth => {
-      if (isAuth) {
-        navigation.current!.navigate('Main');
-      }
-    });
+    mainStore
+      .getUserInstance()
+      .then(isAuth => {
+        if (isAuth) {
+          navigation.current!.navigate('Main');
+        }
+      })
+      .then(async () => await dataStore.loadMarkers());
   });
 
   return (
@@ -51,6 +54,17 @@ const RootNavigator = () => {
           options={{
             headerShown: false,
             cardStyle: { backgroundColor: '#fff' },
+          }}
+        />
+        <MainStack.Screen
+          name="ConfirmAccount"
+          component={Screens.ConfirmAccount}
+          options={{
+            title: 'Підтвердження',
+            headerTintColor: '#fff',
+            headerTransparent: true,
+            cardStyle: { backgroundColor: '#fff' },
+            headerBackImage: () => <BackArrow color={'#fff'} />,
           }}
         />
 
@@ -81,7 +95,7 @@ const RootNavigator = () => {
         <MainStack.Screen
           name="Main"
           component={TabNavigator}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, gestureEnabled: false }}
         />
       </MainStack.Navigator>
     </NavigationContainer>

@@ -1,13 +1,16 @@
 export type MainStackParamsList = {
   SignIn: undefined;
   SignUp: undefined;
+  ConfirmAccount: undefined;
 
   ProfileSettings: undefined;
   Comments: undefined;
   Comment: { commentId: string };
   Markers: undefined;
 
-  Main: undefined;
+  Main?: {
+    screen?: string;
+  };
 };
 
 export type TabParamsList = {

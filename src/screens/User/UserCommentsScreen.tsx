@@ -13,27 +13,6 @@ const Comment = ({ item }) => {
   const name = `${nameArr[0]} ${nameArr[nameArr.length - 1]}`;
 
   return (
-    // <ListItem
-    //   bottomDivider
-    //   // onPress={() => goToComment(item.postId)}
-    // >
-    //   <Avatar
-    //     rounded
-    //     size="medium"
-    //     title={`${name.split(' ')[0].split('')[0].toUpperCase()}${name
-    //       .split(' ')[1]
-    //       .split('')[0]
-    //       .toUpperCase()}`}
-    //     titleStyle={{ color: '#fff' }}
-    //     containerStyle={{ backgroundColor: 'gray' }}
-    //     // source={require('../../../assets/BluredMap.jpg')}
-    //   />
-    //   <ListItem.Content>
-    //     <ListItem.Subtitle>{name}</ListItem.Subtitle>
-    //     <ListItem.Title>{item.body}</ListItem.Title>
-    //   </ListItem.Content>
-    //   <ListItem.Chevron />
-    // </ListItem>
     <>
       <ListItem>
         <Avatar

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import MapView from 'react-native-map-clustering';
 import { PROVIDER_GOOGLE, MapViewProps } from 'react-native-maps';
 import { CustomMarker } from '.';
@@ -29,8 +29,7 @@ const GoogleMapsMain = React.forwardRef(
                 latitude: marker.latitude,
                 longitude: marker.longitude,
               }}
-              title={marker.name}
-              description={marker.description}
+              marker={marker}
             />
           ))}
           {props.children}

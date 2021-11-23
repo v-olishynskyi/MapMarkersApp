@@ -3,11 +3,13 @@ import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Observer } from 'mobx-react-lite';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Avatar, Icon, ListItem, Text } from 'react-native-elements';
+import { Icon, ListItem, Text } from 'react-native-elements';
 import { Divider } from 'react-native-elements';
-import { CustomPressable } from '../../components/buttons';
+import { CustomButton, CustomPressable } from '../../components/buttons';
 import { hooks } from '../../hooks';
 import { MainStackParamsList } from '../../navigation/types';
+import AvatarImage from '../../components/images/Avatar';
+import auth from '@react-native-firebase/auth';
 
 type Navigation = StackNavigationProp<MainStackParamsList>;
 
@@ -18,27 +20,29 @@ const ProfileScreen = () => {
 
   const { user } = mainStore;
 
-  const goToComments = () => {
+  const goToComments = async () => {
     navigation.push('Comments');
-    // const marker = MarkerModel.create({
-    //   id: randomUUID,
-    //   author: user!,
-    //   latitude: 11.11111,
-    //   longitude: 22.222222,
-    //   name: 'Test',
-    //   description: 'qweqweqeqeq',
-    // });
-    // console.log(marker);
-    // user!.addMarker(marker);
   };
 
-  const goToMarkers = () => {
+  const goToMarkers = async () => {
     navigation.push('Markers');
   };
 
   const handlePressSignOut = async () => {
-    await authStore.fakeSignOut();
-    navigation.navigate('SignIn');
+    try {
+      await authStore.signOut();
+
+      navigation.navigate('SignIn');
+    } catch (error) {
+      console.log('handlePressSignOut error', { error });
+    }
+  };
+
+  const test = async () => {
+    try {
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
   return (
@@ -47,27 +51,23 @@ const ProfileScreen = () => {
         return (
           <ScrollView style={styles.container}>
             <View style={styles.avatarBlock}>
-              <Avatar
-                rounded
-                size="xlarge"
+              <AvatarImage
                 title={`${user!.name.charAt(0).toUpperCase()}${user!.family_name
                   .charAt(0)
                   .toUpperCase()}`}
-                titleStyle={{ color: '#fff' }}
-                containerStyle={{ backgroundColor: 'gray' }}
-                source={{ uri: 'https://picsum.photos/200/300' }}
+                uri={'https://picsum.photos/200/300'}
+                size={'xlarge'}
               />
             </View>
             <View style={styles.name}>
-              <Text h2 style={{ textAlign: 'center', marginBottom: 10 }}>
+              <Text h2 style={styles.fullname}>
                 {`${mainStore.user?.name} ${mainStore.user?.family_name}`}
               </Text>
-              <Text style={{ textAlign: 'center', color: 'gray' }}>
-                {mainStore.user?.email}
-              </Text>
+              <Text style={styles.email}>{mainStore.user?.email}</Text>
             </View>
             <Divider />
             <View style={styles.contentContainer}>
+              {/* <CustomButton title={'Test 1'} onPress={test} /> */}
               <CustomPressable onPress={goToMarkers}>
                 <ListItem
                   containerStyle={{ paddingHorizontal: 0 }}
@@ -87,7 +87,7 @@ const ProfileScreen = () => {
                   <ListItem.Content>
                     <ListItem.Title>Коментарі</ListItem.Title>
                   </ListItem.Content>
-                  <Text>10</Text>
+                  <Text>0</Text>
                   <ListItem.Chevron size={22} />
                 </ListItem>
               </CustomPressable>
@@ -126,4 +126,6 @@ const styles = StyleSheet.create({
   name: {
     marginBottom: 20,
   },
+  fullname: { textAlign: 'center', marginBottom: 10 },
+  email: { textAlign: 'center', color: 'gray' },
 });

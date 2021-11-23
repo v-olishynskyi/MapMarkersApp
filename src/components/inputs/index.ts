@@ -1,4 +1,4 @@
-import CustomTextInput from './TextInput';
+import Input from './TextInput';
 import CustomIconTextInput from './IconTextInput';
 
-export { CustomTextInput, CustomIconTextInput };
+export { Input, CustomIconTextInput };

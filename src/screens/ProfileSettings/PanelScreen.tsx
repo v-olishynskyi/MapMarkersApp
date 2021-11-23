@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CustomButton } from '../../components/buttons';
-import { CustomTextInput } from '../../components/inputs';
+import { Input } from '../../components/inputs';
 import { hooks } from '../../hooks';
 import { ProfileSettings } from '../../navigation/types';
 
@@ -54,7 +54,7 @@ const ProfileSettingsScreen = () => {
           </Avatar>
         </View>
         <View>
-          <CustomTextInput
+          <Input
             label={`Ім'я`}
             placeholder={`Ім'я`}
             labelStyle={{ color: 'gray' }}
@@ -62,7 +62,7 @@ const ProfileSettingsScreen = () => {
             value={name}
             onChangeText={setName}
           />
-          <CustomTextInput
+          <Input
             label={`Прізвище`}
             placeholder={`Прізвище`}
             labelStyle={{ color: 'gray' }}
@@ -70,7 +70,7 @@ const ProfileSettingsScreen = () => {
             value={familyName}
             onChangeText={setFamilyName}
           />
-          <CustomTextInput
+          <Input
             label={`Електронна пошта`}
             placeholder={`Email`}
             labelStyle={{ color: 'gray' }}
@@ -82,7 +82,10 @@ const ProfileSettingsScreen = () => {
       </KeyboardAwareScrollView>
       <CustomButton
         title="Зберегти"
-        buttonStyle={{ marginBottom: 50, marginHorizontal: 16 }}
+        buttonStyle={{
+          marginBottom: 50,
+          marginHorizontal: 16,
+        }}
         onPress={handlePressSave}
         loading={loadingSave}
         disabled={loadingSave}

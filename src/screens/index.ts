@@ -6,11 +6,13 @@ import ProfileSettingsScreen from './ProfileSettings/PanelScreen';
 import UserCommentsScreen from './User/UserCommentsScreen';
 import CommentScreen from './User/CommentScreen';
 import UserMarkersScreen from './User/UserMarkersScreen';
+import ConfirmAccountScreen from './Auth/ConfirmAccountScreen';
 
 const Screens = {
   // Auth
   SignIn: SignInScreen,
   SignUp: SignUpScreen,
+  ConfirmAccount: ConfirmAccountScreen,
 
   // user
   Comments: UserCommentsScreen,
