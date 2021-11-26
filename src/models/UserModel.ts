@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   action,
   computed,
@@ -8,19 +7,27 @@ import {
 } from 'mobx';
 import { User, Gender } from './models';
 import { MarkerModel } from './MarkerModel';
+import { Response } from '../types';
+import { api } from '../api';
 
-type UpdatedFields = Pick<User, 'family_name' | 'gender' | 'name' | 'username'>;
+type UpdatedFields = Pick<User, 'family_name' | 'gender' | 'name'>;
 
 export class UserModel {
-  readonly email: User['email'] = '';
-  readonly username: User['username'] = '';
+  id: User['_id'] = '';
+  email: User['email'] = '';
+  username: User['username'] = '';
   name: User['name'] = '';
   family_name: User['family_name'] = '';
   gender: User['gender'] = Gender.EMPTY;
-  markers: User['markers'] = observable<MarkerModel>([]);
-  avatar: User['avatar'] = '';
+  markers: MarkerModel[] = observable<MarkerModel>([]);
+  avatar?: User['avatar'] = '';
+  createdAt?: User['createdAt'];
+  updatedAt?: User['updatedAt'];
 
   constructor(user: User) {
+    this.id = user._id;
+    this.handleResponse(user);
+
     makeObservable(this, {
       name: observable,
       family_name: observable,
@@ -37,13 +44,36 @@ export class UserModel {
 
       markersCount: computed,
       fullName: computed,
+      updatedData: computed,
     });
-    this.email = user.email;
-    this.name = user.name;
-    this.family_name = user.family_name;
-    this.username = user.username;
-    this.gender = user.gender;
-    this.avatar = user.avatar;
+  }
+
+  private handleResponse(user: User) {
+    if (user.email) {
+      this.email = user.email;
+    }
+    if (user.username) {
+      this.username = user.username;
+    }
+    if (user.name) {
+      this.name = user.name;
+    }
+    if (user.family_name) {
+      this.family_name = user.family_name;
+    }
+    if (user.gender) {
+      this.gender = user.gender;
+    }
+    if (user.createdAt) {
+      this.createdAt = user.createdAt;
+    }
+    if (user.updatedAt) {
+      this.updatedAt = user.updatedAt;
+    }
+    if (user.markers) {
+      const markers = user.markers.map(marker => new MarkerModel(marker));
+      this.markers = markers;
+    }
   }
 
   setName(name: string) {
@@ -78,24 +108,24 @@ export class UserModel {
     return `${this.name || ''} ${this.family_name || ''}`;
   }
 
-  async update(params: Array<keyof User>) {
-    try {
-      const data: UpdatedFields | {} = params.reduce((acc, key) => {
-        //@ts-ignore
-        acc[key] = this[key];
-        return acc;
-      }, {});
+  get updatedData(): UpdatedFields {
+    return {
+      name: this.name,
+      family_name: this.family_name,
+    };
+  }
 
-      const user = JSON.parse(
-        //@ts-ignore
-        await AsyncStorage.getItem('currentAuthenticatedUser'),
-      );
-      await AsyncStorage.setItem(
-        'currentAuthenticatedUser',
-        JSON.stringify({ ...user, ...data }),
-      );
-    } catch (error) {
-      console.log('user update error', error);
-    }
+  async update(input: Array<keyof User>) {
+    const userData: Partial<UpdatedFields> & { id: string } = input.reduce(
+      (data: Partial<UpdatedFields> & { id: string }, item: string) => {
+        data[item] = this[item];
+        return data;
+      },
+      { id: this.id },
+    );
+
+    console.log('userData', userData);
+
+    // const response: Response<User, 'user'> = await api.updateUser(input);
   }
 }

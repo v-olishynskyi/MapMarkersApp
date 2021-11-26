@@ -1,21 +1,38 @@
-import { useDimensions } from '@react-native-community/hooks';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as React from 'react';
-import { View, StyleSheet, ImageBackground, StatusBar } from 'react-native';
-import { Text, Icon } from 'react-native-elements';
+import {
+  View,
+  StyleSheet,
+  ImageBackground,
+  StatusBar,
+  ScrollView,
+} from 'react-native';
+import { Text } from 'react-native-elements';
 import { Button } from 'react-native-elements/dist/buttons/Button';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CustomButton } from '../../components/buttons';
-import { CustomIconTextInput, CustomTextInput } from '../../components/inputs';
+import { Input } from '../../components/inputs';
 import { hooks } from '../../hooks';
 import { MainStackParamsList } from '../../navigation/types';
 import { theme } from '../../theme';
 import * as MobX from 'mobx-react-lite';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { IS_ANDROID } from '../../utils/constants';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FirebaseAuthErrorsCode } from '../../store/ErrorStore';
 
 type Navigation = StackNavigationProp<MainStackParamsList>;
+
+const SignUpSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required('Required'),
+  username: Yup.string().required('Required'),
+  name: Yup.string().required('Required'),
+  family_name: Yup.string().required('Required'),
+  password: Yup.string().min(6, 'Too short').required('Required'),
+  confirm_password: Yup.string().min(6, 'Too short').required('Required'),
+});
 
 const SignUpScreen = () => {
   const navigation = useNavigation<Navigation>();
@@ -25,24 +42,52 @@ const SignUpScreen = () => {
 
   const handlePressSignUp = async () => {
     try {
+      if (authStore.password !== authStore.confirmPassword) {
+        formik.setErrors({
+          password: 'Пароли не совпадают',
+          confirm_password: 'Пароли не совпадают',
+        });
+        return;
+      }
       setLoadingSignUp(true);
 
-      await authStore.fakeSignUp();
-      authStore.setIsAuth(true);
-      console.log('authStot', authStore);
-      console.log('mainStore', mainStore);
-
+      await authStore.signUp();
       await mainStore.getUserInstance();
       navigation.navigate('Main', { screen: 'КАРТА' });
 
       authStore.clear();
       setLoadingSignUp(false);
     } catch (error) {
-      console.log('ERORR', { error });
+      console.log('ERORR', error);
+      if (error.code) {
+        const errorCode: FirebaseAuthErrorsCode = error.code;
+        switch (errorCode) {
+          case 'auth/email-already-in-use':
+            formik.setErrors({ email: 'Email already in use' });
+            break;
+
+          default:
+            break;
+        }
+      }
 
       setLoadingSignUp(false);
     }
   };
+
+  const formik = useFormik({
+    initialValues: {
+      username: authStore.username,
+      name: authStore.name,
+      family_name: authStore.family_name,
+      email: authStore.email,
+      password: authStore.password,
+      confirm_password: authStore.confirmPassword,
+    },
+    validationSchema: SignUpSchema,
+    onSubmit: handlePressSignUp,
+    validateOnBlur: true,
+  });
 
   const goToSignIn = () => {
     navigation.navigate('SignIn');
@@ -53,142 +98,130 @@ const SignUpScreen = () => {
     IS_ANDROID && StatusBar.setBackgroundColor('#000');
   }, []);
 
+  const handleChangeInput =
+    (
+      field:
+        | 'username'
+        | 'name'
+        | 'family_name'
+        | 'email'
+        | 'password'
+        | 'confirm_password',
+    ) =>
+    (value: string) => {
+      formik.handleChange(field)(value);
+
+      switch (field) {
+        case 'username':
+          authStore.setUsername(value);
+          break;
+        case 'name':
+          authStore.setName(value);
+          break;
+        case 'family_name':
+          authStore.setFamilyName(value);
+          break;
+        case 'email':
+          authStore.setEmail(value);
+          break;
+        case 'password':
+          authStore.setPassword(value);
+          break;
+        case 'confirm_password':
+          authStore.setConfirmPassword(value);
+          break;
+
+        default:
+          break;
+      }
+    };
+
   return (
     <MobX.Observer
       render={() => {
         return (
           <ImageBackground
             source={require('../../../assets/BluredMap.jpg')}
-            style={{ width: '100%', height: '100%' }}
+            style={styles.fullSize}
             resizeMode="cover">
-            <KeyboardAwareScrollView
-              style={styles.container}
-              contentContainerStyle={{
-                paddingTop: getStatusBarHeight(),
-                // width: '100%',
-                // height: '100%',
-              }}>
-              <View style={styles.loginFormContainer}>
-                <View style={styles.loginForm}>
-                  <Text h1 h1Style={styles.title}>
-                    Signup
-                  </Text>
-                  <CustomTextInput
-                    label={'User name'}
-                    placeholder={'User name'}
-                    onChangeText={authStore.setUsername}
-                    value={authStore.username}
-                  />
-                  <CustomTextInput
-                    label={'Name'}
-                    placeholder={'Name'}
-                    onChangeText={authStore.setName}
-                    value={authStore.name}
-                  />
-                  <CustomTextInput
-                    label={'Family name'}
-                    placeholder={'Family name'}
-                    onChangeText={authStore.setFamilyName}
-                    value={authStore.family_name}
-                  />
-                  <CustomTextInput
-                    label={'Email'}
-                    placeholder={'Email Address'}
-                    onChangeText={authStore.setEmail}
-                    value={authStore.email}
-                  />
-                  <CustomIconTextInput
-                    label={'Password'}
-                    placeholder={'Password'}
-                    rightIcon={
-                      <Icon
-                        name="eye"
-                        type="font-awesome-5"
-                        color={'gray'}
-                        onPress={() => {}}
+            <SafeAreaView>
+              <ScrollView>
+                <KeyboardAwareScrollView>
+                  <View style={styles.loginFormContainer}>
+                    <View style={styles.loginForm}>
+                      <Text h1 h1Style={styles.title}>
+                        Signup
+                      </Text>
+                      <Input
+                        label={'User name'}
+                        placeholder={'User name'}
+                        onChangeText={handleChangeInput('username')}
+                        value={formik.values.username}
+                        errorMessage={formik.errors?.username}
                       />
-                    }
-                    secureTextEntry
-                    onChangeText={authStore.setPassword}
-                    value={authStore.password}
-                  />
-                  <CustomIconTextInput
-                    label={'Confirm password'}
-                    placeholder={'Confirm password'}
-                    rightIcon={
-                      <Icon
-                        name="eye"
-                        type="font-awesome-5"
-                        color={'gray'}
-                        onPress={() => {}}
+                      <Input
+                        label={'Name'}
+                        placeholder={'Name'}
+                        onChangeText={handleChangeInput('name')}
+                        value={formik.values.name}
+                        errorMessage={formik.errors?.name}
                       />
-                    }
-                    secureTextEntry
-                    inputContainerStyle={{ marginBottom: 20 }}
-                    onChangeText={authStore.setConfirmPassword}
-                    value={authStore.confirmPassword}
-                  />
+                      <Input
+                        label={'Family name'}
+                        placeholder={'Family name'}
+                        onChangeText={handleChangeInput('family_name')}
+                        value={formik.values.family_name}
+                        errorMessage={formik.errors?.family_name}
+                      />
+                      <Input
+                        label={'Email'}
+                        placeholder={'Email Address'}
+                        onChangeText={handleChangeInput('email')}
+                        value={formik.values.email}
+                        errorMessage={formik.errors?.email}
+                      />
+                      <Input
+                        label={'Password'}
+                        placeholder={'Password'}
+                        secureTextEntry
+                        onChangeText={handleChangeInput('password')}
+                        value={formik.values.password}
+                        secure
+                        errorMessage={formik.errors?.password}
+                      />
+                      <Input
+                        label={'Confirm password'}
+                        placeholder={'Confirm password'}
+                        secureTextEntry
+                        onChangeText={handleChangeInput('confirm_password')}
+                        value={formik.values.confirm_password}
+                        secure
+                        errorMessage={formik.errors?.confirm_password}
+                      />
 
-                  <CustomButton
-                    title={'Signup'}
-                    onPress={handlePressSignUp}
-                    loading={loadingSignUp}
-                    disabled={loadingSignUp}
-                    buttonStyle={{ marginBottom: 100 }}
-                  />
-
-                  {/* <View style={{ marginHorizontal: 10 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ height: 1, backgroundColor: '#fff', flex: 1 }} />
-              <View style={{ flex: 1.5 }}>
-                <Text style={styles.whiteText}>Or login with</Text>
-              </View>
-              <View style={{ height: 1, backgroundColor: '#fff', flex: 1 }} />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-              <Button
-                icon={{
-                  name: 'google',
-                  type: 'font-awesome-5',
-                }}
-                type="solid"
-                buttonStyle={{ backgroundColor: 'gray', width: 100 }}
-              />
-              <Button
-                icon={{
-                  name: 'google',
-                  type: 'font-awesome-5',
-                }}
-                type="solid"
-                buttonStyle={{ backgroundColor: 'gray', width: 100 }}
-              />
-              <Button
-                icon={{
-                  name: 'google',
-                  type: 'font-awesome-5',
-                }}
-                type="solid"
-                buttonStyle={{ backgroundColor: 'gray', width: 100 }}
-              />
-            </View>
-          </View> */}
-                </View>
-                <View style={styles.bottomSignUp}>
-                  <Text style={styles.whiteText}>Already have an account?</Text>
-                  <Button
-                    title="Login"
-                    type="clear"
-                    titleStyle={styles.inlineSignUp}
-                    onPress={goToSignIn}
-                  />
-                </View>
-              </View>
-            </KeyboardAwareScrollView>
+                      <CustomButton
+                        title={'Signup'}
+                        onPress={formik.handleSubmit}
+                        loading={loadingSignUp}
+                        disabled={loadingSignUp || !formik.isValid}
+                        buttonStyle={{ marginBottom: 100, marginTop: 20 }}
+                      />
+                    </View>
+                    <View style={styles.bottomSignUp}>
+                      <Text style={styles.whiteText}>
+                        Already have an account?
+                      </Text>
+                      <Button
+                        title="Login"
+                        type="clear"
+                        titleStyle={styles.inlineSignUp}
+                        onPress={goToSignIn}
+                      />
+                    </View>
+                  </View>
+                </KeyboardAwareScrollView>
+              </ScrollView>
+            </SafeAreaView>
           </ImageBackground>
         );
       }}
@@ -201,24 +234,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  fullSize: { width: '100%', height: '100%' },
   logo: {
     backgroundColor: 'purple',
   },
   loginFormContainer: {
     height: '100%',
     width: '100%',
-    // backgroundColor: '#000',
     paddingHorizontal: 30,
-    // justifyContent: 'center',
-    // alignSelf: 'center',
   },
-  loginForm: {
-    // borderWidth: 1,
-    borderColor: '#fff',
-  },
+  loginForm: {},
   title: {
     fontWeight: '600',
-    marginBottom: 80,
+    marginBottom: 50,
     textAlign: 'center',
     color: '#fff',
   },

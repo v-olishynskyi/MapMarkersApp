@@ -1,6 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { action, makeObservable, observable } from 'mobx';
 import { UserModel } from '../models/UserModel';
+import auth from '@react-native-firebase/auth';
+import { Response, ResponseStatus } from '../types';
+import { User } from '../models/models';
+import { api } from '../api';
+import { MarkerModel } from '../models/MarkerModel';
 export class MainStore {
   user: UserModel | null = null;
 
@@ -17,23 +21,29 @@ export class MainStore {
     this.user = user;
   };
 
+  checkCurrentUser() {
+    return auth().currentUser;
+  }
+
   getUserInstance = async () => {
     try {
-      // @ts-ignore
-      const isAuth: boolean = JSON.parse(await AsyncStorage.getItem('isAuth'));
+      const currentUser = this.checkCurrentUser();
 
-      if (isAuth) {
-        const currentAuthenticatedUser: UserModel = JSON.parse(
-          // @ts-ignore
-          await AsyncStorage.getItem('currentAuthenticatedUser'),
+      if (currentUser) {
+        const response: Response<User, 'user'> = await api.getUserByEmail(
+          currentUser.email,
         );
 
-        const user = new UserModel(currentAuthenticatedUser);
+        if (response.data.status === ResponseStatus.SUCCESS) {
+          const responseUser = response.data.data.user;
 
-        this.setUser(user);
+          const user = new UserModel(responseUser);
+
+          this.setUser(user);
+
+          return true;
+        }
       }
-
-      return isAuth;
     } catch (error) {
       console.log('error getUserInstance', { error });
     }

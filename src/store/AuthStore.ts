@@ -1,5 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth';
 import { action, computed, makeObservable, observable } from 'mobx';
+import { api } from '../api';
+import { User } from '../models/models';
+import { Response } from '../types';
 
 interface IOnSignIn {
   email: string;
@@ -18,10 +21,6 @@ export default class AuthStore {
 
   constructor() {
     makeObservable(this, {
-      isAuth: observable,
-      setIsAuth: action,
-      computedIsAuth: computed,
-
       username: observable,
       setUsername: action,
 
@@ -41,21 +40,18 @@ export default class AuthStore {
       setConfirmPassword: action,
 
       userData: computed,
+      _isAuth: computed,
 
-      fakeSignIn: action,
-      fakeSignUp: action,
-      fakeSignOut: action,
+      signIn: action,
+      signUp: action,
+      signOut: action,
 
       clear: action,
     });
   }
 
-  setIsAuth = (value: boolean) => {
-    this.isAuth = value;
-  };
-
-  get computedIsAuth() {
-    return this.isAuth;
+  get _isAuth() {
+    return auth().currentUser;
   }
 
   setName = (name: string) => {
@@ -100,94 +96,46 @@ export default class AuthStore {
     this.confirmPassword = '';
   };
 
-  fakeSignIn = async () => {
-    const { email, password } = this;
-    let users: [{ email: string; password: string }] | null = JSON.parse(
-      //@ts-ignore
-      await AsyncStorage.getItem('users'),
-    );
-
-    console.log('users', users);
-
-    if (!users) {
-      throw new Error('UserNotExists');
-    }
-
-    const dbUser = users.find(user => user.email === email);
-
-    if (!dbUser) {
-      throw new Error('UserNotExists');
-    }
-
-    if (dbUser.password !== password) {
-      throw new Error('IncorrectPassword');
-    }
-
-    await AsyncStorage.multiSet([
-      ['isAuth', JSON.stringify(true)],
-      ['currentAuthenticatedUser', JSON.stringify(dbUser)],
-    ]);
-
-    this.setIsAuth(true);
-    console.log(
-      await AsyncStorage.multiGet(
-        ['isAuth', 'currentAuthenticatedUser'],
-        (err, result) => {
-          if (err) {
-            console.log('erro', err);
-            return;
-          }
-          console.log('RESULT', result);
-        },
-      ),
-    );
-  };
-
-  fakeSignUp = async () => {
-    try {
-      const { email, password, name, family_name, username } = this;
-
-      const data = { email, password, name, family_name, username };
-      let users: [{ email: string; password: string }] | null = JSON.parse(
-        //@ts-ignore
-        await AsyncStorage.getItem('users'),
-      );
-
-      if (!users) {
-        users = [{ ...data }];
-        await AsyncStorage.setItem('users', JSON.stringify(users));
-
-        await AsyncStorage.multiSet([
-          ['currentAuthenticatedUser', JSON.stringify(data)],
-          ['isAuth', JSON.stringify(true)],
-        ]);
-        return;
-      }
-
-      const usersEmails = users.map(user => user.email);
-
-      if (usersEmails.includes(email)) {
-        throw new Error('EmailExistsException');
-      }
-
-      await AsyncStorage.multiSet([
-        ['users', JSON.stringify([...users, { ...data }])],
-        ['currentAuthenticatedUser', JSON.stringify(data)],
-        ['isAuth', JSON.stringify(true)],
-      ]);
-
-      //@ts-ignore
-      console.log('USERS', JSON.parse(await AsyncStorage.getItem('users')));
-    } catch (error) {
-      console.log('error sign up', { error });
+  checkIfUserExist = async (userEmail?: string) => {
+    const email = userEmail || this.email;
+    const result = await auth().fetchSignInMethodsForEmail(email);
+    if (result.length === 0) {
+      return false;
+    } else {
+      return true;
     }
   };
 
-  fakeSignOut = async () => {
-    this.setIsAuth(false);
-    await AsyncStorage.multiSet([
-      ['isAuth', JSON.stringify(false)],
-      ['currentAuthenticatedUser', JSON.stringify(null)],
-    ]);
+  signIn = async () => {
+    return await auth().signInWithEmailAndPassword(this.email, this.password);
+  };
+
+  signUp = async () => {
+    const { email, password, name, family_name, username } = this;
+
+    const firebaseAuthResult = await auth().createUserWithEmailAndPassword(
+      email,
+      password,
+    );
+
+    const body = {
+      email,
+      password,
+      name,
+      family_name,
+      username,
+      email_verified: firebaseAuthResult.user.emailVerified,
+    };
+
+    const result: Response<User, 'user'> = await api.signUp(body);
+
+    console.log('RESULT', result.data.data);
+
+    return result.data.data;
+  };
+
+  signOut = async () => {
+    await auth().signOut();
+    await api.signOut();
   };
 }

@@ -1,6 +1,5 @@
 import { IObservableArray } from 'mobx';
 import { MarkerModel } from './MarkerModel';
-import { UserModel } from './UserModel';
 
 export enum Gender {
   MALE = 'male',
@@ -9,26 +8,28 @@ export enum Gender {
 }
 
 export type Marker = {
-  id: string;
-
+  _id: string;
   latitude: number;
   longitude: number;
-
   name: string;
   description?: string;
+  ownerID?: string;
+  owner?: User;
 
-  author: UserModel;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export type User = {
+  _id: string;
   email: string;
   username: string;
-
   name: string;
   family_name: string;
   avatar?: string;
+  gender?: Gender;
+  markers: Marker[];
 
-  gender: Gender;
-
-  markers: IObservableArray<MarkerModel>;
+  createdAt?: Date;
+  updatedAt?: Date;
 };

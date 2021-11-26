@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "405758447624",
+    "project_id": "mapmarkersapp-332221",
+    "storage_bucket": "mapmarkersapp-332221.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405758447624:android:23cab9c31010d570d9c1bd",
+        "android_client_info": {
+          "package_name": "com.mapmarkersapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "405758447624-90l9i14s1i3f9stohgq0uksci1emn809.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mapmarkersapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "405758447624-52dhl4ltve7o31c1ej832qpsj75aadc5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUarQD45mX8JUtsqIL0coxQf4MqyRpcWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405758447624-52dhl4ltve7o31c1ej832qpsj75aadc5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
