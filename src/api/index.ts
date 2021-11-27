@@ -1,6 +1,6 @@
 import { signIn, signUp, signOut } from './auth';
 import { createMarker } from './markers';
-import { getUserByEmail, updateUser } from './users';
+import { getUserByEmail, updateUser, getUserById } from './users';
 
 export const api = {
   signIn,
@@ -9,4 +9,5 @@ export const api = {
   createMarker,
   getUserByEmail,
   updateUser,
+  getUserById,
 };

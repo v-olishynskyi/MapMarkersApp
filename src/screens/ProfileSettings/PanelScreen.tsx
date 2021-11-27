@@ -4,6 +4,7 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { UpdateUserParams } from '../../api/users';
 import { CustomButton } from '../../components/buttons';
 import { Input } from '../../components/inputs';
 import { hooks } from '../../hooks';
@@ -29,7 +30,14 @@ const ProfileSettingsScreen = () => {
       user!.setName(name);
       user!.setFamilyName(familyName);
 
-      await user!.update(['name', 'family_name']);
+      const input: UpdateUserParams = {
+        id: mainStore.user!.id,
+        family_name: mainStore.user?.family_name,
+        name: mainStore.user?.name,
+      };
+
+      await user!.update(input);
+
       navigation.goBack();
 
       setLoadingSave(false);
@@ -47,9 +55,7 @@ const ProfileSettingsScreen = () => {
             size="large"
             title={'MD'}
             titleStyle={{ color: '#fff' }}
-            containerStyle={{ backgroundColor: 'gray' }}
-            // source={require('../../../assets/BluredMap.jpg')}
-          >
+            containerStyle={{ backgroundColor: 'gray' }}>
             <Avatar.Accessory size={22} onPress={() => {}} />
           </Avatar>
         </View>

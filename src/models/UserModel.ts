@@ -7,8 +7,9 @@ import {
 } from 'mobx';
 import { User, Gender } from './models';
 import { MarkerModel } from './MarkerModel';
-import { Response } from '../types';
+import { Response, ResponseStatus } from '../types';
 import { api } from '../api';
+import { UpdateUserParams } from '../api/users';
 
 type UpdatedFields = Pick<User, 'family_name' | 'gender' | 'name'>;
 
@@ -115,17 +116,17 @@ export class UserModel {
     };
   }
 
-  async update(input: Array<keyof User>) {
-    const userData: Partial<UpdatedFields> & { id: string } = input.reduce(
-      (data: Partial<UpdatedFields> & { id: string }, item: string) => {
-        data[item] = this[item];
-        return data;
-      },
-      { id: this.id },
-    );
+  async update(input: UpdateUserParams) {
+    const response: Response<User, 'user'> = await api.updateUser(input);
 
-    console.log('userData', userData);
+    if (response.data.status === ResponseStatus.SUCCESS) {
+      return response.data.data.user;
+    } else {
+      return response.data.error;
+    }
+  }
 
-    // const response: Response<User, 'user'> = await api.updateUser(input);
+  async get() {
+    return await api.getUserByEmail(this.email);
   }
 }
