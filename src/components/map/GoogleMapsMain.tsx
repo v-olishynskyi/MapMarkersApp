@@ -2,12 +2,15 @@ import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import MapView from 'react-native-map-clustering';
 import { PROVIDER_GOOGLE, MapViewProps } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
 import { CustomMarker } from '.';
 import { MarkerModel } from '../../models/MarkerModel';
 
 type GoogleMapsMainProps = {
   children?: React.ReactNode;
   markers: MarkerModel[];
+  handlePressMarkerCallout: (marker: MarkerModel) => void;
+  isDirection?: boolean;
 };
 
 const GoogleMapsMain = React.forwardRef(
@@ -30,9 +33,37 @@ const GoogleMapsMain = React.forwardRef(
                 longitude: marker.longitude,
               }}
               marker={marker}
+              handlePressCallout={() => {
+                props.handlePressMarkerCallout(marker);
+              }}
             />
           ))}
-          {props.children}
+          <>
+            {props.isDirection && (
+              <MapViewDirections
+                origin={props.markers[0].coordinates}
+                // waypoints={ (this.state.coordinates.length > 2) ? this.state.coordinates.slice(1, -1): undefined}
+                destination={props.markers[1].coordinates}
+                apikey={'AIzaSyC1MNx-ZtousxdQAfVgNd8Fc2j_HEBAeH4'}
+                strokeWidth={3}
+                strokeColor="hotpink"
+                optimizeWaypoints={true}
+                onStart={params => {
+                  console.log(
+                    `Started routing between "${params.origin}" and "${params.destination}"`,
+                  );
+                }}
+                onReady={result => {
+                  console.log(`Distance: ${result.distance} km`);
+                  console.log(`Duration: ${result.duration} min.`);
+                }}
+                onError={errorMessage => {
+                  // console.log('GOT AN ERROR');
+                }}
+              />
+            )}
+            {props.children}
+          </>
         </MapView>
       </View>
     );

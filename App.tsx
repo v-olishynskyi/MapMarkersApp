@@ -13,8 +13,11 @@ import { LogBox } from 'react-native';
 import { ThemeProvider } from 'react-native-elements';
 
 import RootNavigator from './src/navigation/RootNavigator';
+import Geocoder from 'react-native-geocoding';
 
 LogBox.ignoreLogs(['EventEmitter']);
+
+Geocoder.init('AIzaSyC1MNx-ZtousxdQAfVgNd8Fc2j_HEBAeH4', { language: 'ru' });
 
 const App = () => {
   return (
