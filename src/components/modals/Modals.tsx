@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { CustomButton } from '../buttons';
-import { CustomTextInput } from '../inputs';
+import { Input } from '../inputs';
 import Modal from 'react-native-modal';
 import { LatLng } from 'react-native-maps';
 import * as MobX from 'mobx-react-lite';
+import RNPickerSelect from 'react-native-picker-select';
 
 type NewMarkerModalProps = {
   visible: boolean;
@@ -18,6 +19,7 @@ type NewMarkerModalProps = {
   handleChangeName: (name: string) => void;
   handleChageDescription: (description: string) => void;
   handleChangeCoordinates: (coordinates: LatLng) => void;
+  handleChangeCategoryValue: (value: any, index: number) => void;
 };
 
 export const NewMarkerModal = ({
@@ -29,6 +31,7 @@ export const NewMarkerModal = ({
   handleChangeName,
   handleChageDescription,
   handleChangeCoordinates,
+  handleChangeCategoryValue,
   name,
   description,
   coordinates,
@@ -36,37 +39,6 @@ export const NewMarkerModal = ({
   return (
     <MobX.Observer
       render={() => (
-        // <Overlay
-        //   isVisible={visible}
-        //   onBackdropPress={onDismiss}
-        //   overlayStyle={styles.container}>
-        // <Text style={{ fontSize: 24, textAlign: 'center' }}>
-        //   Введіть інформацію стосовно данного маркера
-        // </Text>
-        // <View style={{ paddingHorizontal: 8, marginTop: 20 }}>
-        //   <CustomTextInput
-        //     label={`Назва*`}
-        //     placeholder={`Назва`}
-        //     labelStyle={{ color: 'gray' }}
-        //     inputStyle={{ borderWidth: 1 }}
-        //     onChangeText={() => {}}
-        //   />
-        //   <CustomTextInput
-        //     label={`Опис`}
-        //     placeholder={`Опис`}
-        //     labelStyle={{ color: 'gray' }}
-        //     inputStyle={{ borderWidth: 1 }}
-        //     onChangeText={() => {}}
-        //   />
-        //   <CustomButton
-        //     title="Зберегти"
-        //     buttonStyle={{ marginVertical: 16 }}
-        //     onPress={handlePressSave}
-        //     loading={loading}
-        //     disabled={disabled}
-        //   />
-        // </View>
-        // </Overlay>
         <Modal
           isVisible={visible}
           onBackdropPress={onDismiss}
@@ -78,7 +50,7 @@ export const NewMarkerModal = ({
               Введіть інформацію стосовно данного маркера
             </Text>
             <View style={{ paddingHorizontal: 8, marginTop: 20 }}>
-              <CustomTextInput
+              <Input
                 label={`Назва*`}
                 placeholder={`Назва`}
                 labelStyle={{ color: 'gray' }}
@@ -86,7 +58,7 @@ export const NewMarkerModal = ({
                 onChangeText={handleChangeName}
                 value={name}
               />
-              <CustomTextInput
+              <Input
                 label={`Опис`}
                 placeholder={`Опис`}
                 labelStyle={{ color: 'gray' }}
@@ -94,7 +66,36 @@ export const NewMarkerModal = ({
                 onChangeText={handleChageDescription}
                 value={description}
               />
-              <CustomTextInput
+              <Input
+                label={`Категорія*`}
+                labelStyle={{ color: 'gray' }}
+                inputStyle={{ borderWidth: 1 }}
+                InputComponent={() => (
+                  <RNPickerSelect
+                    onValueChange={handleChangeCategoryValue}
+                    placeholder={{ label: 'Інше', value: '1' }}
+                    items={[
+                      { label: 'Football', value: 'football' },
+                      { label: 'Baseball', value: 'baseball' },
+                      { label: 'Hockey', value: 'hockey' },
+                    ]}
+                    style={{
+                      viewContainer: {
+                        width: '100%',
+                        height: '100%',
+                        borderWidth: 1,
+                        borderColor: '#000',
+                        paddingVertical: 16,
+                        borderRadius: 8,
+                        paddingLeft: 16,
+                      },
+                      placeholder: { fontSize: 16 },
+                    }}
+                  />
+                )}
+              />
+
+              <Input
                 label={`Координати`}
                 placeholder={`Координати`}
                 labelStyle={{ color: 'gray' }}

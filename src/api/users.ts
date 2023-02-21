@@ -1,7 +1,9 @@
 import { axiosInstance } from '../config';
 import { User } from '../models/models';
 
-export type UpdateUserParams = Partial<Omit<User, '_id' | 'markers'>> & {
+export type UpdateUserParams = Partial<
+  Omit<User, '_id' | 'markers' | 'createdAt' | 'updatedAt'>
+> & {
   id: string;
 };
 

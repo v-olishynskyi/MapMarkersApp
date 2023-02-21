@@ -159,6 +159,7 @@ const MapScreen = () => {
       const newMarker = await MarkerModel.create({
         ...markerStore.marker,
         ownerID: mainStore.user!.id,
+        categoryID: '61a6639cb2ba6106d6176785',
       });
 
       const marker = new MarkerModel(newMarker.data.marker);
@@ -242,6 +243,7 @@ const MapScreen = () => {
               handleChangeName={markerStore.marker.setName}
               handleChageDescription={markerStore.marker.setDescription}
               handleChangeCoordinates={markerStore.marker.setCoordinates}
+              handleChangeCategoryValue={markerStore.marker.setCategoryID}
               loading={isLoadingSaveMarker}
               disabled={isLoadingSaveMarker}
               name={markerStore.marker.name}

@@ -4,7 +4,6 @@ import auth from '@react-native-firebase/auth';
 import { Response, ResponseStatus } from '../types';
 import { User } from '../models/models';
 import { api } from '../api';
-import { MarkerModel } from '../models/MarkerModel';
 export class MainStore {
   user: UserModel | null = null;
 

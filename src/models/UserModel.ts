@@ -11,7 +11,9 @@ import { Response, ResponseStatus } from '../types';
 import { api } from '../api';
 import { UpdateUserParams } from '../api/users';
 
-type UpdatedFields = Pick<User, 'family_name' | 'gender' | 'name'>;
+type UpdatedFields = Pick<User, 'family_name' | 'gender' | 'name'> & {
+  id: string;
+};
 
 export class UserModel {
   id: User['_id'] = '';
@@ -111,12 +113,13 @@ export class UserModel {
 
   get updatedData(): UpdatedFields {
     return {
+      id: this.id,
       name: this.name,
       family_name: this.family_name,
     };
   }
 
-  async update(input: UpdateUserParams) {
+  static async update(input: UpdateUserParams) {
     const response: Response<User, 'user'> = await api.updateUser(input);
 
     if (response.data.status === ResponseStatus.SUCCESS) {
@@ -124,6 +127,12 @@ export class UserModel {
     } else {
       return response.data.error;
     }
+  }
+  async update() {
+    const data: UpdateUserParams = {
+      ...this.updatedData,
+    };
+    return await UserModel.update(data);
   }
 
   async get() {

@@ -10,6 +10,11 @@ import { hooks } from '../../hooks';
 import { MainStackParamsList } from '../../navigation/types';
 import AvatarImage from '../../components/images/Avatar';
 import auth from '@react-native-firebase/auth';
+import { axiosInstance } from '../../config';
+import { api } from '../../api';
+import CategoryModel from '../../models/CategoryModel';
+import { Response } from '../../types';
+import { Category } from '../../models/models';
 
 type Navigation = StackNavigationProp<MainStackParamsList>;
 

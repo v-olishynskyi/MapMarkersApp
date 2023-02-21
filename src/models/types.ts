@@ -1,10 +1,11 @@
 import { MarkerModel } from '../models/MarkerModel';
 import { UserModel } from '../models/UserModel';
-import { Marker, User } from '../models/models';
+import { Category, Marker, User } from '../models/models';
+import CategoryModel from './CategoryModel';
 
-export type ResponseModels = Marker | User;
+export type ResponseModels = Marker | User | Category;
 
-export type Models = MarkerModel | UserModel;
+export type Models = MarkerModel | UserModel | CategoryModel;
 
 export type ResponseModelToModel<T extends ResponseModels> = T extends Marker
   ? MarkerModel

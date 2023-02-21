@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Chip, Text } from 'react-native-elements';
 import { Marker, MarkerProps, Callout } from 'react-native-maps';
 import { hooks } from '../../hooks';
 import { MarkerModel } from '../../models/MarkerModel';
@@ -32,13 +32,28 @@ const CustomMarker = (props: MarkerProps & CustomMarkerProps) => {
         }}
         style={styles.customView}>
         <View style={[styles.container]}>
+          {marker.category && (
+            <View style={{ alignItems: 'center' }}>
+              <View
+                style={{
+                  paddingHorizontal: 8,
+                  paddingVertical: 3,
+                  borderRadius: 15,
+                  backgroundColor: 'gray',
+                }}>
+                <Text style={{ color: '#fff' }}>{marker.category.label}</Text>
+              </View>
+            </View>
+          )}
           <CalloutUserCard user={props.marker.owner} marker={props.marker} />
-          <Text style={{ marginTop: 4 }}>{markerAddress}</Text>
+          <Text style={{ marginTop: 4 }} numberOfLines={2}>
+            {markerAddress}
+          </Text>
           <View style={{ marginTop: 6 }}>
             <Text h4 numberOfLines={1}>
               {marker.name}
             </Text>
-            <Text numberOfLines={4} style={{ marginBottom: 30 }}>
+            <Text numberOfLines={3} style={{ marginBottom: 30 }}>
               {marker.description}
             </Text>
           </View>

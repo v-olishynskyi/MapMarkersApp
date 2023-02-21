@@ -1,6 +1,3 @@
-import { IObservableArray } from 'mobx';
-import { MarkerModel } from './MarkerModel';
-
 export enum Gender {
   MALE = 'male',
   FEMALE = 'female',
@@ -15,6 +12,8 @@ export type Marker = {
   description?: string;
   ownerID?: string;
   owner?: User;
+  categoryID?: string;
+  category?: Category;
 
   createdAt?: Date;
   updatedAt?: Date;
@@ -29,6 +28,16 @@ export type User = {
   avatar?: string;
   gender?: Gender;
   markers: Marker[];
+
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export type Category = {
+  _id: string;
+  label: string;
+  value: string;
+  isAccept?: boolean;
 
   createdAt?: Date;
   updatedAt?: Date;

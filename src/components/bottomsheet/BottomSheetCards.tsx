@@ -6,7 +6,7 @@ import {
   ViewStyle,
   TouchableOpacity,
 } from 'react-native';
-import { Icon, Text } from 'react-native-elements';
+import { Divider, Icon, Text } from 'react-native-elements';
 import { MarkerModel } from '../../models/MarkerModel';
 import { parseAddress } from '../../utils/parseAddress';
 import { MapBottomSheetUserCard } from '../cards/UserCards';
@@ -36,16 +36,17 @@ export const MarkerDetailBottomCard = ({
       <MapBottomSheetUserCard user={marker.owner} marker={marker} />
       <View>
         <TouchableOpacity
-          style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}
+          style={styles.addressContainer}
           onPress={() => onPressAddress && onPressAddress(marker)}>
           <Icon
             name="route"
             type="font-awesome-5"
             iconStyle={{ marginRight: 10 }}
-            color={'rose'}
+            tvParallaxProperties={undefined}
           />
-          <Text>{address}</Text>
+          <Text style={{ width: '90%' }}>{address}</Text>
         </TouchableOpacity>
+        <Divider style={styles.divider} />
         <Text h2 style={[styles.centerText]}>
           {marker.name}
         </Text>
@@ -57,4 +58,10 @@ export const MarkerDetailBottomCard = ({
 
 const styles = StyleSheet.create({
   centerText: { textAlign: 'center' },
+  addressContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 6,
+  },
+  divider: { marginVertical: 10 },
 });
