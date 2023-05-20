@@ -5,7 +5,8 @@
  *  */
 import React from 'react';
 import useStyles from './styles';
-import {SignUpProps} from './types';
+import { SignUpProps } from './types';
+import { View } from 'react-native';
 
 /**
  * SignUp
@@ -21,7 +22,7 @@ import {SignUpProps} from './types';
 const SignUp: React.FC<SignUpProps> = () => {
   const styles = useStyles();
 
-  return <></>;
+  return <View></View>;
 };
 
 export default SignUp;

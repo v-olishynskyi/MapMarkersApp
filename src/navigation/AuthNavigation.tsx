@@ -16,7 +16,8 @@ export const AuthNavigation = () => (
     screenOptions={{
       headerShown: false,
       contentStyle: styles.content,
-    }}>
+    }}
+    initialRouteName="sign-in">
     <Stack.Screen name="sign-in" component={SignIn} />
     <Stack.Screen name="sign-up" component={SignUp} />
     <Stack.Screen name="forgot-password" component={ForgotPassword} />

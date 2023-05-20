@@ -5,7 +5,8 @@
  *  */
 import React from 'react';
 import useStyles from './styles';
-import {ForgotPasswordProps} from './types';
+import { ForgotPasswordProps } from './types';
+import { View } from 'react-native';
 
 /**
  * ForgotPassword
@@ -21,7 +22,7 @@ import {ForgotPasswordProps} from './types';
 const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
   const styles = useStyles();
 
-  return <></>;
+  return <View></View>;
 };
 
 export default ForgotPassword;

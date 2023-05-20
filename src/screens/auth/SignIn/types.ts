@@ -1,7 +1,4 @@
-/**
- * @memberof SignIn
- * @typedef {Object} SignInProps
- */
-export type SignInProps = {
-  
-}
+export type FormState = {
+  email: string;
+  password: string;
+};
