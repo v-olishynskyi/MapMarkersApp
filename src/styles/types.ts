@@ -1,17 +1,34 @@
-import { TextStyle } from 'react-native';
-
-export type ITypography = {
-  buttonText: TextStyle;
-};
-
 export type ITheme = {
-  typography: ITypography;
   dark: boolean;
   colors: IColors;
 };
 
 export interface IColors {
-  error: string;
+  red: string;
+  orange: string;
+  yellow: string;
+  green: string;
+  mint: string;
+  teal: string;
+  cyan: string;
+  blue: string;
+  indigo: string;
+  purple: string;
+  pink: string;
+  brown: string;
+  gray: string;
+  gray2: string;
+  gray3: string;
+  gray4: string;
+  gray5: string;
+  gray6: string;
+  white: string;
+  black: string;
+
+  background: {
+    primary: string;
+    secondary: string;
+  };
 }
 
 type SpacingNames =
