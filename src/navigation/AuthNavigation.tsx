@@ -1,9 +1,10 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet } from 'react-native';
-import { ForgotPassword, SignIn, SignUp } from '@screens';
+import { ForgotPassword, Onboarding, SignIn, SignUp } from '@screens';
+import { AuthNavigationStackParamsList } from './types';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<AuthNavigationStackParamsList>();
 
 const styles = StyleSheet.create({
   content: {
@@ -14,12 +15,28 @@ const styles = StyleSheet.create({
 export const AuthNavigation = () => (
   <Stack.Navigator
     screenOptions={{
-      headerShown: false,
       contentStyle: styles.content,
     }}
-    initialRouteName="sign-in">
-    <Stack.Screen name="sign-in" component={SignIn} />
-    <Stack.Screen name="sign-up" component={SignUp} />
-    <Stack.Screen name="forgot-password" component={ForgotPassword} />
+    initialRouteName="onboarding">
+    <Stack.Screen
+      name="onboarding"
+      options={{ headerShown: false }}
+      component={Onboarding}
+    />
+    <Stack.Screen
+      name="sign-in"
+      options={{ title: 'Авторизація' }}
+      component={SignIn}
+    />
+    <Stack.Screen
+      name="sign-up"
+      options={{ title: 'Реєстрація' }}
+      component={SignUp}
+    />
+    <Stack.Screen
+      name="forgot-password"
+      options={{ title: 'Відновлення паролю' }}
+      component={ForgotPassword}
+    />
   </Stack.Navigator>
 );

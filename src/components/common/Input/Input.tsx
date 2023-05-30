@@ -4,26 +4,24 @@
  * @subcategory Shared
  *  */
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
-  LayoutChangeEvent,
   NativeSyntheticEvent,
-  Platform,
+  Pressable,
   Text,
   TextInput,
   TextInputFocusEventData,
-  TextInputProps,
   View,
 } from 'react-native';
 import { InputProps } from './types';
 import useStyles from './styles';
-import { getTheme } from '@utils/helpers';
 import Animated, {
   Easing,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { EyeIcon } from '@assets/icons';
 
 /**
  *
@@ -47,106 +45,87 @@ import Animated, {
  */
 
 const Input: React.FC<InputProps> = ({
-  onChangeText,
-  value,
+  onFocus,
   error,
-  containerStyle,
   leftIcon,
   rightIcon,
+  style: containerStyle,
+  value,
+  onChangeText,
   caption,
-  onFocus,
-  placeholder,
+  password,
+  inputStyle,
+  onBlur,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = React.useState(false);
-  const [inputHeight, setInputHeight] = React.useState(0);
+  const styles = useStyles(!!error, isFocused);
 
-  // const placeholderTextColor = dark ? colors.white40 : colors.black40;
+  const [showPassword, setShowPassword] = React.useState(password);
 
-  const styles = useStyles(!!error);
+  const sharedHeight = useSharedValue(13.3 * Number(!!error));
 
-  const captionTop = useSharedValue(inputHeight / 2);
-  const captionFontSize = useSharedValue(16);
-  const captionLineHeight = useSharedValue(24);
-
-  const animatedStyles = useAnimatedStyle(() => ({
-    top: captionTop.value,
-    fontSize: captionFontSize.value,
-    lineHeight: captionLineHeight.value,
+  const height = useAnimatedStyle(() => ({
+    height: sharedHeight.value,
   }));
 
-  const isCaptionOnTop = isFocused || !!value;
-
-  useEffect(() => {
-    if (isCaptionOnTop) {
-      captionTop.value = withTiming(-8, {
-        duration: 100,
-        easing: Easing.linear,
-      });
-      captionFontSize.value = withTiming(12, {
-        duration: 100,
-        easing: Easing.linear,
-      });
-      captionLineHeight.value = withTiming(16, {
-        duration: 100,
-        easing: Easing.linear,
-      });
-    } else {
-      captionTop.value = withTiming(10, {
-        duration: 100,
-        easing: Easing.linear,
-      });
-      captionFontSize.value = withTiming(16, {
-        duration: 100,
-        easing: Easing.linear,
-      });
-      captionLineHeight.value = withTiming(24, {
-        duration: 100,
-        easing: Easing.linear,
-      });
-    }
-  }, [isCaptionOnTop]);
+  const errorComponent = (
+    <Animated.Text style={[styles.error, height]}>{error}</Animated.Text>
+  );
 
   const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setIsFocused(true);
-    onFocus(e) && onFocus(e);
+    onFocus && onFocus(e);
   };
 
-  const onLayout = (e: LayoutChangeEvent) => {
-    setInputHeight(e.nativeEvent.layout.height);
+  const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    setIsFocused(false);
+    onBlur && onBlur(e);
   };
+
+  const passwordIcon = (
+    <Pressable onPress={() => setShowPassword(prev => !prev)}>
+      <EyeIcon />
+    </Pressable>
+  );
+
+  const passwordProps = {
+    secureTextEntry: showPassword,
+    rightIcon: passwordIcon,
+  };
+
+  React.useEffect(() => {
+    sharedHeight.value = withTiming(13.3 * Number(!!error), {
+      duration: 200,
+      easing: Easing.linear,
+    });
+  }, [error, sharedHeight]);
 
   return (
-    <View>
-      <View style={[styles.container, containerStyle]} onLayout={}>
+    <View style={containerStyle}>
+      {caption && <Text style={[styles.caption]}>{caption}</Text>}
+      <View style={[styles.inputContainer]}>
         {leftIcon && (
-          <View style={[styles.pv2, styles.iconContainer, styles.leftIcon]}>
+          <View style={[styles.iconContainer, styles.leftIcon]}>
             {leftIcon}
           </View>
         )}
         <TextInput
-          {...rest}
           value={value}
           onChangeText={onChangeText}
-          style={[styles.pv2, styles.input]}
+          style={[styles.input, inputStyle]}
           onFocus={handleFocus}
-          placeholder={
-            placeholder
-              ? !isCaptionOnTop
-                ? placeholder
-                : undefined
-              : undefined
-          }
+          onBlur={handleBlur}
+          {...(password ? passwordProps : {})}
+          {...rest}
         />
-        {rightIcon && (
-          <View style={[styles.pv2, styles.iconContainer, styles.rightIcon]}>
-            {rightIcon}
+        {(password || rightIcon) && (
+          <View style={[styles.iconContainer, styles.rightIcon]}>
+            {password ? passwordIcon : rightIcon}
           </View>
         )}
       </View>
-      {!!error && typeof error === 'string' && (
-        <Text style={styles.error}>{error}</Text>
-      )}
+      {!!error && typeof error === 'string' && errorComponent}
     </View>
   );
 };

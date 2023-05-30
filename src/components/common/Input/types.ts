@@ -8,8 +8,10 @@ export type InputProps = {
   value: string;
   onChangeText: (value: string) => void;
   error?: string | boolean;
-  containerStyle?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   caption?: string;
-} & Partial<Omit<TextInputProps, 'value' | 'onChangeText'>>;
+  password?: boolean;
+  inputStyle?: StyleProp<ViewStyle>;
+} & Partial<Omit<TextInputProps, 'value' | 'onChangeText' | 'style'>>;

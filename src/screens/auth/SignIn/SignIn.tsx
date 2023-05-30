@@ -4,15 +4,22 @@
  * @subcategory Auth screens
  *  */
 import React from 'react';
-import useStyles from './styles';
 import View from 'react-native-ui-lib/view';
-import TextField from 'react-native-ui-lib/textField';
 import { useFormik } from 'formik';
 import { FormState } from './types';
-import { Alert, Dimensions, TextInput } from 'react-native';
+import { Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Input } from '@components';
 import { useStores } from '@store';
-import { Observer } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
+import { IS_IOS, getTheme } from '@utils/helpers';
+import { spacingBase } from '@styles';
+import { Button } from 'react-native-ui-lib';
+import validationSchema from './schema';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { useNavigation } from '@react-navigation/native';
+import { AuthNavigationStackParamsList } from '@navigation';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 /**
  * SignIn
@@ -25,6 +32,10 @@ import { Observer } from 'mobx-react-lite';
  *  <SignIn />
  */
 const SignIn: React.FC = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AuthNavigationStackParamsList>>();
+  const height = useHeaderHeight();
+
   const styles = useStyles();
   const { authStore } = useStores();
 
@@ -35,6 +46,7 @@ const SignIn: React.FC = () => {
   const { errors, handleSubmit, handleBlur, touched, setFieldValue, values } =
     useFormik<FormState>({
       initialValues: { email: authStore.email, password: authStore.password },
+      validationSchema,
       onSubmit,
     });
 
@@ -48,46 +60,91 @@ const SignIn: React.FC = () => {
       : null;
   };
 
+  const onPressForgotPassword = () => navigation.navigate('forgot-password');
+  const onPressSignUp = () => navigation.navigate('sign-up');
+
   return (
-    <Observer
-      render={() => {
-        return (
-          <View flexG centerV centerH>
-            <View style={{ width: Dimensions.get('screen').width * 0.7 }}>
-              <Input
-                value={values.email}
-                onChangeText={handleChangeInput('email')}
-                onBlur={handleBlur('email')}
-                // error={touched.email && errors.email}
-                error="asdlnasjkd"
-                leftIcon={
-                  <View
-                    style={{
-                      width: 20,
-                      height: 20,
-                      backgroundColor: 'black',
-                      borderRadius: 50,
-                    }}
-                  />
-                }
-                rightIcon={
-                  <View
-                    style={{
-                      width: 20,
-                      height: 20,
-                      backgroundColor: 'black',
-                      borderRadius: 50,
-                    }}
-                  />
-                }
-                placeholder="Email"
-              />
-            </View>
-          </View>
-        );
-      }}
-    />
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior="height"
+      keyboardVerticalOffset={height + 64}>
+      <View style={[styles.form]}>
+        <Input
+          value={values.email}
+          caption={'E-mail'}
+          onChangeText={handleChangeInput('email')}
+          onBlur={handleBlur('email')}
+          style={styles.input}
+          error={touched.email && errors.email}
+          clearButtonMode="while-editing"
+          placeholder="E-mail"
+        />
+        <Input
+          value={values.password}
+          caption={'Пароль'}
+          onChangeText={handleChangeInput('password')}
+          onBlur={handleBlur('password')}
+          error={touched.password && errors.password}
+          placeholder="Не менше 6 символів"
+          password
+          // rightIcon={
+          //   <View style={{ width: 24, height: 24, backgroundColor: 'black' }} />
+          // }
+          style={styles.input}
+        />
+        <Button
+          label="Забули пароль?"
+          link
+          style={styles.forgotPassword}
+          onPress={onPressForgotPassword}
+        />
+      </View>
+      <View>
+        <Button
+          label="Вхід"
+          onPress={handleSubmit}
+          style={styles.submitButton}
+        />
+        <Button
+          label="Ще не маєте аккаунту? Зареєструватись"
+          link
+          onPress={onPressSignUp}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
-export default SignIn;
+export default observer(SignIn);
+
+const useStyles = () => {
+  const {
+    uiStore: { isPortrait },
+  } = useStores();
+  const { colors } = getTheme();
+  const { bottom, left, right } = useSafeAreaInsets();
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.card,
+      justifyContent: 'space-between',
+      paddingBottom: IS_IOS ? bottom + spacingBase.s4 : spacingBase.s4,
+      paddingLeft: isPortrait ? spacingBase.s4 : left,
+      paddingRight: isPortrait ? spacingBase.s4 : right,
+      paddingTop: spacingBase.s3,
+    },
+    form: {
+      width: '100%',
+    },
+    input: {
+      marginBottom: spacingBase.s3,
+    },
+    forgotPassword: {
+      alignSelf: 'flex-start',
+    },
+    submitButton: {
+      marginBottom: spacingBase.s2,
+    },
+  });
+};

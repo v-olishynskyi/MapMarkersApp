@@ -1,9 +1,13 @@
-export type ITheme = {
+import { Theme } from '@react-navigation/native';
+import { TextStyle } from 'react-native';
+
+export type ITheme = Theme & {
   dark: boolean;
   colors: IColors;
+  typography: ITypography;
 };
 
-export interface IColors {
+export type IColors = Theme['colors'] & {
   red: string;
   orange: string;
   yellow: string;
@@ -24,12 +28,7 @@ export interface IColors {
   gray6: string;
   white: string;
   black: string;
-
-  background: {
-    primary: string;
-    secondary: string;
-  };
-}
+};
 
 type SpacingNames =
   | 's1'
@@ -45,3 +44,22 @@ type SpacingNames =
   | 's11';
 
 export type SpacingBase = Record<SpacingNames, number>;
+
+export type Typographies = {
+  largeTitle: TextStyle;
+  title1: TextStyle;
+  title2: TextStyle;
+  title3: TextStyle;
+  headline: TextStyle;
+  body: TextStyle;
+  callout: TextStyle;
+  subhead: TextStyle;
+  footnote: TextStyle;
+  caption1: TextStyle;
+  caption2: TextStyle;
+};
+
+export interface ITypography {
+  bold: Typographies;
+  regular: Typographies;
+}

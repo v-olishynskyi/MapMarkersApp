@@ -1,25 +1,43 @@
 import { StyleSheet } from 'react-native';
-import { getTheme } from '@utils/helpers';
+import { IS_ANDROID, getTheme } from '@utils/helpers';
 import { spacingBase } from '@styles';
 
-const useStyles = (error: boolean) => {
-  const { colors } = getTheme();
+const useStyles = (error: boolean, focused: boolean) => {
+  const { colors, typography } = getTheme();
 
   return StyleSheet.create({
-    container: {
+    inputContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: spacingBase.s3,
       borderWidth: 1,
-      borderColor: error ? colors.error : '#6B737A',
+      borderColor: focused
+        ? colors.primary
+        : error
+        ? colors.red
+        : colors.border,
       borderRadius: 4,
-      marginBottom: 4,
     },
-    pv2: { paddingVertical: spacingBase.s2 },
-    pv3: { paddingVertical: spacingBase.s3 },
+    caption: {
+      marginBottom: spacingBase.s2,
+      ...typography.regular.headline,
+    },
+    leftIcon: {
+      paddingLeft: spacingBase.s1,
+    },
+    rightIcon: {
+      paddingRight: spacingBase.s3,
+    },
     input: {
       height: '100%',
       flex: 1,
+      ...typography.regular.body,
+      paddingHorizontal: spacingBase.s1,
+      paddingVertical: spacingBase.s2,
+      ...(IS_ANDROID
+        ? {
+            paddingVertical: 8,
+          }
+        : {}),
     },
     iconContainer: {
       width: 24,
@@ -27,17 +45,10 @@ const useStyles = (error: boolean) => {
       justifyContent: 'center',
       alignItems: 'center',
     },
-    leftIcon: {
-      marginRight: spacingBase.s1,
-    },
-    rightIcon: {
-      marginLeft: spacingBase.s1,
-    },
     error: {
-      color: colors.error,
-      fontSize: 12,
-      textAlign: 'left',
-      paddingHorizontal: spacingBase.s3,
+      ...typography.regular.caption2,
+      marginTop: spacingBase.s2,
+      color: colors.red,
     },
   });
 };

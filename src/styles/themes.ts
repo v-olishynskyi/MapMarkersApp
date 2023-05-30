@@ -1,6 +1,7 @@
 import { ITheme } from './types';
+import { typography } from './typography';
 
-export const LightTheme: ITheme = {
+export const DefaultTheme: ITheme = {
   dark: false,
   colors: {
     red: '#FF3B30',
@@ -24,16 +25,21 @@ export const LightTheme: ITheme = {
     white: '#FFFFFF',
     black: '#000000',
 
-    background: {
-      primary: '#F1F2F6',
-      secondary: '#FFFDFF',
-    },
+    background: '#FFFFFFFF',
+    border: '#E5E5EA',
+    card: '#F2F2F7FF',
+    primary: '#6B4EFF',
+    text: '#000000',
+    notification: '#FF2D55',
   },
+  typography,
 };
 
 export const DarkTheme: ITheme = {
+  ...DefaultTheme,
   dark: true,
   colors: {
+    ...DefaultTheme,
     red: '#FF453A',
     pink: '#FF375F',
     purple: '#BF5AF2',
@@ -55,9 +61,12 @@ export const DarkTheme: ITheme = {
     white: '#FFFFFF',
     black: '#000000',
 
-    background: {
-      primary: '#000000',
-      secondary: '#1C1C1E',
-    },
+    background: '#000000FF',
+    border: '#2C2C2E',
+    card: '#1C1C1EFF',
+    primary: '#6B4EFF',
+    text: '#FFFFFF',
+    notification: '#FF375F',
   },
+  typography,
 };
