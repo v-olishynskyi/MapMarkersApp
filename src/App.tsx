@@ -13,7 +13,7 @@ import { RootNavigation, navigationRef } from '@navigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DefaultTheme } from '@styles';
 import { useStores } from '@store';
-import { Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { isPortrait } from '@utils/helpers';
 
 const App = () => {
@@ -28,7 +28,7 @@ const App = () => {
   }, [uiStore]);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>
         <NavigationContainer ref={navigationRef} theme={DefaultTheme}>
           <RootNavigation />
@@ -37,5 +37,9 @@ const App = () => {
     </GestureHandlerRootView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+});
 
 export default App;

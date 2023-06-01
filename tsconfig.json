@@ -47,6 +47,7 @@
       "@assets/*": ["./assets/*"],
       "@api/*": ["./api/*"],
       "@screens": ["./screens"],
+      "@services": ["./services"],
       "@utils/*": ["./utils/*"],
       "@store": ["./store"],
       "@store/*": ["./store/*"],

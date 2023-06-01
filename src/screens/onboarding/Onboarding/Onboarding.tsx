@@ -16,6 +16,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { globalStorage } from '@utils/Storage';
 
 const Step: React.FC<{ isActive: boolean }> = ({ isActive }) => {
   const styles = useStyles();
@@ -73,8 +74,14 @@ const Onboarding: React.FC = () => {
 
   const handlePressNext = () =>
     isLast ? onPressSignUp() : setStep(prev => prev + 1);
-  const onPressSignIn = () => navigate('sign-in');
-  const onPressSignUp = () => navigate('sign-in');
+  const onPressSignIn = () => {
+    globalStorage.set('is-visited-onboarding', true);
+    return navigate('sign-in');
+  };
+  const onPressSignUp = () => {
+    globalStorage.set('is-visited-onboarding', true);
+    return navigate('sign-in');
+  };
 
   const renderStep = React.useCallback(
     (_, index) => {

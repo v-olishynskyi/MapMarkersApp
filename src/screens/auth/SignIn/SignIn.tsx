@@ -7,19 +7,17 @@ import React from 'react';
 import View from 'react-native-ui-lib/view';
 import { useFormik } from 'formik';
 import { FormState } from './types';
-import { Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView } from 'react-native';
 import { Input } from '@components';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
-import { IS_IOS, getTheme } from '@utils/helpers';
-import { spacingBase } from '@styles';
 import { Button } from 'react-native-ui-lib';
 import validationSchema from './schema';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useNavigation } from '@react-navigation/native';
 import { AuthNavigationStackParamsList } from '@navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import useStyles from './styles';
 
 /**
  * SignIn
@@ -31,21 +29,25 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
  * // How to use SignIn:
  *  <SignIn />
  */
-const SignIn: React.FC = () => {
+const SignIn: React.FC = observer(() => {
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthNavigationStackParamsList>>();
   const height = useHeaderHeight();
-
   const styles = useStyles();
-  const { authStore } = useStores();
 
-  const onSubmit = (values: FormState) => {
-    Alert.alert('', JSON.stringify(values));
+  const {
+    authStore: { signIn, email, password, setEmail, setPassword, isLoading },
+  } = useStores();
+
+  const onSubmit = async (values: FormState) => {
+    const { email: formEmail, password: formPassword } = values;
+
+    await signIn(formEmail, formPassword);
   };
 
   const { errors, handleSubmit, handleBlur, touched, setFieldValue, values } =
     useFormik<FormState>({
-      initialValues: { email: authStore.email, password: authStore.password },
+      initialValues: { email: email, password: password },
       validationSchema,
       onSubmit,
     });
@@ -54,15 +56,14 @@ const SignIn: React.FC = () => {
     setFieldValue(field, value);
 
     field === 'email'
-      ? authStore.setEmail(value)
+      ? setEmail(value)
       : field === 'password'
-      ? authStore.setPassword(value)
+      ? setPassword(value)
       : null;
   };
 
   const onPressForgotPassword = () => navigation.navigate('forgot-password');
   const onPressSignUp = () => navigation.navigate('sign-up');
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -87,9 +88,6 @@ const SignIn: React.FC = () => {
           error={touched.password && errors.password}
           placeholder="Не менше 6 символів"
           password
-          // rightIcon={
-          //   <View style={{ width: 24, height: 24, backgroundColor: 'black' }} />
-          // }
           style={styles.input}
         />
         <Button
@@ -100,11 +98,13 @@ const SignIn: React.FC = () => {
         />
       </View>
       <View>
-        <Button
-          label="Вхід"
-          onPress={handleSubmit}
-          style={styles.submitButton}
-        />
+        <View style={styles.submitButton}>
+          {isLoading ? (
+            <ActivityIndicator />
+          ) : (
+            <Button label="Вхід" onPress={handleSubmit} />
+          )}
+        </View>
         <Button
           label="Ще не маєте аккаунту? Зареєструватись"
           link
@@ -113,38 +113,6 @@ const SignIn: React.FC = () => {
       </View>
     </KeyboardAvoidingView>
   );
-};
+});
 
-export default observer(SignIn);
-
-const useStyles = () => {
-  const {
-    uiStore: { isPortrait },
-  } = useStores();
-  const { colors } = getTheme();
-  const { bottom, left, right } = useSafeAreaInsets();
-
-  return StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.card,
-      justifyContent: 'space-between',
-      paddingBottom: IS_IOS ? bottom + spacingBase.s4 : spacingBase.s4,
-      paddingLeft: isPortrait ? spacingBase.s4 : left,
-      paddingRight: isPortrait ? spacingBase.s4 : right,
-      paddingTop: spacingBase.s3,
-    },
-    form: {
-      width: '100%',
-    },
-    input: {
-      marginBottom: spacingBase.s3,
-    },
-    forgotPassword: {
-      alignSelf: 'flex-start',
-    },
-    submitButton: {
-      marginBottom: spacingBase.s2,
-    },
-  });
-};
+export default SignIn;

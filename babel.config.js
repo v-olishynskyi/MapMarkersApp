@@ -29,6 +29,7 @@ module.exports = {
           '@assets': './src/assets',
           '@api': './src/api',
           '@screens': './src/screens',
+          '@services': './src/services',
           '@utils': './src/utils',
           '@store': './src/store',
           '@styles': './src/styles',

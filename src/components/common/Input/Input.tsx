@@ -7,7 +7,6 @@
 import React from 'react';
 import {
   NativeSyntheticEvent,
-  Pressable,
   Text,
   TextInput,
   TextInputFocusEventData,
@@ -21,7 +20,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { EyeIcon } from '@assets/icons';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Pressable } from '@components';
 
 /**
  *
@@ -36,10 +36,9 @@ import { EyeIcon } from '@assets/icons';
  * // How to use with Formik
  * <Input
  *  value={inputValue}
- *  onBlur={setInputValue}
+ *  onChangeText={setInputValue}
  *  caption="Input caption"
- *  errors={errors.email]}
- *  showError={errors.email && touched.emai}
+ *  error={"Error"]}
  * />
  *
  */
@@ -65,12 +64,12 @@ const Input: React.FC<InputProps> = ({
 
   const sharedHeight = useSharedValue(13.3 * Number(!!error));
 
-  const height = useAnimatedStyle(() => ({
-    height: sharedHeight.value,
+  const minHeight = useAnimatedStyle(() => ({
+    minHeight: sharedHeight.value,
   }));
 
   const errorComponent = (
-    <Animated.Text style={[styles.error, height]}>{error}</Animated.Text>
+    <Animated.Text style={[styles.error, minHeight]}>{error}</Animated.Text>
   );
 
   const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -84,8 +83,14 @@ const Input: React.FC<InputProps> = ({
   };
 
   const passwordIcon = (
-    <Pressable onPress={() => setShowPassword(prev => !prev)}>
-      <EyeIcon />
+    <Pressable
+      onPress={() => setShowPassword(prev => !prev)}
+      hitSlop={{ top: 20, bottom: 20 }}>
+      <Icon
+        name={showPassword ? 'eye-outline' : 'eye-off-outline'}
+        style={styles.iconContainer}
+        size={24}
+      />
     </Pressable>
   );
 

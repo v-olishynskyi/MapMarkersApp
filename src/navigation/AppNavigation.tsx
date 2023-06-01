@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SignIn } from '@screens';
+import { Profile } from '@screens';
 
 const Stack = createNativeStackNavigator();
 
@@ -9,6 +9,6 @@ export const AppNavigation = () => (
     screenOptions={{
       headerShown: false,
     }}>
-    <Stack.Screen name="main" component={SignIn} />
+    <Stack.Screen name="profile" component={Profile} />
   </Stack.Navigator>
 );
