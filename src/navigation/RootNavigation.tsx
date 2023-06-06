@@ -1,22 +1,16 @@
 import React from 'react';
 import { AuthNavigation } from './AuthNavigation';
 import { AppNavigation } from './AppNavigation';
-import { getGenericPassword } from 'react-native-keychain';
+import { useStores } from '@store';
+import { observer } from 'mobx-react-lite';
 
-const RootNavigation = () => {
-  const [isAuth, setIsAuth] = React.useState(false);
-
-  React.useEffect(() => {
-    (async () => {
-      const creds = await getGenericPassword();
-      if (creds) {
-        setIsAuth(true);
-      }
-      console.log('file: RootNavigation.tsx:13 - creds:', creds);
-    })();
-  }, []);
+const RootNavigation = observer(() => {
+  const {
+    authStore: { isAuth },
+  } = useStores();
+  console.log('file: RootNavigation.tsx:10 - RootNavigation - isAuth:', isAuth);
 
   return isAuth ? <AppNavigation /> : <AuthNavigation />;
-};
+});
 
 export default RootNavigation;

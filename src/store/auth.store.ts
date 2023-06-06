@@ -1,10 +1,12 @@
-import { AuthService } from '../services/auth.service';
+import { UsersService, AuthService } from '@services';
 import { RootStore } from '@store/root.store';
 import { action, makeObservable, observable, runInAction } from 'mobx';
 import * as Keychain from 'react-native-keychain';
 
 export class AuthStore {
   rootStore: RootStore;
+
+  isAuth: boolean = false;
 
   isLoading: boolean = false;
   email: string = '';
@@ -20,10 +22,12 @@ export class AuthStore {
         email: observable,
         password: observable,
         isLoading: observable,
+        isAuth: observable,
 
         // actions
         setEmail: action.bound,
         setPassword: action.bound,
+        setIsAuth: action.bound,
         signIn: action.bound,
         logout: action.bound,
 
@@ -45,15 +49,23 @@ export class AuthStore {
     try {
       this.isLoading = true;
 
-      const { token } = await AuthService.login({ email, password });
+      const { access_token } = await AuthService.login({ email, password });
 
-      await Keychain.setGenericPassword(email, token);
+      await Keychain.setGenericPassword(
+        'acs_tkn',
+        JSON.stringify({ accessToken: access_token }),
+      );
+
+      await UsersService.getAllUsers();
 
       runInAction(() => {
         this.isLoading = false;
+        this.isAuth = true;
       });
     } catch (error) {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
   }
 
@@ -66,22 +78,18 @@ export class AuthStore {
 
       await Keychain.resetGenericPassword();
 
-      const test = await Keychain.getGenericPassword();
-      console.log('file: auth.store.ts:70 - AuthStore - logout - test:', test);
-
       runInAction(() => {
         this.isLoading = false;
+        this.isAuth = false;
       });
     } catch (error) {
-      console.log('errir', error);
-
       runInAction(() => {
         this.isLoading = false;
       });
     }
   }
 
-  get isAuth() {
-    return Boolean(Keychain.getGenericPassword());
+  setIsAuth(value: boolean) {
+    this.isAuth = value;
   }
 }

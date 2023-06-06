@@ -5,7 +5,7 @@ export class UserStore {
   rootStore: RootStore;
 
   id: string = '';
-  email: string = 'asdsadsadas';
+  email: string = '';
   first_name: string = '';
   last_name: string = '';
   middle_name?: string = undefined;

@@ -1,9 +1,13 @@
-import { wait } from '@utils/helpers';
-import { LoginData } from './auth.model';
+import api from '@api';
+import { LoginData, LoginResponse } from './auth.model';
 
 export class AuthService {
-  public static async login(body: LoginData) {
-    await wait(4000);
-    return Promise.resolve({ token: `${body.email}-${body.password}` });
+  public static async login({ email, password }: LoginData) {
+    const { data } = await api.post<LoginResponse>('auth/sign-in', {
+      email,
+      password,
+    });
+
+    return data;
   }
 }

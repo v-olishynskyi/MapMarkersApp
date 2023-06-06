@@ -17,10 +17,6 @@ export const AuthNavigation = () => {
   const shouldShowOnboarding = !globalStorage.getBoolean(
     'is-visited-onboarding',
   );
-  console.log(
-    'file: AuthNavigation.tsx:18 - AuthNavigation - shouldShowOnboarding:',
-    shouldShowOnboarding,
-  );
 
   return (
     <Stack.Navigator
