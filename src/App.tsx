@@ -15,7 +15,7 @@ import { DefaultTheme } from '@styles';
 import { useStores } from '@store';
 import { Dimensions, StyleSheet } from 'react-native';
 import { isPortrait } from '@utils/helpers';
-import { RootLoading } from '@components';
+import { RootLoading, Toast } from '@components';
 
 const App = () => {
   const { uiStore } = useStores();
@@ -29,15 +29,18 @@ const App = () => {
   }, [uiStore]);
 
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <SafeAreaProvider>
-        <NavigationContainer ref={navigationRef} theme={DefaultTheme}>
-          <RootLoading>
-            <RootNavigation />
-          </RootLoading>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <>
+      <GestureHandlerRootView style={styles.container}>
+        <SafeAreaProvider>
+          <NavigationContainer ref={navigationRef} theme={DefaultTheme}>
+            <RootLoading>
+              <RootNavigation />
+            </RootLoading>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+      <Toast />
+    </>
   );
 };
 
