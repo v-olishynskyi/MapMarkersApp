@@ -43,29 +43,33 @@ import { Pressable } from '@components';
  *
  */
 
-const Input: React.FC<InputProps> = ({
-  onFocus,
-  error,
-  leftIcon,
-  rightIcon,
-  style: containerStyle,
-  value,
-  onChangeText,
-  caption,
-  password,
-  inputStyle,
-  onBlur,
-  ...rest
-}) => {
+const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
+  const {
+    onFocus,
+    error,
+    leftIcon,
+    rightIcon,
+    style: containerStyle,
+    value,
+    onChangeText,
+    caption,
+    password,
+    inputStyle,
+    onBlur,
+    ...rest
+  } = props;
+
   const [isFocused, setIsFocused] = React.useState(false);
   const styles = useStyles(!!error, isFocused);
 
   const [showPassword, setShowPassword] = React.useState(password);
 
-  const sharedHeight = useSharedValue(13.3 * Number(!!error));
-
+  const errorHeight = useSharedValue(0);
   const minHeight = useAnimatedStyle(() => ({
-    minHeight: sharedHeight.value,
+    maxHeight: withTiming(errorHeight.value, {
+      duration: 100,
+      easing: Easing.linear,
+    }),
   }));
 
   const errorComponent = (
@@ -100,11 +104,8 @@ const Input: React.FC<InputProps> = ({
   };
 
   React.useEffect(() => {
-    sharedHeight.value = withTiming(13.3 * Number(!!error), {
-      duration: 200,
-      easing: Easing.linear,
-    });
-  }, [error, sharedHeight]);
+    errorHeight.value = error ? 13.3 : 0;
+  }, [error, errorHeight]);
 
   return (
     <View style={containerStyle}>
@@ -116,6 +117,7 @@ const Input: React.FC<InputProps> = ({
           </View>
         )}
         <TextInput
+          ref={ref}
           value={value}
           onChangeText={onChangeText}
           style={[styles.input, inputStyle]}
@@ -133,6 +135,6 @@ const Input: React.FC<InputProps> = ({
       {!!error && typeof error === 'string' && errorComponent}
     </View>
   );
-};
+});
 
 export default Input;

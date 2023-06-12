@@ -7,17 +7,21 @@ import React from 'react';
 import View from 'react-native-ui-lib/view';
 import { useFormik } from 'formik';
 import { FormState } from './types';
-import { ActivityIndicator, KeyboardAvoidingView } from 'react-native';
-import { Input } from '@components';
+import { KeyboardAvoidingView } from 'react-native';
+import { Input, Button } from '@components';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
-import { Button } from 'react-native-ui-lib';
 import validationSchema from './schema';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useNavigation } from '@react-navigation/native';
 import { AuthNavigationStackParamsList } from '@navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import useStyles from './styles';
+
+const defaultState: FormState = {
+  email: '',
+  password: '',
+};
 
 /**
  * SignIn
@@ -36,34 +40,36 @@ const SignIn: React.FC = observer(() => {
   const styles = useStyles();
 
   const {
-    authStore: { signIn, email, password, setEmail, setPassword, isLoading },
+    authStore: { signIn, isLoading },
   } = useStores();
 
   const onSubmit = async (values: FormState) => {
-    const { email: formEmail, password: formPassword } = values;
-
-    await signIn(formEmail, formPassword);
+    try {
+      await signIn(values);
+      resetForm();
+    } catch (error) {}
   };
 
-  const { errors, handleSubmit, handleBlur, touched, setFieldValue, values } =
-    useFormik<FormState>({
-      initialValues: { email: email, password: password },
-      validationSchema,
-      onSubmit,
-    });
+  const {
+    errors,
+    handleSubmit,
+    handleBlur,
+    touched,
+    values,
+    setFieldValue,
+    resetForm,
+  } = useFormik<FormState>({
+    initialValues: defaultState,
+    validationSchema,
+    onSubmit,
+  });
 
-  const handleChangeInput = (field: keyof FormState) => (value: string) => {
+  const handleChangeInput = (field: keyof FormState) => (value: string) =>
     setFieldValue(field, value);
-
-    field === 'email'
-      ? setEmail(value)
-      : field === 'password'
-      ? setPassword(value)
-      : null;
-  };
 
   const onPressForgotPassword = () => navigation.navigate('forgot-password');
   const onPressSignUp = () => navigation.navigate('sign-up');
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -99,11 +105,7 @@ const SignIn: React.FC = observer(() => {
       </View>
       <View>
         <View style={styles.submitButton}>
-          {isLoading ? (
-            <ActivityIndicator />
-          ) : (
-            <Button label="Вхід" onPress={handleSubmit} />
-          )}
+          <Button label="Вхід" onPress={handleSubmit} loading={isLoading} />
         </View>
         <Button
           label="Ще не маєте аккаунту? Зареєструватись"

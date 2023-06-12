@@ -31,7 +31,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => response,
   error => {
-    return Promise.reject(error.response);
+    return Promise.reject(error.response.data);
   },
 );
 
