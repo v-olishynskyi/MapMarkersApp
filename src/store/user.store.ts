@@ -7,15 +7,13 @@ export class UserStore {
   rootStore: RootStore;
 
   isLoading: boolean = false;
-  user: User = {
-    id: '',
-    email: '',
-    first_name: '',
-    last_name: '',
-    middle_name: null,
-    username: null,
-    avatar_url: null,
-  };
+  id: User['id'] = '';
+  email: User['email'] = '';
+  first_name: User['first_name'] = '';
+  last_name: User['last_name'] = '';
+  middle_name: User['middle_name'];
+  username: User['username'];
+  avatar_url: User['avatar_url'];
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -24,7 +22,7 @@ export class UserStore {
   }
 
   handleUserData(user: User) {
-    Object.keys(user).forEach(key => (this.user[key] = user[key]));
+    Object.keys(user).forEach(key => (this[key] = user[key]));
   }
 
   async loadProfile() {
@@ -43,5 +41,15 @@ export class UserStore {
         this.isLoading = false;
       });
     }
+  }
+
+  get fullname() {
+    return `${this.first_name} ${this.last_name}`;
+  }
+
+  get initials() {
+    return `${this.first_name.charAt(0).toUpperCase()}${this.last_name
+      .charAt(0)
+      .toUpperCase()}`;
   }
 }

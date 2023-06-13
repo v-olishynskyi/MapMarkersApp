@@ -9,7 +9,7 @@ import { Image, ScrollView, Text, View } from 'react-native';
 import { Button, Carousel } from 'react-native-ui-lib';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthNavigationStackParamsList } from '@navigation';
+import { AuthStackParamsList } from '@navigation';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -49,7 +49,7 @@ const Step: React.FC<{ isActive: boolean }> = ({ isActive }) => {
  */
 const Onboarding: React.FC = () => {
   const { navigate } =
-    useNavigation<NativeStackNavigationProp<AuthNavigationStackParamsList>>();
+    useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
   const styles = useStyles();
 
   const [step, setStep] = React.useState(0);

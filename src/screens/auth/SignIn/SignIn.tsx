@@ -14,7 +14,7 @@ import { observer } from 'mobx-react-lite';
 import validationSchema from './schema';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useNavigation } from '@react-navigation/native';
-import { AuthNavigationStackParamsList } from '@navigation';
+import { AuthStackParamsList } from '@navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import useStyles from './styles';
 
@@ -35,7 +35,7 @@ const defaultState: FormState = {
  */
 const SignIn: React.FC = observer(() => {
   const navigation =
-    useNavigation<NativeStackNavigationProp<AuthNavigationStackParamsList>>();
+    useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
   const height = useHeaderHeight();
   const styles = useStyles();
 

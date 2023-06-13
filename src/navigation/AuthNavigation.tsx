@@ -2,10 +2,10 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet } from 'react-native';
 import { ForgotPassword, Onboarding, SignIn, SignUp } from '@screens';
-import { AuthNavigationStackParamsList } from './types';
+import { AuthStackParamsList } from './types';
 import { globalStorage } from '@utils/Storage';
 
-const Stack = createNativeStackNavigator<AuthNavigationStackParamsList>();
+const Stack = createNativeStackNavigator<AuthStackParamsList>();
 
 const styles = StyleSheet.create({
   content: {
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const AuthNavigation = () => {
+const AuthNavigation = () => {
   const shouldShowOnboarding = !globalStorage.getBoolean(
     'is-visited-onboarding',
   );
@@ -49,3 +49,5 @@ export const AuthNavigation = () => {
     </Stack.Navigator>
   );
 };
+
+export default AuthNavigation;

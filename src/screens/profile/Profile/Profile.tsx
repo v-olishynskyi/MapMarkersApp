@@ -6,7 +6,7 @@
 import React from 'react';
 import useStyles from './styles';
 import { ProfileProps } from './types';
-import { Dimensions, Text, View } from 'react-native';
+import { Dimensions, ScrollView, View } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
 import { Button } from '@components';
@@ -28,34 +28,37 @@ const Profile: React.FC<ProfileProps> = observer(() => {
   const styles = useStyles();
 
   const {
-    userStore: { user, loadProfile },
+    userStore: { loadProfile, initials, avatar_url, fullname },
     authStore: { logout, isLoading: isLoadingLogout },
     uiStore: { isPortrait },
   } = useStores();
 
   React.useEffect(() => {
     loadProfile();
-  }, []);
+  }, [loadProfile]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}>
       <View style={styles.profileContainer}>
         <View style={styles.avatar_container}>
           <Avatar
             animate
+            label={initials}
+            useAutoColors
+            name={fullname}
             source={{
-              uri:
-                user.avatar_url ||
-                'https://www.cinebuster.in/wp-content/uploads/2022/10/Untitled-20-scaled.jpg',
+              uri: avatar_url || undefined,
             }}
             size={
-              Dimensions.get('window')[isPortrait ? 'width' : 'height'] * 0.4
+              Dimensions.get('window')[isPortrait ? 'width' : 'height'] * 0.3
             }
           />
         </View>
       </View>
       <Button label="Вийти" onPress={logout} loading={isLoadingLogout} />
-    </SafeAreaView>
+    </ScrollView>
   );
 });
 

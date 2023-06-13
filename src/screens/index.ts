@@ -1,5 +1,5 @@
 export * from './auth';
 export * from './map';
-export * from './users';
+export * from './community';
 export * from './profile';
 export * from './onboarding';

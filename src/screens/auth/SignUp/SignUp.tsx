@@ -12,7 +12,7 @@ import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
 import validationSchema from './schema';
 import { useNavigation } from '@react-navigation/native';
-import { AuthNavigationStackParamsList } from '@navigation';
+import { AuthStackParamsList } from '@navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import useStyles from './styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -40,7 +40,7 @@ const initalState: FormState = {
  */
 const SignUp: React.FC = () => {
   const navigation =
-    useNavigation<NativeStackNavigationProp<AuthNavigationStackParamsList>>();
+    useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
 
   const styles = useStyles();
   const {

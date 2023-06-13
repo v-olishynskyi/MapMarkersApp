@@ -1,14 +1,16 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Profile } from '@screens';
+import { TabNavigation } from './';
 
 const Stack = createNativeStackNavigator();
 
-export const AppNavigation = () => (
+const AppNavigation = () => (
   <Stack.Navigator
     screenOptions={{
       headerShown: false,
     }}>
-    <Stack.Screen name="profile" component={Profile} />
+    <Stack.Screen name="tabs" component={TabNavigation} />
   </Stack.Navigator>
 );
+
+export default AppNavigation;
