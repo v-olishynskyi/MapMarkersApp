@@ -16,9 +16,14 @@ import { useStores } from '@store';
 import { Dimensions, StyleSheet } from 'react-native';
 import { isPortrait } from '@utils/helpers';
 import { RootLoading, Toast } from '@components';
+import { observer } from 'mobx-react-lite';
 
-const App = () => {
-  const { uiStore } = useStores();
+const App = observer(() => {
+  const {
+    uiStore,
+    authStore: { isAuth },
+    userStore: { loadProfile },
+  } = useStores();
 
   React.useEffect(() => {
     Dimensions.addEventListener('change', () => {
@@ -27,6 +32,12 @@ const App = () => {
         : uiStore.setOrientation('landscape');
     });
   }, [uiStore]);
+
+  React.useEffect(() => {
+    if (isAuth) {
+      loadProfile();
+    }
+  }, [isAuth, loadProfile]);
 
   return (
     <>
@@ -42,7 +53,7 @@ const App = () => {
       <Toast />
     </>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: { flex: 1 },

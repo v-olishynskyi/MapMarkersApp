@@ -9,9 +9,7 @@ import { ProfileProps } from './types';
 import { Dimensions, ScrollView, View } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
-import { Button } from '@components';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Avatar } from 'react-native-ui-lib';
+import { Avatar, Button } from '@components';
 
 /**
  * Profile
@@ -44,13 +42,9 @@ const Profile: React.FC<ProfileProps> = observer(() => {
       <View style={styles.profileContainer}>
         <View style={styles.avatar_container}>
           <Avatar
-            animate
-            label={initials}
-            useAutoColors
-            name={fullname}
-            source={{
-              uri: avatar_url || undefined,
-            }}
+            initials={initials}
+            fullname={fullname}
+            url={avatar_url || undefined}
             size={
               Dimensions.get('window')[isPortrait ? 'width' : 'height'] * 0.3
             }
