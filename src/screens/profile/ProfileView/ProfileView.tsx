@@ -1,28 +1,28 @@
 /**
- * @namespace Profile
+ * @namespace ProfileView
  * @category
  * @subcategory
  *  */
 import React from 'react';
 import useStyles from './styles';
-import { ProfileProps } from './types';
+import { ProfileViewProps } from './types';
 import { Dimensions, ScrollView, View } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
 import { Avatar, Button } from '@components';
 
 /**
- * Profile
+ * ProfileView
  *
  *
- * @memberof ProfileNavigation
- * @param {ProfileProps} params
+ * @memberof ProfileViewNavigation
+ * @param {ProfileViewProps} params
  *
  * @example
- * // How to use Profile:
- *  <Profile />
+ * // How to use ProfileView:
+ *  <ProfileView />
  */
-const Profile: React.FC<ProfileProps> = observer(() => {
+const ProfileView: React.FC<ProfileViewProps> = observer(() => {
   const styles = useStyles();
 
   const {
@@ -56,4 +56,4 @@ const Profile: React.FC<ProfileProps> = observer(() => {
   );
 });
 
-export default Profile;
+export default ProfileView;

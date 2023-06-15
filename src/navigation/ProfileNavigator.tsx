@@ -1,9 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { ProfileStackParamsList } from '@navigation';
-import { Profile, ProfileTab } from '@screens';
+import { ProfileTab } from '@screens';
 
 const Stack = createNativeStackNavigator<ProfileStackParamsList>();
+
+const EditProfile = () => null;
 
 const ProfileNavigator = () => {
   return (
@@ -15,10 +17,9 @@ const ProfileNavigator = () => {
       />
       <Stack.Screen
         name="edit-profile"
-        component={Profile}
+        component={EditProfile}
         options={{ presentation: 'formSheet' }}
       />
-      <Stack.Screen name="profile-view" component={Profile} />
     </Stack.Navigator>
   );
 };

@@ -36,6 +36,7 @@ const TabNavigation = () => {
 
   return (
     <Tab.Navigator
+      initialRouteName="profile"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: colors.primary,

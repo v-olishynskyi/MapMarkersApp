@@ -13,6 +13,10 @@ export type TabsStackParamsList = {
 
 export type ProfileStackParamsList = {
   'profile-tab': undefined;
-  'profile-view': undefined;
   'edit-profile': undefined;
+};
+
+export type AppStackParamsList = {
+  tabs: undefined;
+  'profile-view': { userId?: string };
 };
