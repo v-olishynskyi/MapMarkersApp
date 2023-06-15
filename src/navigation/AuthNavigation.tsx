@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { ForgotPassword, Onboarding, SignIn, SignUp } from '@screens';
 import { AuthStackParamsList } from './types';
 import { globalStorage } from '@utils/Storage';
+import { getTheme } from '@utils/helpers';
 
 const Stack = createNativeStackNavigator<AuthStackParamsList>();
 
@@ -18,10 +19,13 @@ const AuthNavigation = () => {
     'is-visited-onboarding',
   );
 
+  const { colors } = getTheme();
+
   return (
     <Stack.Navigator
       screenOptions={{
         contentStyle: styles.content,
+        headerStyle: { backgroundColor: colors.background },
       }}
       initialRouteName={shouldShowOnboarding ? 'onboarding' : 'sign-in'}>
       {shouldShowOnboarding && (

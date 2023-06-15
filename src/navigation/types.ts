@@ -18,5 +18,8 @@ export type ProfileStackParamsList = {
 
 export type AppStackParamsList = {
   tabs: undefined;
-  'profile-view': { userId?: string };
+  'profile-view': { userId?: string } | undefined;
+  support: undefined;
+  'about-us': undefined;
+  settings: undefined;
 };

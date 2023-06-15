@@ -8,7 +8,7 @@ const useStyles = () => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.card,
+      backgroundColor: colors.background,
     },
     scrollContent: {
       flex: 1,

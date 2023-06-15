@@ -14,7 +14,7 @@ const useStyles = () => {
   return StyleSheet.create({
     container: { flex: 1 },
     scrollContainer: {
-      backgroundColor: colors.card,
+      backgroundColor: colors.background,
       justifyContent: 'space-between',
       paddingBottom: IS_IOS ? bottom + spacingBase.s4 : spacingBase.s4,
       paddingLeft: isPortrait ? spacingBase.s4 : left,

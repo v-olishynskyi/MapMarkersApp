@@ -14,7 +14,7 @@ const useStyles = () => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.card,
+      backgroundColor: colors.background,
       paddingBottom: IS_IOS ? bottom + spacingBase.s4 : spacingBase.s4,
     },
     contentStyles: {

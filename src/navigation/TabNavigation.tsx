@@ -53,7 +53,8 @@ const TabNavigation = () => {
           elevation: 24,
           backgroundColor: colors.background,
         },
-      }}>
+      }}
+      sceneContainerStyle={{ backgroundColor: colors.background }}>
       <Tab.Screen
         name="map"
         options={{

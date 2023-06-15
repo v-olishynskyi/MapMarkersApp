@@ -25,9 +25,9 @@ export const DefaultTheme: ITheme = {
     white: '#FFFFFF',
     black: '#000000',
 
-    background: '#FFFFFFFF',
+    background: '#F2F2F7FF',
     border: '#E5E5EA',
-    card: '#F2F2F7FF',
+    card: '#FFFFFFFF',
     primary: '#6B4EFF',
     text: '#000000',
     notification: '#FF2D55',
