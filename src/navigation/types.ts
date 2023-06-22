@@ -6,20 +6,21 @@ export type AuthStackParamsList = {
 };
 
 export type TabsStackParamsList = {
-  map: undefined;
-  community: undefined;
-  profile: undefined;
+  'map-tab': undefined;
+  'community-tab': undefined;
+  'profile-tab': undefined;
 };
 
 export type ProfileStackParamsList = {
-  'profile-tab': undefined;
+  'profile-view': { userId?: string } | undefined;
   'edit-profile': undefined;
 };
 
 export type AppStackParamsList = {
   tabs: undefined;
-  'profile-view': { userId?: string } | undefined;
   support: undefined;
   'about-us': undefined;
   settings: undefined;
+  'profile-view': { userId?: string } | undefined;
+  'edit-profile': undefined;
 };

@@ -3,7 +3,7 @@ import { getTheme } from '@utils/helpers';
 import { StyleSheet } from 'react-native';
 
 const useStyles = () => {
-  const { colors } = getTheme();
+  const { colors, typography } = getTheme();
 
   return StyleSheet.create({
     container: {
@@ -20,6 +20,18 @@ const useStyles = () => {
     profileContainer: {},
     avatar_container: {
       alignItems: 'center',
+      marginBottom: spacingBase.s4,
+    },
+
+    fullname: {
+      ...typography.bold.body,
+      textAlign: 'center',
+      marginBottom: 4,
+    },
+    email: {
+      ...typography.regular.body,
+      color: colors.gray,
+      textAlign: 'center',
     },
   });
 };

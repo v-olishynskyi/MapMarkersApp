@@ -1,8 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Map, Community } from '@screens';
+import { Map, Community, ProfileTab } from '@screens';
 import { TabsStackParamsList } from './types';
-import { ProfileNavigator } from '@navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getTheme } from '@utils/helpers';
 
@@ -12,17 +11,17 @@ const TabBarIcons: Record<
   keyof TabsStackParamsList,
   (props: { focused: boolean; color: string; size: number }) => React.ReactNode
 > = {
-  map: ({ focused, color }) => (
+  'map-tab': ({ focused, color }) => (
     <Icon name={focused ? 'map' : 'map-outline'} color={color} size={20} />
   ),
-  community: ({ focused, color }) => (
+  'community-tab': ({ focused, color }) => (
     <Icon
       name={focused ? 'people' : 'people-outline'}
       color={color}
       size={20}
     />
   ),
-  profile: ({ focused, color }) => (
+  'profile-tab': ({ focused, color }) => (
     <Icon
       name={focused ? 'person' : 'person-outline'}
       color={color}
@@ -36,7 +35,7 @@ const TabNavigation = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="profile"
+      initialRouteName="profile-tab"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
@@ -56,22 +55,25 @@ const TabNavigation = () => {
       }}
       sceneContainerStyle={{ backgroundColor: colors.background }}>
       <Tab.Screen
-        name="map"
+        name="map-tab"
         options={{
           title: 'Карта',
-          tabBarIcon: TabBarIcons.map,
+          tabBarIcon: TabBarIcons['map-tab'],
         }}
         component={Map}
       />
       <Tab.Screen
-        name="community"
-        options={{ title: 'Спільнота', tabBarIcon: TabBarIcons.community }}
+        name="community-tab"
+        options={{
+          title: 'Спільнота',
+          tabBarIcon: TabBarIcons['community-tab'],
+        }}
         component={Community}
       />
       <Tab.Screen
-        name="profile"
-        options={{ title: 'Профіль', tabBarIcon: TabBarIcons.profile }}
-        component={ProfileNavigator}
+        name="profile-tab"
+        options={{ title: 'Профіль', tabBarIcon: TabBarIcons['profile-tab'] }}
+        component={ProfileTab}
       />
     </Tab.Navigator>
   );

@@ -42,3 +42,12 @@ export const showToast = (
 
   Toast.show({ type, text1: toastTitle, text2: toastMessage, ...rest });
 };
+
+export const getUserInitials = (fullname: string) => {
+  const firstName = fullname.split(' ')[0];
+  const lastName = fullname.split(' ')[1];
+
+  return `${firstName.charAt(0).toUpperCase()}${lastName
+    .charAt(0)
+    .toUpperCase()}`;
+};

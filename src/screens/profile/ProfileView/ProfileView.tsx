@@ -6,10 +6,13 @@
 import React from 'react';
 import useStyles from './styles';
 import { ProfileViewProps } from './types';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
-import { Avatar, Button } from '@components';
+import { Avatar, Pressable } from '@components';
+import { generalStyles } from '@styles';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { getTheme } from '@utils/helpers';
 
 /**
  * ProfileView
@@ -23,12 +26,11 @@ import { Avatar, Button } from '@components';
  *  <ProfileView />
  */
 const ProfileView: React.FC<ProfileViewProps> = observer(() => {
+  const { colors } = getTheme();
   const styles = useStyles();
 
   const {
-    userStore: { loadProfile, initials, avatar_url, fullname },
-    authStore: { logout, isLoading: isLoadingLogout },
-    uiStore: { isPortrait },
+    userStore: { loadProfile, initials, avatar_url, fullname, email, username },
   } = useStores();
 
   React.useEffect(() => {
@@ -45,13 +47,24 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
             initials={initials}
             fullname={fullname}
             url={avatar_url || undefined}
-            size={
-              Dimensions.get('window')[isPortrait ? 'width' : 'height'] * 0.3
-            }
+            size={110}
           />
         </View>
+        <Text style={styles.fullname}>{fullname}</Text>
+        <Text style={styles.email}>{email}</Text>
+        {username ? (
+          <Text style={styles.email}>{username}</Text>
+        ) : (
+          <Pressable style={generalStyles.rowBetween}>
+            <Text>@ Додати username</Text>
+            <Icon
+              name="chevron-forward-outline"
+              size={24}
+              color={colors.gray}
+            />
+          </Pressable>
+        )}
       </View>
-      <Button label="Вийти" onPress={logout} loading={isLoadingLogout} />
     </ScrollView>
   );
 });

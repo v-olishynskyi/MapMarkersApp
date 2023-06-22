@@ -6,6 +6,11 @@ export type User = {
   middle_name: string | null;
   username: string | null;
   avatar_url: string | null;
+
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type CommunityUser = User;
+
+export type UpdateProfileData = Omit<User, 'id' | 'email'>;
