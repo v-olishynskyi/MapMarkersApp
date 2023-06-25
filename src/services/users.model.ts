@@ -13,4 +13,7 @@ export type User = {
 
 export type CommunityUser = User;
 
-export type UpdateProfileData = Omit<User, 'id' | 'email'>;
+export type UpdateProfileData = Omit<
+  User,
+  'id' | 'email' | 'createdAt' | 'updatedAt'
+>;

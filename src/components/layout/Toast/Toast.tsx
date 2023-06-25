@@ -15,7 +15,7 @@ const Toast: FC<Props> = () => {
     info: props => <InfoToast {...props} />,
   };
 
-  return <LibToast config={toastConfig} />;
+  return <LibToast config={toastConfig} visibilityTime={3000} />;
 };
 
 export default Toast;

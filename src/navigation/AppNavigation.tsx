@@ -22,12 +22,15 @@ const EditProfileHeaderButton: FC<{
 }> = ({ canGoBack, label, color, loading, onPress }) => {
   const { typography, colors } = getTheme();
 
-  const onPressCancel = () =>
-    onPress
-      ? onPress()
-      : canGoBack
-      ? navigationRef.goBack()
-      : navigationRef.navigate('profile-view' as any);
+  const onPressCancel = async () => {
+    try {
+      onPress && (await onPress());
+
+      canGoBack
+        ? navigationRef.goBack()
+        : navigationRef.navigate('profile-view' as any);
+    } catch (error) {}
+  };
 
   return (
     <Pressable
@@ -54,7 +57,7 @@ const EditProfileHeaderButton: FC<{
 const AppNavigation = () => {
   const { colors } = getTheme();
   const {
-    userStore: { isSaving, updateProfile },
+    userStore: { isSaving, updateProfile, resetUpdateFormData },
   } = useStores();
 
   return (
@@ -100,6 +103,7 @@ const AppNavigation = () => {
               canGoBack={canGoBack}
               color={colors.red}
               label={'Відмінити'}
+              onPress={resetUpdateFormData}
             />
           ),
           headerRight: ({ canGoBack }) => (

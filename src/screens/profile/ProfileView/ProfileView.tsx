@@ -6,7 +6,7 @@
 import React from 'react';
 import useStyles from './styles';
 import { ProfileViewProps } from './types';
-import { ScrollView, Text, View } from 'react-native';
+import { RefreshControl, ScrollView, Text, View } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
 import { Avatar, Pressable } from '@components';
@@ -30,7 +30,15 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
   const styles = useStyles();
 
   const {
-    userStore: { loadProfile, initials, avatar_url, fullname, email, username },
+    userStore: {
+      loadProfile,
+      initials,
+      avatar_url,
+      fullname,
+      email,
+      username,
+      isLoading,
+    },
   } = useStores();
 
   React.useEffect(() => {
@@ -40,7 +48,10 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={styles.scrollContent}>
+      contentContainerStyle={styles.scrollContent}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={loadProfile} />
+      }>
       <View style={styles.profileContainer}>
         <View style={styles.avatar_container}>
           <Avatar
@@ -53,7 +64,7 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
         <Text style={styles.fullname}>{fullname}</Text>
         <Text style={styles.email}>{email}</Text>
         {username ? (
-          <Text style={styles.email}>{username}</Text>
+          <Text style={styles.email}>@{username}</Text>
         ) : (
           <Pressable style={generalStyles.rowBetween}>
             <Text>@ Додати username</Text>

@@ -20,6 +20,7 @@ export class UserStore {
   updatedAt: User['createdAt'];
 
   updateFormData: UpdateProfileData = {} as UpdateProfileData;
+  updateFormErrors: Partial<UpdateProfileData>;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -27,7 +28,7 @@ export class UserStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  handleUserData(user: User) {
+  handleData(user: User) {
     const keys = Object.keys(user);
     keys.forEach(key => (this[key] = user[key]));
 
@@ -42,7 +43,7 @@ export class UserStore {
       const userData = await ProfileService.loadProfile();
 
       runInAction(() => {
-        this.handleUserData(userData);
+        this.handleData(userData);
         this.isLoading = false;
       });
     } catch (error: any) {
@@ -57,11 +58,13 @@ export class UserStore {
     try {
       this.isSaving = true;
 
-      await wait(4000);
-      // const newData = await ProfileService.updateProfile(this.id, data);
+      const newData = await ProfileService.updateProfile(
+        this.id,
+        this.updateFormData,
+      );
 
       runInAction(() => {
-        // this.handleUserData(newData);
+        this.handleData(newData);
         this.isSaving = false;
       });
     } catch (error: any) {
@@ -69,6 +72,7 @@ export class UserStore {
       runInAction(() => {
         this.isSaving = false;
       });
+      throw error;
     }
   }
 
@@ -76,7 +80,20 @@ export class UserStore {
     this.updateFormData[field] = value;
   }
 
-  resetUpdateFormData() {}
+  resetUpdateFormData() {
+    Object.keys(this.updateFormData).forEach(
+      key => (this.updateFormData[key] = this[key]),
+    );
+  }
+
+  async validateUpdateForm() {
+    return await new Promise(resolve => {
+      let errors = {};
+      Object.keys(this.updateFormData).forEach(key => {
+        const value = this.updateFormData[key];
+      });
+    });
+  }
 
   get fullname() {
     return `${this.first_name} ${this.last_name}`;
