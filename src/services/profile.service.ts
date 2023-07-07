@@ -1,15 +1,15 @@
 import api from '@api';
-import { UpdateProfileData, User } from '@services';
+import { UpdateProfileData, IUser } from '@services';
 
 export class ProfileService {
   public static async loadProfile() {
-    const { data } = await api.get<User>('users/profile');
+    const { data } = await api.get<IUser>('users/profile');
 
     return data;
   }
 
   public static async updateProfile(id: string, data: UpdateProfileData) {
-    const { data: response } = await api.put<User>(`users/${id}`, data);
+    const { data: response } = await api.put<IUser>(`users/${id}`, data);
 
     return response;
   }

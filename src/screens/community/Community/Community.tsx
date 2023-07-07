@@ -13,6 +13,9 @@ import { FlatList, Text, View } from 'react-native';
 import { Avatar, Pressable } from '@components';
 import { generalStyles } from '@styles';
 import { getUserInitials } from '@utils/helpers';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AppStackParamsList } from '@navigation';
 
 /**
  * Community
@@ -26,6 +29,9 @@ import { getUserInitials } from '@utils/helpers';
  *  <Community />
  */
 const Community: React.FC<CommunityProps> = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AppStackParamsList>>();
+
   const styles = useStyles();
 
   const {
@@ -34,7 +40,7 @@ const Community: React.FC<CommunityProps> = () => {
 
   useEffect(() => {
     loadUsers();
-  }, []);
+  }, [loadUsers]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,13 +51,13 @@ const Community: React.FC<CommunityProps> = () => {
         renderItem={({ item: user }) => {
           const fullname = `${user.first_name} ${user.last_name}`;
           const initials = getUserInitials(fullname);
-          console.log(
-            'file: Community.tsx:69 - user:',
-            JSON.stringify(user.avatar_url, null, 2),
-          );
 
           return (
-            <Pressable style={[generalStyles.row, { marginBottom: 16 }]}>
+            <Pressable
+              style={[generalStyles.row, { marginBottom: 16 }]}
+              onPress={() =>
+                navigation.navigate('profile-view', { userId: user.id })
+              }>
               <Avatar
                 size={40}
                 fullname={fullname}

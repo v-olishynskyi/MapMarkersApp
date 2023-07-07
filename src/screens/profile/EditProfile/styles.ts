@@ -9,7 +9,7 @@ const useStyles = () => {
     uiStore: { isPortrait },
   } = useStores();
   const { bottom, left, right } = useSafeAreaInsets();
-  const { colors, paddings, dark, margins, typography } = getTheme();
+  const { colors } = getTheme();
 
   return StyleSheet.create({
     container: {

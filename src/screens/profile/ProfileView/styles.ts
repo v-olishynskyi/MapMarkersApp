@@ -14,7 +14,7 @@ const useStyles = () => {
       flex: 1,
       paddingTop: spacingBase.s3,
       paddingBottom: spacingBase.s4,
-      paddingHorizontal: spacingBase.s4,
+      paddingHorizontal: spacingBase.s3,
       justifyContent: 'space-between',
     },
     profileContainer: {},

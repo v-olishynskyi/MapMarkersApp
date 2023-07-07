@@ -10,6 +10,7 @@ import { ActivityIndicator, Text } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
 import { generalStyles, spacingBase } from '@styles';
+import { useRoute } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator<AppStackParamsList>();
 
@@ -81,12 +82,14 @@ const AppNavigation = () => {
         component={ProfileView}
         options={{
           title: 'Профіль',
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigationRef.navigate('edit-profile' as any)}>
-              <Icon name="md-pencil" size={24} color={colors.primary} />
-            </Pressable>
-          ),
+          headerRight: () => {
+            return (
+              <Pressable
+                onPress={() => navigationRef.navigate('edit-profile' as any)}>
+                <Icon name="md-pencil" size={24} color={colors.primary} />
+              </Pressable>
+            );
+          },
         }}
       />
       <Stack.Screen

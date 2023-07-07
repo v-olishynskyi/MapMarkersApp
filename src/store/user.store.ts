@@ -1,6 +1,7 @@
-import { ProfileService, UpdateProfileData, User } from '@services';
+import { UserModel } from '@models';
+import { ProfileService, UpdateProfileData, IUser } from '@services';
 import { RootStore } from '@store/root.store';
-import { showToast, wait } from '@utils/helpers';
+import { showToast } from '@utils/helpers';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 export class UserStore {
@@ -9,15 +10,7 @@ export class UserStore {
   isLoading: boolean = false;
   isSaving: boolean = false;
 
-  id: User['id'] = '';
-  email: User['email'] = '';
-  first_name: User['first_name'] = '';
-  last_name: User['last_name'] = '';
-  middle_name: User['middle_name'];
-  username: User['username'];
-  avatar_url: User['avatar_url'];
-  createdAt: User['createdAt'];
-  updatedAt: User['createdAt'];
+  user: UserModel = {} as UserModel;
 
   updateFormData: UpdateProfileData = {} as UpdateProfileData;
   updateFormErrors: Partial<UpdateProfileData>;
@@ -28,11 +21,12 @@ export class UserStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  handleData(user: User) {
-    const keys = Object.keys(user);
-    keys.forEach(key => (this[key] = user[key]));
+  handleData(user: IUser) {
+    this.user = new UserModel(user);
 
-    const updateDataKeys = keys.filter(key => key !== 'id' && key !== 'email');
+    const updateDataKeys = Object.keys(user).filter(
+      key => key !== 'id' && key !== 'email',
+    );
     updateDataKeys.forEach(key => (this.updateFormData[key] = user[key]));
   }
 
@@ -58,10 +52,7 @@ export class UserStore {
     try {
       this.isSaving = true;
 
-      const newData = await ProfileService.updateProfile(
-        this.id,
-        this.updateFormData,
-      );
+      const newData = await this.user.update(this.updateFormData);
 
       runInAction(() => {
         this.handleData(newData);
@@ -86,22 +77,16 @@ export class UserStore {
     );
   }
 
+  setIsLoading(value: boolean) {
+    this.isLoading = value;
+  }
+
   async validateUpdateForm() {
-    return await new Promise(resolve => {
-      let errors = {};
-      Object.keys(this.updateFormData).forEach(key => {
-        const value = this.updateFormData[key];
-      });
-    });
-  }
-
-  get fullname() {
-    return `${this.first_name} ${this.last_name}`;
-  }
-
-  get initials() {
-    return `${this.first_name.charAt(0).toUpperCase()}${this.last_name
-      .charAt(0)
-      .toUpperCase()}`;
+    // return await new Promise(resolve => {
+    //   let errors = {};
+    //   Object.keys(this.updateFormData).forEach(key => {
+    //     const value = this.updateFormData[key];
+    //   });
+    // });
   }
 }

@@ -36,6 +36,7 @@ module.exports = {
           '@env': './src/environments',
           '@cometchat': './src/cometchat',
           '@layout': './src/layout',
+          '@models': './src/models',
         },
       },
     ],

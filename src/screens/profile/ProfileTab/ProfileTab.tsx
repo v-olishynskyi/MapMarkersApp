@@ -38,7 +38,9 @@ const ProfileTab: React.FC = () => {
   const { colors } = getTheme();
 
   const {
-    userStore: { avatar_url, fullname, initials, email },
+    userStore: {
+      user: { avatar_url, fullname, initials, email },
+    },
     authStore: { logout },
   } = useStores();
 

@@ -20,7 +20,7 @@ const useStyles = () => {
     userContainer: {
       flexDirection: 'row',
       paddingBottom: spacingBase.s4,
-      paddingHorizontal: spacingBase.s4,
+      paddingHorizontal: spacingBase.s3,
     },
     userInfo: {
       flex: 1,
@@ -29,7 +29,7 @@ const useStyles = () => {
     block: {
       paddingTop: spacingBase.s1,
       backgroundColor: colors.card,
-      paddingHorizontal: spacingBase.s4,
+      paddingHorizontal: spacingBase.s3,
     },
     pressable: {
       borderBottomColor: colors.border,

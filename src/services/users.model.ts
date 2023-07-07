@@ -1,4 +1,4 @@
-export type User = {
+export type IUser = {
   id: string;
   email: string;
   first_name: string;
@@ -11,9 +11,14 @@ export type User = {
   updatedAt: string;
 };
 
-export type CommunityUser = User;
+export type CommunityUser = IUser;
 
 export type UpdateProfileData = Omit<
-  User,
+  IUser,
+  'id' | 'email' | 'createdAt' | 'updatedAt'
+>;
+
+export type UpdateUserData = Omit<
+  IUser,
   'id' | 'email' | 'createdAt' | 'updatedAt'
 >;
