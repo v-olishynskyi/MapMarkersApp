@@ -11,11 +11,7 @@ authApi.interceptors.response.use(
 
 export class AuthService {
   public static async login(body: LoginData) {
-    const { data } = await authApi.post<LoginResponse>('auth/sign-in', body, {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    });
+    const { data } = await authApi.post<LoginResponse>('auth/sign-in', body);
 
     return data;
   }

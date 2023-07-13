@@ -1,5 +1,6 @@
 import api from '@api';
 import { CommunityUser, IUser, UpdateUserData } from '@services';
+import { PaginationResponse } from '@utils/types';
 
 export class UsersService {
   public static async get(id: string) {
@@ -14,8 +15,10 @@ export class UsersService {
     return data;
   }
 
-  public static async getCommunityUsers() {
-    const { data } = await api.get<CommunityUser[]>('users');
+  public static async getCommunityUsers(page: number, limit: number) {
+    const { data } = await api.get<PaginationResponse<CommunityUser>>(
+      `users?page=${page}&limit=${limit}`,
+    );
 
     return data;
   }

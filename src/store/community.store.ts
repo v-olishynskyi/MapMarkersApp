@@ -1,36 +1,15 @@
+import { UserModel } from '@models';
 import { CommunityUser, UsersService } from '@services';
+import { PaginationStore } from '@store/pagination.store';
 import { RootStore } from '@store/root.store';
-import { showToast } from '@utils/helpers';
-import { makeAutoObservable, observable, runInAction } from 'mobx';
 
-export class CommunityStore {
+export class CommunityStore extends PaginationStore<CommunityUser, UserModel> {
   rootStore: RootStore;
 
-  isLoading: boolean = false;
-  users = observable.array<CommunityUser>([]);
-
   constructor(rootStore: RootStore) {
+    super(UsersService.getCommunityUsers, UserModel);
     this.rootStore = rootStore;
 
-    makeAutoObservable(this, {}, { autoBind: true });
-  }
-
-  async loadUsers() {
-    try {
-      this.isLoading = true;
-
-      const data = await UsersService.getCommunityUsers();
-
-      runInAction(() => {
-        this.users.replace(data);
-        this.isLoading = false;
-      });
-    } catch (error: any) {
-      showToast('error', error.message);
-
-      runInAction(() => {
-        this.isLoading = false;
-      });
-    }
+    // makeObservable(this, { isLoading: observable });
   }
 }

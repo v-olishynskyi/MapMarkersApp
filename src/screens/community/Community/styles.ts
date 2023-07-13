@@ -1,3 +1,4 @@
+import { spacingBase } from '@styles';
 import { StyleSheet } from 'react-native';
 
 const useStyles = () => {
@@ -5,6 +6,7 @@ const useStyles = () => {
     container: {
       flex: 1,
     },
+    contentContainer: { paddingHorizontal: spacingBase.s3 },
   });
 };
 
