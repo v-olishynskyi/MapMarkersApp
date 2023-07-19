@@ -3,15 +3,15 @@
  * @category
  * @subcategory
  *  */
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import useStyles from './styles';
 import { CommunityProps } from './types';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '@store';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActivityIndicator, FlatList, ListRenderItem } from 'react-native';
+import { ListRenderItem, View } from 'react-native';
 import { UserModel } from '@models';
 import { UserItem } from './components';
+import { BaseList } from '@components';
 
 /**
  * Community
@@ -29,7 +29,7 @@ const Community: React.FC<CommunityProps> = () => {
 
   const {
     communityStore: {
-      loadData,
+      initialLoadData,
       isLoading,
       data,
       isFetchingNextPage,
@@ -38,33 +38,33 @@ const Community: React.FC<CommunityProps> = () => {
     },
   } = useStores();
 
-  const loadUsers = React.useCallback(() => loadData(0, 10), [loadData]);
+  const loadUsers = React.useCallback(
+    () => initialLoadData(0, 20),
+    [initialLoadData],
+  );
 
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
 
-  const renderItem: ListRenderItem<UserModel> = ({ item: user }) => (
-    <UserItem user={user} />
+  const renderItem: ListRenderItem<UserModel> = useCallback(
+    ({ item: user }) => <UserItem user={user} />,
+    [],
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList<UserModel>
-        ListHeaderComponent={isLoading ? <ActivityIndicator /> : null}
-        refreshing={isFetchingNextPage}
-        onEndReached={() => {
-          hasNextPage && fetchNextPage();
-        }}
-        onEndReachedThreshold={0.1}
-        onRefresh={loadUsers}
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
+    <View style={styles.container}>
+      <BaseList
         data={data}
+        isLoading={isLoading}
+        isFetchingNextPage={isFetchingNextPage}
+        onRefresh={loadUsers}
+        onEndReached={() => hasNextPage && fetchNextPage()}
+        style={styles.listContainer}
+        contentContainerStyle={styles.contentContainer}
         renderItem={renderItem}
-        ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

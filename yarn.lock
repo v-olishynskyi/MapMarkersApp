@@ -1103,6 +1103,11 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@faker-js/faker@^8.0.2":
+  version "8.0.2"
+  resolved "https://registry.npmjs.org/@faker-js/faker/-/faker-8.0.2.tgz"
+  integrity sha512-Uo3pGspElQW91PCvKSIAXoEgAUlRnH29sX2/p89kg7sP1m2PzCufHINd0FhTXQf6DYGiUlVncdSPa2F9wxed2A==
+
 "@gorhom/bottom-sheet@^4.4.5":
   version "4.4.5"
   resolved "https://registry.npmjs.org/@gorhom/bottom-sheet/-/bottom-sheet-4.4.5.tgz"

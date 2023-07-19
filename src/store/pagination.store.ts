@@ -36,7 +36,7 @@ export class PaginationStore<TData, TModel> {
         hasNextPage: computed,
         isFetchingNextPage: observable,
         meta: observable,
-        loadData: action.bound,
+        initialLoadData: action.bound,
         fetchNextPage: action.bound,
         data: computed,
         pages: observable,
@@ -45,7 +45,7 @@ export class PaginationStore<TData, TModel> {
     );
   }
 
-  async loadData(page: number = 0, limit: number = 10) {
+  async initialLoadData(page: number = 0, limit: number = 10) {
     try {
       this.isLoading = true;
 
@@ -56,7 +56,7 @@ export class PaginationStore<TData, TModel> {
 
       runInAction(() => {
         this.meta = response.meta;
-        this.pages = { ...this.pages, [page]: items };
+        this.pages = { [page]: items };
       });
     } catch (error) {
       throw error;

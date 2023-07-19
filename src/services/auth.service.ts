@@ -2,7 +2,7 @@ import env from '@env';
 import { LoginData, LoginResponse, RegistrationData } from './auth.model';
 import axios from 'axios';
 
-const authApi = axios.create({ baseURL: env.BASE_URL });
+const authApi = axios.create({ baseURL: `${env.BASE_URL}api/v1` });
 
 authApi.interceptors.response.use(
   res => res,
