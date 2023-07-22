@@ -39,12 +39,16 @@ const ProfileTab: React.FC = () => {
 
   const {
     userStore: {
-      user: { avatar_url, fullname, initials, email },
+      user: { id, avatar_url, fullname, initials, email },
     },
     authStore: { logout },
+    profileViewStore: { setUserId },
   } = useStores();
 
-  const goToProfile = () => navigate('profile-view');
+  const goToProfile = () => {
+    setUserId(id);
+    navigate('profile-view');
+  };
   const goToSettins = () => navigate('settings');
   const goToSupport = () => navigate('support');
   const goToAboutUs = () => navigate('about-us');

@@ -5,13 +5,14 @@
  *  */
 import React, { useCallback, useEffect } from 'react';
 import useStyles from './styles';
-import { CommunityProps } from './types';
+import { CommunityProps, NavigationType } from './types';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '@store';
 import { ListRenderItem, View } from 'react-native';
 import { UserModel } from '@models';
 import { UserItem } from './components';
 import { BaseList } from '@components';
+import { useNavigation } from '@react-navigation/native';
 
 /**
  * Community
@@ -26,6 +27,7 @@ import { BaseList } from '@components';
  */
 const Community: React.FC<CommunityProps> = () => {
   const styles = useStyles();
+  const navigation = useNavigation<NavigationType>();
 
   const {
     communityStore: {
@@ -36,21 +38,30 @@ const Community: React.FC<CommunityProps> = () => {
       fetchNextPage,
       hasNextPage,
     },
+    profileViewStore: { setUserId },
   } = useStores();
+
+  const onPress = React.useCallback(
+    (user: UserModel) => {
+      setUserId(user.id);
+      navigation.navigate('profile-view', { userId: user.id });
+    },
+    [navigation, setUserId],
+  );
 
   const loadUsers = React.useCallback(
     () => initialLoadData(0, 20),
     [initialLoadData],
   );
 
+  const renderItem: ListRenderItem<UserModel> = useCallback(
+    ({ item: user }) => <UserItem user={user} onPress={() => onPress(user)} />,
+    [onPress],
+  );
+
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
-
-  const renderItem: ListRenderItem<UserModel> = useCallback(
-    ({ item: user }) => <UserItem user={user} />,
-    [],
-  );
 
   return (
     <View style={styles.container}>

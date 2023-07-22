@@ -6,4 +6,5 @@ import { UserModel } from '@models';
  */
 export type UserItemProps = {
   user: UserModel;
+  onPress: VoidFunction;
 };

@@ -1,5 +1,5 @@
 import { UserModel } from '@models';
-import { ProfileService, UpdateProfileData, IUser } from '@services';
+import { UpdateProfileData, IUser, UsersService } from '@services';
 import { RootStore } from '@store/root.store';
 import { showToast } from '@utils/helpers';
 import { makeAutoObservable, runInAction } from 'mobx';
@@ -34,7 +34,7 @@ export class UserStore {
     try {
       this.isLoading = true;
 
-      const userData = await ProfileService.loadProfile();
+      const userData = await UsersService.loadProfile();
 
       runInAction(() => {
         this.handleData(userData);

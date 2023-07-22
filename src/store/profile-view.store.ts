@@ -7,7 +7,7 @@ export class ProfileViewStore {
   rootStore: RootStore;
 
   isLoading: boolean = false;
-  userId: string | null = null;
+  userId: string = '';
   user: UserModel | null;
 
   constructor(rootStore: RootStore) {
@@ -16,12 +16,10 @@ export class ProfileViewStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  async loadUserById(id: string) {
+  async loadUser() {
     try {
-      this.userId = id;
-
       this.isLoading = true;
-      const user = await UserModel.get(id);
+      const user = await UserModel.get(this.userId);
 
       runInAction(() => {
         this.user = new UserModel(user);
@@ -36,7 +34,11 @@ export class ProfileViewStore {
     }
   }
 
-  setUserId(id: string | null) {
+  setUserId(id: string) {
     this.userId = id;
+  }
+
+  get isMe() {
+    return this.userId === this.rootStore.userStore.user.id;
   }
 }

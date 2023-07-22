@@ -1,4 +1,4 @@
-import { PaginationMeta, PaginationResponse } from '@utils/types';
+import { PaginationMeta, PaginationResponse } from '@types';
 import {
   IObservableArray,
   action,
