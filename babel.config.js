@@ -37,6 +37,7 @@ module.exports = {
           '@cometchat': './src/cometchat',
           '@layout': './src/layout',
           '@models': './src/models',
+          '@types': './src/types',
         },
       },
     ],
