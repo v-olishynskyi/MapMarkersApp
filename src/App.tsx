@@ -14,7 +14,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DefaultTheme } from '@styles';
 import { useStores } from '@store';
 import { Dimensions, StyleSheet } from 'react-native';
-import { isPortrait } from '@utils/helpers';
+import { isPortrait } from '@common/helpers';
 import { RootLoading, Toast } from '@components';
 import { observer } from 'mobx-react-lite';
 

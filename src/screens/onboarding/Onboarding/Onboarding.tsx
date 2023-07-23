@@ -16,7 +16,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { globalStorage } from '@utils/Storage';
+import { globalStorage } from '@common/helpers';
 
 const Step: React.FC<{ isActive: boolean }> = ({ isActive }) => {
   const styles = useStyles();

@@ -30,7 +30,7 @@ module.exports = {
           '@api': './src/axios-config',
           '@screens': './src/screens',
           '@services': './src/services',
-          '@utils': './src/utils',
+          '@common': './src/common',
           '@store': './src/store',
           '@styles': './src/styles',
           '@env': './src/environments',

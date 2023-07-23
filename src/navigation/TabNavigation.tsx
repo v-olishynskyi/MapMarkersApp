@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Map, Community, ProfileTab } from '@screens';
 import { TabsStackParamsList } from './types';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { getTheme } from '@utils/helpers';
+import { getTheme } from '@common/helpers';
 
 const Tab = createBottomTabNavigator<TabsStackParamsList>();
 

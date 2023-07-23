@@ -12,6 +12,10 @@ const useStyles = () => {
     },
     listContainer: { flex: 1 },
     contentContainer: { paddingHorizontal: spacingBase.s3 },
+    searchContainer: {
+      paddingHorizontal: spacingBase.s3,
+      marginBottom: spacingBase.s2,
+    },
   });
 };
 

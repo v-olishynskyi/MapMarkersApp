@@ -48,7 +48,7 @@
       "@api/*": ["./api/*"],
       "@screens": ["./screens"],
       "@services": ["./services"],
-      "@utils/*": ["./utils/*"],
+      "@common/*": ["./common/*"],
       "@store": ["./store"],
       "@store/*": ["./store/*"],
       "@layout": ["./layout"],

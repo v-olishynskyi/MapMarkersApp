@@ -3,7 +3,7 @@ import useStyles from './styles';
 import { ActivityIndicator, View } from 'react-native';
 import { useStores } from '@store';
 import { getGenericPassword } from 'react-native-keychain';
-import { wait } from '@utils/helpers';
+import { wait } from '@common/helpers';
 import { observer } from 'mobx-react-lite';
 
 const RootLoading: React.FC<PropsWithChildren<any>> = observer(

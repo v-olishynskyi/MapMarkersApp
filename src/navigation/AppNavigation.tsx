@@ -5,7 +5,7 @@ import { AppStackParamsList } from './types';
 import { AboutUs, EditProfile, ProfileView, Settings } from '@screens';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Pressable } from '@components';
-import { getTheme } from '@utils/helpers';
+import { getTheme } from '@common/helpers';
 import { ActivityIndicator, Text } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';

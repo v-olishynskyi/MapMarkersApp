@@ -11,8 +11,10 @@ import { useStores } from '@store';
 import { ListRenderItem, View } from 'react-native';
 import { UserModel } from '@models';
 import { UserItem } from './components';
-import { BaseList } from '@components';
+import { BaseList, Input } from '@components';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { getTheme } from '@common/helpers';
 
 /**
  * Community
@@ -26,8 +28,11 @@ import { useNavigation } from '@react-navigation/native';
  *  <Community />
  */
 const Community: React.FC<CommunityProps> = () => {
+  const { colors } = getTheme();
   const styles = useStyles();
   const navigation = useNavigation<NavigationType>();
+
+  const [searchValue, setSearchValue] = React.useState('');
 
   const {
     communityStore: {
@@ -65,6 +70,14 @@ const Community: React.FC<CommunityProps> = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <Input
+          placeholder="Пошук"
+          value={searchValue}
+          onChangeText={setSearchValue}
+          leftIcon={<Icon name="search" size={16} color={colors.gray} />}
+        />
+      </View>
       <BaseList
         data={data}
         isLoading={isLoading}

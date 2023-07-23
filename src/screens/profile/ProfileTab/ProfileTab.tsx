@@ -10,7 +10,7 @@ import { Text, View } from 'react-native';
 import { Avatar, Pressable } from '@components';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
-import { getTheme } from '@utils/helpers';
+import { getTheme } from '@common/helpers';
 import { spacingBase } from '@styles';
 import { useNavigation } from '@react-navigation/native';
 import { AppStackParamsList, ProfileStackParamsList } from '@navigation';

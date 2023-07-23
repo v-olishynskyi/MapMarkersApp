@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { IS_ANDROID, getTheme } from '@utils/helpers';
+import { IS_ANDROID, getTheme } from '@common/helpers';
 import { spacingBase } from '@styles';
 
 const useStyles = (error: boolean, focused: boolean) => {

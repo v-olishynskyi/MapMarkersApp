@@ -1,4 +1,4 @@
-import { getTheme } from '@utils/helpers';
+import { getTheme } from '@common/helpers';
 import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 

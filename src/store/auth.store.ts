@@ -1,6 +1,6 @@
 import { AuthService, LoginData, RegistrationData } from '@services';
 import { RootStore } from '@store/root.store';
-import { showToast } from '@utils/helpers';
+import { showToast } from '@common/helpers';
 import { makeAutoObservable, runInAction } from 'mobx';
 import * as Keychain from 'react-native-keychain';
 

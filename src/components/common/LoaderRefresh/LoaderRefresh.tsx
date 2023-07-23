@@ -7,7 +7,7 @@
 import React from 'react';
 import { RefreshControl } from 'react-native';
 import { LoaderRefreshProps } from './types';
-import { getTheme } from '@utils/helpers';
+import { getTheme } from '@common/helpers';
 
 /**
  *

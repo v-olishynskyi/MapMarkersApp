@@ -3,8 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet } from 'react-native';
 import { ForgotPassword, Onboarding, SignIn, SignUp } from '@screens';
 import { AuthStackParamsList } from './types';
-import { globalStorage } from '@utils/Storage';
-import { getTheme } from '@utils/helpers';
+import { globalStorage } from '@common/helpers';
+import { getTheme } from '@common/helpers';
 
 const Stack = createNativeStackNavigator<AuthStackParamsList>();
 

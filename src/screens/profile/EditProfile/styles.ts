@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { IS_IOS, getTheme } from '@utils/helpers';
+import { IS_IOS, getTheme } from '@common/helpers';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useStores } from '@store';
 import { spacingBase } from '@styles';

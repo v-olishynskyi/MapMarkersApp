@@ -1,5 +1,5 @@
 import { spacingBase } from '@styles';
-import { getTheme } from '@utils/helpers';
+import { getTheme } from '@common/helpers';
 import { StyleSheet } from 'react-native';
 
 const useStyles = () => {

@@ -18,7 +18,7 @@ import { observer } from 'mobx-react-lite';
 import { Avatar, Pressable } from '@components';
 import { generalStyles } from '@styles';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { getTheme } from '@utils/helpers';
+import { getTheme } from '@common/helpers';
 import { useFocusEffect } from '@react-navigation/native';
 
 /**
