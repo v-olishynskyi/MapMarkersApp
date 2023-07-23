@@ -4,7 +4,7 @@
  * @subcategory
  *  */
 import React from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { AvatarProps } from './types';
 import useStyles from './styles';
 import { Avatar as RNUiLibAvatar } from 'react-native-ui-lib';
@@ -12,12 +12,12 @@ import Modal from 'react-native-modal';
 import { Size } from '@types';
 import { WINDOW_WIDTH } from '@gorhom/bottom-sheet';
 import { useStores } from '@store';
+import { Pressable } from '@components';
 
 /**
  * Avatar
  *
- *
- * @memberof
+ * @memberof SharedComponents
  * @param {AvatarProps} params
  *
  * @example

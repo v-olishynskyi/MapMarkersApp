@@ -12,8 +12,7 @@ import { Button as RNUILibButton } from 'react-native-ui-lib';
 /**
  * Button
  *
- *
- * @memberof
+ * @memberof SharedComponents
  * @param {ButtonProps} params
  *
  * @example

@@ -27,7 +27,7 @@ import { Pressable } from '@components';
  *
  * Input component.
  *
- * @memberof Input
+ * @memberof SharedComponents
  * @example
  *
  * // How to use

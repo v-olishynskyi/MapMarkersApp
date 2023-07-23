@@ -13,10 +13,8 @@ import { getTheme } from '@utils/helpers';
  *
  * LoaderRefresh component.
  *
- * @memberof LoaderRefresh
+ * @memberof SharedComponents
  * @example
- *
- * // How to use
  *  <LoaderRefresh
  *    isRefreshing={isRefreshing}
  *    onRefresh={() => {

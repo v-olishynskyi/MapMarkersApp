@@ -8,18 +8,17 @@ import useStyles from './styles';
 import { BaseListProps } from './types';
 import { ActivityIndicator, FlatList, View } from 'react-native';
 import { generalStyles } from '@styles';
-import LoaderRefresh from '@components/common/LoaderRefresh/LoaderRefresh';
+import { LoaderRefresh } from '@components';
 
 /**
  * BaseList
  *
- *
- * @memberof
+ * @memberof SharedComponents
  * @param {BaseListProps} params
  *
  * @example
  * // How to use BaseList:
- *  <BaseList />
+ *  <BaseList data={data} renderItem={({item}, index) => <View></View} />
  */
 const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
   const styles = useStyles();

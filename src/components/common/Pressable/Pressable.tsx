@@ -11,12 +11,10 @@ import { PressableProps } from './types';
 /**
  * Pressable
  *
- *
- * @memberof
+ * @memberof SharedComponents
  * @param {PressableProps} params
  *
  * @example
- * // How to use Pressable:
  *  <Pressable />
  */
 const Pressable: React.FC<PressableProps> = ({ children, style, ...rest }) => {
