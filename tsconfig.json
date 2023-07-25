@@ -45,7 +45,6 @@
       "@components": ["./components"],
       "@components/*": ["./components/*"],
       "@assets/*": ["./assets/*"],
-      "@api/*": ["./api/*"],
       "@screens": ["./screens"],
       "@services": ["./services"],
       "@common/*": ["./common/*"],

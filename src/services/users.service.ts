@@ -21,9 +21,13 @@ export class UsersService {
     return data;
   }
 
-  public static async getCommunityUsers(page: number, limit: number) {
+  public static async getCommunityUsers(
+    page: number,
+    limit: number,
+    search?: string,
+  ) {
     const { data } = await api.get<PaginationResponse<CommunityUser>>(
-      `users?page=${page}&limit=${limit}`,
+      `users?page=${page}&limit=${limit}${search ? `&search=${search}` : ''}`,
     );
 
     return data;

@@ -15,6 +15,7 @@ import { BaseList, Input } from '@components';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getTheme } from '@common/helpers';
+import { useDebouncedCallback } from 'use-debounce';
 
 /**
  * Community
@@ -46,6 +47,10 @@ const Community: React.FC<CommunityProps> = () => {
     profileViewStore: { setUserId },
   } = useStores();
 
+  const debouncedLoad = useDebouncedCallback(() => {
+    initialLoadData(0, 20, searchValue);
+  }, 1000);
+
   const onPress = React.useCallback(
     (user: UserModel) => {
       setUserId(user.id);
@@ -68,6 +73,10 @@ const Community: React.FC<CommunityProps> = () => {
     loadUsers();
   }, [loadUsers]);
 
+  useEffect(() => {
+    debouncedLoad();
+  }, [searchValue, debouncedLoad]);
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -76,6 +85,7 @@ const Community: React.FC<CommunityProps> = () => {
           value={searchValue}
           onChangeText={setSearchValue}
           leftIcon={<Icon name="search" size={16} color={colors.gray} />}
+          clearButtonMode="while-editing"
         />
       </View>
       <BaseList

@@ -34,8 +34,6 @@ module.exports = {
           '@store': './src/store',
           '@styles': './src/styles',
           '@env': './src/environments',
-          '@cometchat': './src/cometchat',
-          '@layout': './src/layout',
           '@models': './src/models',
           '@types': './src/types',
         },

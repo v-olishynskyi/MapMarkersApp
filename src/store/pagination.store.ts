@@ -11,6 +11,7 @@ import {
 type FetchFunction<T> = (
   page: number,
   limit: number,
+  search?: string,
 ) => Promise<PaginationResponse<T>>;
 
 type Pages<T> = Record<number, IObservableArray<T>>;
@@ -45,11 +46,15 @@ export class PaginationStore<TData, TModel> {
     );
   }
 
-  async initialLoadData(page: number = 0, limit: number = 10) {
+  async initialLoadData(
+    page: number = 0,
+    limit: number = 10,
+    search: string = '',
+  ) {
     try {
       this.isLoading = true;
 
-      const response = await this.fetchFunction(page, limit);
+      const response = await this.fetchFunction(page, limit, search);
       const items = observable.array<TModel>(
         response.data.map(item => new this.Model(item)),
       );

@@ -47,7 +47,9 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
     }
   }, [data]);
 
-  return (
+  return isLoading ? (
+    <ActivityIndicator size={'large'} style={styles.loader} />
+  ) : (
     <FlatList
       ref={ref}
       data={data}
