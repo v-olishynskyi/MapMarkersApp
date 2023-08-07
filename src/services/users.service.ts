@@ -1,22 +1,23 @@
 import api from '@api';
-import { CommunityUser, IUser, UpdateUserData } from '@services';
-import { PaginationResponse } from '@types';
+import { PaginationResponse } from '@common/types';
+import { User } from '@common/types/entities';
+import { CommunityUser, UpdateUserData } from '@services';
 
 export class UsersService {
   public static async loadProfile() {
-    const { data } = await api.get<IUser>('users/profile');
+    const { data } = await api.get<User>('users/profile');
 
     return data;
   }
 
   public static async get(id: string) {
-    const response = await api.get<IUser>(`users/${id}`);
+    const response = await api.get<User>(`users/${id}`);
     const { data } = response;
     return data;
   }
 
   public static async update(id: string, params: UpdateUserData) {
-    const { data } = await api.put<IUser>(`users/${id}`, params);
+    const { data } = await api.put<User>(`users/${id}`, params);
 
     return data;
   }

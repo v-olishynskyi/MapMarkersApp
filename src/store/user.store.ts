@@ -1,8 +1,9 @@
 import { UserModel } from '@models';
-import { UpdateProfileData, IUser, UsersService } from '@services';
+import { UpdateProfileData, UsersService } from '@services';
 import { RootStore } from '@store/root.store';
 import { showToast } from '@common/helpers';
 import { makeAutoObservable, runInAction } from 'mobx';
+import { User } from '@common/types/entities';
 
 export class UserStore {
   rootStore: RootStore;
@@ -21,11 +22,11 @@ export class UserStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  handleData(user: IUser) {
+  handleData(user: User) {
     this.user = new UserModel(user);
 
     const updateDataKeys = Object.keys(user).filter(
-      key => key !== 'id' && key !== 'email',
+      key => key !== 'id' && key !== 'email' && key !== 'sessions',
     );
     updateDataKeys.forEach(key => (this.updateFormData[key] = user[key]));
   }

@@ -1,28 +1,38 @@
-import { IUser, UpdateUserData, UsersService } from '@services';
+import { User, UserSession } from '@common/types/entities';
+import { ListItems, UserSessionModel } from '@models';
+import { UpdateUserData, UsersService } from '@services';
 
 export default class UserModel {
-  id: IUser['id'];
-  email: IUser['email'];
-  first_name: IUser['first_name'];
-  last_name: IUser['last_name'];
-  middle_name: IUser['middle_name'];
-  username: IUser['username'];
-  avatar_url: IUser['avatar_url'];
+  id: User['id'];
+  email: User['email'];
+  first_name: User['first_name'];
+  last_name: User['last_name'];
+  middle_name: User['middle_name'];
+  username: User['username'];
+  avatar_url: User['avatar_url'];
+  sessions: ListItems<UserSession>;
 
-  createdAt: IUser['createdAt'];
-  updatedAt: IUser['updatedAt'];
+  created_at: User['created_at'];
+  updated_at: User['updated_at'];
 
-  constructor(user: IUser) {
-    this.handleData(user);
+  constructor(user: User) {
+    if (user.sessions) {
+      this.sessions = new ListItems<UserSession>(
+        UserSessionModel,
+        user.sessions,
+      );
+    }
+
+    return this.handleData(user);
   }
 
-  private handleData(user: IUser) {
+  private handleData(user: User) {
     Object.keys(user).forEach(key => (this[key] = user[key]));
 
     return this;
   }
 
-  public async get() {
+  async get() {
     const user = await UserModel.get(this.id);
 
     this.handleData(user);
@@ -30,15 +40,16 @@ export default class UserModel {
     return this;
   }
 
-  public static async get(id: string): Promise<IUser> {
+  public static async get(id: string): Promise<User> {
     const response = await UsersService.get(id);
     return response;
   }
 
-  public async update(data: UpdateUserData) {
+  async update(data: UpdateUserData) {
     const newUserData = await UsersService.update(this.id, data);
 
-    return this.handleData(newUserData);
+    this.handleData(newUserData);
+    return newUserData;
   }
 
   public static async update(id: string, data: UpdateUserData) {

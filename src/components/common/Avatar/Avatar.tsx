@@ -9,10 +9,10 @@ import { AvatarProps } from './types';
 import useStyles from './styles';
 import { Avatar as RNUiLibAvatar } from 'react-native-ui-lib';
 import Modal from 'react-native-modal';
-import { Size } from '@types';
 import { WINDOW_WIDTH } from '@gorhom/bottom-sheet';
 import { useStores } from '@store';
 import { Pressable } from '@components';
+import { Size } from '@common/types';
 
 /**
  * Avatar

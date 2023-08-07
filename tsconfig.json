@@ -56,7 +56,9 @@
       "@env": ["./environments"],
       "@api": ["./axios-config"],
       "@models": ["./models"],
-      "@types": ["./types"]
+      "@models/*": ["./models/*"],
+      "@type": ["./@types"],
+      "@type/*": ["./@types/*"]
     },
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
     // "typeRoots": [],                       /* List of folders to include type definitions from. */

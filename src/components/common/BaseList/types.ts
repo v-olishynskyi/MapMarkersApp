@@ -13,4 +13,5 @@ export type BaseListProps = Omit<
   onEndReached?: VoidFunction;
   isFetchingNextPage?: boolean;
   enableRefresh?: boolean;
+  loader?: JSX.Element;
 };

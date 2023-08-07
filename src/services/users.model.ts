@@ -1,24 +1,13 @@
-export type IUser = {
-  id: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  middle_name: string | null;
-  username: string | null;
-  avatar_url: string | null;
+import { User } from '@common/types/entities';
 
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type CommunityUser = IUser;
+export type CommunityUser = Omit<User, 'sessions'>;
 
 export type UpdateProfileData = Omit<
-  IUser,
+  User,
   'id' | 'email' | 'createdAt' | 'updatedAt'
 >;
 
 export type UpdateUserData = Omit<
-  IUser,
+  User,
   'id' | 'email' | 'createdAt' | 'updatedAt'
 >;
