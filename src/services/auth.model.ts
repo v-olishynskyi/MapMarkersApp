@@ -5,6 +5,7 @@ export type LoginData = {
 
 export type LoginResponse = {
   access_token: string;
+  refresh_token: string;
 };
 
 export type RegistrationData = {
@@ -14,4 +15,8 @@ export type RegistrationData = {
   middle_name: string;
   username: string;
   password: string;
+};
+
+export type RefreshTokenResponse = {
+  access_token: string;
 };

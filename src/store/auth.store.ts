@@ -20,7 +20,7 @@ export class AuthStore {
     try {
       this.isLoading = true;
 
-      const { access_token } = await AuthService.login({
+      const { access_token, refresh_token } = await AuthService.login({
         email: email.toLowerCase(),
         password,
       });
@@ -28,6 +28,12 @@ export class AuthStore {
       await Keychain.setGenericPassword(
         'acs_tkn',
         JSON.stringify({ accessToken: access_token }),
+      );
+
+      Keychain.setInternetCredentials(
+        'refresh_tkn',
+        'rfsh_tkn',
+        JSON.stringify({ refreshToken: refresh_token }),
       );
 
       runInAction(() => {
