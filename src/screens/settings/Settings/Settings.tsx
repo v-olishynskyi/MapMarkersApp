@@ -6,9 +6,12 @@
 import React from 'react';
 import useStyles from './styles';
 import { useStores } from '@store';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import { Pressable } from '@components';
 import { generalStyles } from '@styles';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AppStackParamsList } from '@navigation';
 
 /**
  * Settings
@@ -20,6 +23,8 @@ import { generalStyles } from '@styles';
  *  <Settings />
  */
 const Settings: React.FC = () => {
+  const { navigate } =
+    useNavigation<NativeStackNavigationProp<AppStackParamsList>>();
   const styles = useStyles();
   const {
     userStore: { user },
@@ -30,7 +35,9 @@ const Settings: React.FC = () => {
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.contentContainer}>
-      <Pressable style={[generalStyles.rowBetween]}>
+      <Pressable
+        style={[generalStyles.rowBetween]}
+        onPress={() => navigate('sessions')}>
         <Text>Пристрої</Text>
         <Text>{user.sessions.length}</Text>
       </Pressable>

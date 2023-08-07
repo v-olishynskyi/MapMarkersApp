@@ -1,11 +1,27 @@
-import {StyleSheet} from 'react-native';
-import {getTheme} from '@utils/helpers';
+import { getTheme } from '@common/helpers';
+import { spacingBase } from '@styles';
+import { StyleSheet } from 'react-native';
 
 const useStyles = () => {
-  const {colors, paddings, dark, margins, typography} = getTheme();
+  const {} = getTheme();
 
-  return StyleSheet.create({});
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    contentContainer: {
+      padding: spacingBase.s3,
+    },
+    rectButton: {
+      flex: 1,
+      height: 80,
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      justifyContent: 'space-between',
+      flexDirection: 'column',
+      backgroundColor: 'white',
+    },
+  });
 };
 
 export default useStyles;
-

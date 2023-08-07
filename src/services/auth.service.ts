@@ -34,4 +34,12 @@ export class AuthService {
 
     return data;
   }
+
+  public static async logout(sessionId: string) {
+    const { data } = await authApi.post('auth/logout', {
+      session_id: sessionId,
+    });
+
+    return data;
+  }
 }

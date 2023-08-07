@@ -21,6 +21,7 @@ export type AppStackParamsList = {
   support: undefined;
   'about-us': undefined;
   settings: undefined;
+  sessions: undefined;
   'profile-view': { userId?: string } | undefined;
   'edit-profile': undefined;
 };

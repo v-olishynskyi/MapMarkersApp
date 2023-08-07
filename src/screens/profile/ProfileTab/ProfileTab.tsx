@@ -6,7 +6,7 @@
 import React from 'react';
 import useStyles from './styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { Avatar, Pressable } from '@components';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
@@ -41,7 +41,7 @@ const ProfileTab: React.FC = () => {
     userStore: {
       user: { id, avatar_url, fullname, initials, email },
     },
-    authStore: { logout },
+    authStore: { logout, sessionId, isLoading },
     profileViewStore: { setUserId },
   } = useStores();
 
@@ -129,14 +129,21 @@ const ProfileTab: React.FC = () => {
       <View style={styles.divider} />
 
       <View style={styles.block}>
-        <Pressable style={styles.pressable} onPress={logout}>
+        <Pressable
+          style={styles.pressable}
+          onPress={() => logout(sessionId)}
+          disabled={isLoading}>
           <View style={styles.row}>
-            <Icon
-              name="log-out-outline"
-              size={24}
-              style={styles.icon}
-              color={colors.text}
-            />
+            {isLoading ? (
+              <ActivityIndicator size={'small'} style={styles.icon} />
+            ) : (
+              <Icon
+                name="log-out-outline"
+                size={24}
+                style={styles.icon}
+                color={colors.text}
+              />
+            )}
             <Text style={styles.pressableText}>Вийти</Text>
           </View>
         </Pressable>

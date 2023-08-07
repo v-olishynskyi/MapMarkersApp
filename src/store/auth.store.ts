@@ -8,6 +8,7 @@ export class AuthStore {
   rootStore: RootStore;
 
   isAuth: boolean = false;
+  sessionId: string;
   isLoading: boolean = false;
 
   constructor(rootStore: RootStore) {
@@ -20,10 +21,11 @@ export class AuthStore {
     try {
       this.isLoading = true;
 
-      const { access_token, refresh_token } = await AuthService.login({
-        email: email.toLowerCase(),
-        password,
-      });
+      const { access_token, refresh_token, session_id } =
+        await AuthService.login({
+          email: email.toLowerCase(),
+          password,
+        });
 
       await Keychain.setGenericPassword(
         'acs_tkn',
@@ -37,6 +39,7 @@ export class AuthStore {
       );
 
       runInAction(() => {
+        this.sessionId = session_id;
         this.isLoading = false;
         this.isAuth = true;
       });
@@ -68,10 +71,11 @@ export class AuthStore {
     }
   }
 
-  async logout() {
+  async logout(sessionId: string) {
     try {
       this.isLoading = true;
 
+      await AuthService.logout(sessionId);
       await Keychain.resetGenericPassword();
 
       runInAction(() => {

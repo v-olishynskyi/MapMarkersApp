@@ -2,7 +2,13 @@ import React, { FC } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TabNavigation, navigationRef } from './';
 import { AppStackParamsList } from './types';
-import { AboutUs, EditProfile, ProfileView, Settings } from '@screens';
+import {
+  AboutUs,
+  EditProfile,
+  ProfileView,
+  Sessions,
+  Settings,
+} from '@screens';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Pressable } from '@components';
 import { getTheme } from '@common/helpers';
@@ -74,6 +80,14 @@ const AppNavigation = () => {
         component={Settings}
         options={{
           title: 'Налаштування',
+          headerBackTitle: 'Назад',
+        }}
+      />
+      <Stack.Screen
+        name="sessions"
+        component={Sessions}
+        options={{
+          title: 'Пристрої',
           headerBackTitle: 'Назад',
         }}
       />
