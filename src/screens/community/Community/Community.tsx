@@ -10,12 +10,23 @@ import { observer } from 'mobx-react-lite';
 import { useStores } from '@store';
 import { ListRenderItem, View } from 'react-native';
 import { UserModel } from '@models';
-import { UserItem } from './components';
+import { UserItem, UserSkeleton } from './components';
 import { BaseList, Input } from '@components';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getTheme } from '@common/helpers';
 import { useDebouncedCallback } from 'use-debounce';
+import { useIsMounted } from '@common/hooks';
+
+const skeleton = (
+  <>
+    {Array(20)
+      .fill(undefined)
+      .map((_, index) => (
+        <UserSkeleton key={index} />
+      ))}
+  </>
+);
 
 /**
  * Community
@@ -32,6 +43,7 @@ const Community: React.FC<CommunityProps> = () => {
   const { colors } = getTheme();
   const styles = useStyles();
   const navigation = useNavigation<NavigationType>();
+  const isMounted = useIsMounted();
 
   const [searchValue, setSearchValue] = React.useState('');
 
@@ -48,7 +60,7 @@ const Community: React.FC<CommunityProps> = () => {
   } = useStores();
 
   const debouncedLoad = useDebouncedCallback(() => {
-    initialLoadData(0, 20, searchValue);
+    isMounted && loadUsers(searchValue);
   }, 1000);
 
   const onPress = React.useCallback(
@@ -60,7 +72,8 @@ const Community: React.FC<CommunityProps> = () => {
   );
 
   const loadUsers = React.useCallback(
-    () => initialLoadData(0, 20),
+    (search?: string, silent?: boolean) =>
+      initialLoadData(0, 20, search, silent),
     [initialLoadData],
   );
 
@@ -70,12 +83,12 @@ const Community: React.FC<CommunityProps> = () => {
   );
 
   useEffect(() => {
-    loadUsers();
-  }, [loadUsers]);
+    debouncedLoad();
+  }, [searchValue, debouncedLoad, isMounted]);
 
   useEffect(() => {
-    debouncedLoad();
-  }, [searchValue, debouncedLoad]);
+    loadUsers();
+  }, [loadUsers]);
 
   return (
     <View style={styles.container}>
@@ -92,11 +105,12 @@ const Community: React.FC<CommunityProps> = () => {
         data={data}
         isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}
-        onRefresh={loadUsers}
+        onRefresh={() => loadUsers(searchValue, true)}
         onEndReached={() => hasNextPage && fetchNextPage()}
         style={styles.listContainer}
         contentContainerStyle={styles.contentContainer}
         renderItem={renderItem}
+        loader={skeleton}
       />
     </View>
   );

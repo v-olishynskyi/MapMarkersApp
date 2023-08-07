@@ -1,4 +1,5 @@
-import { PaginationMeta, PaginationResponse } from '@types';
+import { wait } from '@common/helpers';
+import { PaginationMeta, PaginationResponse } from '@common/types';
 import {
   IObservableArray,
   action,
@@ -50,10 +51,13 @@ export class PaginationStore<TData, TModel> {
     page: number = 0,
     limit: number = 10,
     search: string = '',
+    silent?: boolean,
   ) {
     try {
-      this.isLoading = true;
-
+      if (!silent) {
+        this.isLoading = true;
+      }
+      await wait(5000);
       const response = await this.fetchFunction(page, limit, search);
       const items = observable.array<TModel>(
         response.data.map(item => new this.Model(item)),
@@ -67,7 +71,9 @@ export class PaginationStore<TData, TModel> {
       throw error;
     } finally {
       runInAction(() => {
-        this.isLoading = false;
+        if (!silent) {
+          this.isLoading = false;
+        }
       });
     }
   }

@@ -30,6 +30,7 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
     onEndReached,
     onRefresh,
     enableRefresh = true,
+    loader,
     ...rest
   } = props;
 
@@ -47,8 +48,12 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
     }
   }, [data]);
 
+  const loaderComponent = loader || (
+    <ActivityIndicator size={'large'} style={styles.loader} animating />
+  );
+
   return isLoading ? (
-    <ActivityIndicator size={'large'} style={styles.loader} />
+    loaderComponent
   ) : (
     <FlatList
       ref={ref}
@@ -60,9 +65,7 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
       }}
       onEndReachedThreshold={0.8}
       refreshing={isRefreshing}
-      ListEmptyComponent={
-        isLoading ? <ActivityIndicator size="large" /> : rest.ListEmptyComponent
-      }
+      ListEmptyComponent={isLoading ? loaderComponent : rest.ListEmptyComponent}
       {...rest}
       ListFooterComponent={
         !isLoading && !isRefreshing && isFetchingNextPage ? <Footer /> : null
@@ -71,9 +74,10 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
         enableRefresh ? (
           <LoaderRefresh
             isRefreshing={isRefreshing}
-            onRefresh={() => {
-              onRefresh?.();
+            onRefresh={async () => {
               setIsRefreshing(true);
+              await onRefresh?.();
+              setIsRefreshing(false);
             }}
           />
         ) : undefined
