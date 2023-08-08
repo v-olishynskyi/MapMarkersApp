@@ -3,16 +3,20 @@
  * @category
  * @subcategory
  *  */
-import React from 'react';
+import React, { useEffect, useImperativeHandle } from 'react';
 import useStyles from './styles';
-import { SessionItemProps } from './types';
+import { SessionItemProps, SwipeableItemHandler } from './types';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { RectButton } from 'react-native-gesture-handler';
 import { Pressable } from '@components';
 import { generalStyles } from '@styles';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Animated, Text, View } from 'react-native';
+import { Animated as RNAnimated, Text, View } from 'react-native';
 import { getTheme } from '@common/helpers';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 /**
  * SessionItem
@@ -25,79 +29,82 @@ import { getTheme } from '@common/helpers';
  * // How to use SessionItem:
  *  <SessionItem />
  */
-const SessionItem = React.forwardRef<Swipeable, SessionItemProps>(
-  ({ isEditMode, onDelete, onPress, onPressMinus, session, setRef }, ref) => {
+const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
+  ({ isEditMode, onDelete, onPress, onPressMinus, session }, ref) => {
     const { colors } = getTheme();
     const styles = useStyles();
 
+    const swipeableRef = React.useRef<Swipeable>(null);
+
+    useImperativeHandle(ref, () => ({
+      close: () => swipeableRef.current?.close(),
+      openRight: () => swipeableRef.current?.openRight(),
+    }));
+
     const renderRightActions = (
-      progressAnimatedValue: Animated.AnimatedInterpolation<string | number>,
-      dragAnimatedValue: Animated.AnimatedInterpolation<string | number>,
+      progressAnimatedValue: RNAnimated.AnimatedInterpolation<string | number>,
     ) => {
       const trans = progressAnimatedValue.interpolate({
         inputRange: [0, 1],
-        outputRange: [192, 0],
+        outputRange: [128, 0],
       });
+
       return (
-        <View
-          style={{
-            width: 192,
-            flexDirection: 'row',
-          }}>
-          <Animated.View
-            style={{
-              flex: 1,
-              transform: [{ translateX: trans }],
-            }}>
-            <RectButton
-              style={[
-                {
-                  alignItems: 'center',
-                  flex: 1,
-                  justifyContent: 'center',
-                  backgroundColor: colors.red,
-                },
-              ]}
-              onPress={onDelete}>
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 16,
-                  backgroundColor: 'transparent',
-                }}>
-                Видалити
-              </Text>
+        <View style={styles.rightActionsContainer}>
+          <RNAnimated.View
+            style={[
+              styles.actionButtonContainer,
+              {
+                transform: [{ translateX: trans }],
+              },
+            ]}>
+            <RectButton style={styles.rectButton} onPress={onDelete}>
+              <Icon size={26} name="trash" color={colors.white} />
+              <Text style={styles.actionText}>Видалити</Text>
             </RectButton>
-          </Animated.View>
+          </RNAnimated.View>
         </View>
       );
     };
 
+    const isShowMinus = useSharedValue(isEditMode);
+
+    useEffect(() => {
+      if (isEditMode) {
+        isShowMinus.value = true;
+      } else {
+        isShowMinus.value = false;
+      }
+    }, [isEditMode, isShowMinus]);
+
+    const minusIconStyle = useAnimatedStyle(() => {
+      return {};
+    });
+
     return (
       <Swipeable
-        ref={ref}
+        ref={swipeableRef}
         friction={2}
         enableTrackpadTwoFingerGesture
         leftThreshold={30}
         rightThreshold={40}
         renderRightActions={renderRightActions}
-        onSwipeableOpen={direction => {
-          console.log(`Opening swipeable from the ${direction}`);
-        }}
-        onSwipeableClose={direction => {
-          console.log(`Closing swipeable to the ${direction}`);
-        }}
-        childrenContainerStyle={{ marginBottom: 8 }}>
+        containerStyle={styles.container}
+        childrenContainerStyle={[generalStyles.row]}>
         <Pressable style={[generalStyles.row]} onPress={onPress}>
           {isEditMode && (
-            <Pressable style={styles.minusIconContainer} onPress={onPressMinus}>
-              <Icon
-                size={16}
-                name="remove"
-                style={styles.minusIcon}
-                color={colors.white}
-              />
-            </Pressable>
+            <Animated.View style={minusIconStyle}>
+              <Pressable
+                style={styles.minusIconContainer}
+                onPress={onPressMinus}>
+                <Icon
+                  size={16}
+                  name="remove"
+                  style={styles.minusIcon}
+                  color={colors.white}
+                />
+              </Pressable>
+            </Animated.View>
           )}
           <View style={styles.iconContainer}>
             <Icon size={20} name="logo-apple" />

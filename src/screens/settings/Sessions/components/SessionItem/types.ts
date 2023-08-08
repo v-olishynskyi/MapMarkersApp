@@ -1,5 +1,4 @@
 import { UserSessionModel } from '@models';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 /**
  * @memberof SessionItem
@@ -11,5 +10,9 @@ export type SessionItemProps = {
   onDelete: () => Promise<void>;
   onPress: VoidFunction;
   onPressMinus: VoidFunction;
-  setRef: (ref: Swipeable) => void;
+};
+
+export type SwipeableItemHandler = {
+  close: VoidFunction;
+  openRight: VoidFunction;
 };

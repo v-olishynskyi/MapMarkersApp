@@ -6,7 +6,7 @@ export type Models = UserModel;
 export type EntityToModel<T extends Entities> = T extends User
   ? UserModel
   : T extends UserSession
-  ? UserSession
+  ? UserSessionModel
   : never;
 
 export type ModelConstructor<T extends Entities> = T extends User

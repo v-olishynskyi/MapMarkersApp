@@ -60,7 +60,9 @@ const Community: React.FC<CommunityProps> = () => {
   } = useStores();
 
   const debouncedLoad = useDebouncedCallback(() => {
-    isMounted && loadUsers(searchValue);
+    if (isMounted) {
+      loadUsers(searchValue);
+    }
   }, 1000);
 
   const onPress = React.useCallback(
@@ -84,7 +86,7 @@ const Community: React.FC<CommunityProps> = () => {
 
   useEffect(() => {
     debouncedLoad();
-  }, [searchValue, debouncedLoad, isMounted]);
+  }, [searchValue, debouncedLoad]);
 
   useEffect(() => {
     loadUsers();

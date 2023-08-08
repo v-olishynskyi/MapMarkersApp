@@ -6,6 +6,7 @@ const useStyles = () => {
   const { colors, typography } = getTheme();
 
   return StyleSheet.create({
+    container: { paddingVertical: spacingBase.s1 },
     iconContainer: {
       borderRadius: 4,
       padding: 4,
@@ -39,6 +40,25 @@ const useStyles = () => {
     },
     minusIcon: {
       backgroundColor: colors.red,
+    },
+
+    rightActionsContainer: {
+      width: 128,
+      flexDirection: 'row',
+      paddingVertical: spacingBase.s1,
+    },
+    actionButtonContainer: { flex: 1 },
+    rectButton: {
+      alignItems: 'center',
+      flex: 1,
+      justifyContent: 'center',
+      backgroundColor: colors.red,
+    },
+    actionText: {
+      ...typography.regular.body,
+      color: colors.white,
+      backgroundColor: 'transparent',
+      marginLeft: spacingBase.s1,
     },
   });
 };

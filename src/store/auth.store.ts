@@ -38,6 +38,12 @@ export class AuthStore {
         JSON.stringify({ refreshToken: refresh_token }),
       );
 
+      Keychain.setInternetCredentials(
+        'session_id',
+        'session_id',
+        JSON.stringify({ sessionId: session_id }),
+      );
+
       runInAction(() => {
         this.sessionId = session_id;
         this.isLoading = false;
@@ -71,12 +77,27 @@ export class AuthStore {
     }
   }
 
-  async logout(sessionId: string) {
+  async logout() {
     try {
       this.isLoading = true;
 
+      let sessionId;
+
+      const sessionInternetCredentials = await Keychain.getInternetCredentials(
+        'session_id',
+      );
+      if (sessionInternetCredentials) {
+        const { sessionId: storedSessionId } = JSON.parse(
+          sessionInternetCredentials.password,
+        );
+
+        sessionId = storedSessionId;
+      }
+
       await AuthService.logout(sessionId);
-      await Keychain.resetGenericPassword();
+      Keychain.resetGenericPassword();
+      Keychain.resetInternetCredentials('refresh_tkn');
+      Keychain.resetInternetCredentials('session_id');
 
       runInAction(() => {
         this.isLoading = false;

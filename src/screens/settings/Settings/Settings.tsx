@@ -30,7 +30,6 @@ const Settings: React.FC = () => {
     userStore: { user },
   } = useStores();
 
-  console.log('file: Settings.tsx:27 - user:', user);
   return (
     <ScrollView
       style={styles.container}
@@ -39,7 +38,7 @@ const Settings: React.FC = () => {
         style={[generalStyles.rowBetween]}
         onPress={() => navigate('sessions')}>
         <Text>Пристрої</Text>
-        <Text>{user.sessions.length}</Text>
+        <Text>{user.sessions.items.length}</Text>
       </Pressable>
     </ScrollView>
   );

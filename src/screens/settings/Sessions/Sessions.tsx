@@ -9,11 +9,8 @@ import useStyles from './styles';
 import { useStores } from '@store';
 import { useNavigation } from '@react-navigation/native';
 import { Pressable } from '@components';
-import { UserSessionModel } from '@models';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { RectButton } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
 import { SessionItem } from './components';
+import { SwipeableItemHandler } from './components/SessionItem/types';
 
 /**
  * Sessions
@@ -35,53 +32,51 @@ const Sessions: React.FC = () => {
 
   const [isEditMode, setIsEditMode] = React.useState(false);
 
-  const refs = useRef<Array<Swipeable>>([]);
+  const refs = useRef<Array<SwipeableItemHandler>>([]);
+
+  const closeAllSwipers = React.useCallback(
+    () =>
+      sessions.items.forEach((_, index) => {
+        refs.current[index].close();
+      }),
+    [refs, sessions],
+  );
 
   useLayoutEffect(() => {
     setOptions({
       headerRight: props => (
         <Pressable
           onPress={() => {
+            closeAllSwipers();
             setIsEditMode(prev => !prev);
           }}>
-          <Text style={{ color: props.tintColor }}>Змінити</Text>
+          <Text style={{ color: props.tintColor }}>
+            {isEditMode ? 'Готово' : 'Змінити'}
+          </Text>
         </Pressable>
       ),
     });
-  }, [setOptions]);
-
-  const renderLeftActions = (progress, dragX) => {
-    const trans = dragX.interpolate({
-      inputRange: [0, 50, 100, 101],
-      outputRange: [-20, 0, 0, 1],
-    });
-    return (
-      <RectButton style={styles.rectButton} onPress={() => {}}>
-        <Animated.Text
-          style={[
-            {
-              // transform: [{ translateX: trans }],
-            },
-          ]}>
-          Archive
-        </Animated.Text>
-      </RectButton>
-    );
-  };
+  }, [setOptions, isEditMode, closeAllSwipers]);
 
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.contentContainer}>
-      {sessions.map((item: UserSessionModel, index: number) => {
+      {sessions.items.map((item, index) => {
         return (
           <SessionItem
-            onSetRef={ref => (refs[index] = ref)}
             key={item.id}
+            ref={ref => {
+              refs.current[index] = ref!;
+            }}
             session={item}
             isEditMode={isEditMode}
             onDelete={async () => {}}
             onPress={() => {}}
+            onPressMinus={() => {
+              closeAllSwipers();
+              refs.current[index].openRight();
+            }}
           />
         );
       })}

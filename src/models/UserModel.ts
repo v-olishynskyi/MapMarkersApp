@@ -10,24 +10,23 @@ export default class UserModel {
   middle_name: User['middle_name'];
   username: User['username'];
   avatar_url: User['avatar_url'];
-  sessions: ListItems<UserSession>;
+  sessions: ListItems<UserSessionModel>;
 
   created_at: User['created_at'];
   updated_at: User['updated_at'];
 
   constructor(user: User) {
+    return this.handleData(user);
+  }
+
+  private handleData(user: User) {
+    Object.keys(user).forEach(key => (this[key] = user[key]));
     if (user.sessions) {
       this.sessions = new ListItems<UserSession>(
         UserSessionModel,
         user.sessions,
       );
     }
-
-    return this.handleData(user);
-  }
-
-  private handleData(user: User) {
-    Object.keys(user).forEach(key => (this[key] = user[key]));
 
     return this;
   }

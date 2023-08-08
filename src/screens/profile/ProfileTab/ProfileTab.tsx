@@ -41,7 +41,7 @@ const ProfileTab: React.FC = () => {
     userStore: {
       user: { id, avatar_url, fullname, initials, email },
     },
-    authStore: { logout, sessionId, isLoading },
+    authStore: { logout, isLoading },
     profileViewStore: { setUserId },
   } = useStores();
 
@@ -131,7 +131,7 @@ const ProfileTab: React.FC = () => {
       <View style={styles.block}>
         <Pressable
           style={styles.pressable}
-          onPress={() => logout(sessionId)}
+          onPress={logout}
           disabled={isLoading}>
           <View style={styles.row}>
             {isLoading ? (
