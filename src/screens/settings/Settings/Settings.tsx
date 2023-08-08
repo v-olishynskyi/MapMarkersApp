@@ -12,6 +12,7 @@ import { generalStyles } from '@styles';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStackParamsList } from '@navigation';
+import { observer } from 'mobx-react-lite';
 
 /**
  * Settings
@@ -44,4 +45,4 @@ const Settings: React.FC = () => {
   );
 };
 
-export default Settings;
+export default observer(Settings);

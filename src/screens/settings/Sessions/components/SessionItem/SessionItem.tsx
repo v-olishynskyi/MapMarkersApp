@@ -111,6 +111,7 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
           </View>
           <View style={styles.info}>
             <Text style={styles.device} numberOfLines={1}>
+              {session.id}
               {session.device}
             </Text>
             <Text style={styles.version} numberOfLines={1}>

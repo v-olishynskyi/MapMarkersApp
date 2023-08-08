@@ -1,5 +1,5 @@
 import { UserModel } from '@models';
-import { UpdateProfileData, UsersService } from '@services';
+import { AuthService, UpdateProfileData, UsersService } from '@services';
 import { RootStore } from '@store/root.store';
 import { showToast } from '@common/helpers';
 import { makeAutoObservable, runInAction } from 'mobx';
@@ -80,6 +80,22 @@ export class UserStore {
 
   setIsLoading(value: boolean) {
     this.isLoading = value;
+  }
+
+  async terminateSession(sessionId: string) {
+    const sessions = this.user.sessions;
+
+    try {
+      await AuthService.logout(sessionId);
+      runInAction(() => {
+        const sessionIndex = sessions.items.findIndex(
+          ({ id }) => sessionId === id,
+        );
+        this.user.sessions.remove(sessionIndex);
+      });
+    } catch (error) {
+      this.user.sessions = sessions;
+    }
   }
 
   async validateUpdateForm() {
