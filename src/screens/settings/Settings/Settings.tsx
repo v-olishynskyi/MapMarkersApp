@@ -6,13 +6,14 @@
 import React from 'react';
 import useStyles from './styles';
 import { useStores } from '@store';
-import { ScrollView, Text } from 'react-native';
-import { Pressable } from '@components';
-import { generalStyles } from '@styles';
+import { ScrollView } from 'react-native';
+import { Menu, MenuItem } from '@components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStackParamsList } from '@navigation';
 import { observer } from 'mobx-react-lite';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { getTheme } from '@common/helpers';
 
 /**
  * Settings
@@ -24,6 +25,8 @@ import { observer } from 'mobx-react-lite';
  *  <Settings />
  */
 const Settings: React.FC = () => {
+  const { colors } = getTheme();
+
   const { navigate } =
     useNavigation<NativeStackNavigationProp<AppStackParamsList>>();
   const styles = useStyles();
@@ -35,12 +38,22 @@ const Settings: React.FC = () => {
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.contentContainer}>
-      <Pressable
-        style={[generalStyles.rowBetween]}
-        onPress={() => navigate('sessions')}>
-        <Text>Пристрої</Text>
-        <Text>{user.sessions.items.length}</Text>
-      </Pressable>
+      <Menu>
+        <MenuItem
+          label="Пристрої"
+          icon={
+            <Icon
+              size={20}
+              name="phone-portrait-outline"
+              color={colors.white}
+            />
+          }
+          onPress={() => navigate('sessions')}
+          iconColor={colors.orange}
+          secondaryLabel={user.sessions.items.length.toString()}
+          isLast
+        />
+      </Menu>
     </ScrollView>
   );
 };

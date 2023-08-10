@@ -2,6 +2,8 @@ import axios, { AxiosError } from 'axios';
 import env from '@env';
 import * as Keychain from 'react-native-keychain';
 import { AuthService } from '@services';
+import { rootStore } from '@store';
+import { showToast } from '@common/helpers';
 
 const api = axios.create({ baseURL: `${env.BASE_URL}api/v1` });
 
@@ -61,7 +63,9 @@ api.interceptors.response.use(
           );
 
           rerunFailedRequests(access_token);
-        } catch (error) {
+        } catch {
+          showToast('error', 'Термін дії сесії минув');
+          rootStore.authStore.logout();
         } finally {
           failedRequests = [];
           isAlreadyFetchingNewToken = false;

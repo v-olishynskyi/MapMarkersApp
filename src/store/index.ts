@@ -6,7 +6,7 @@ import { UiStore } from '@store/ui.store';
 import { CommunityStore } from '@store/community.store';
 import { ProfileViewStore } from '@store/profile-view.store';
 
-const rootStore = new RootStore([
+export const rootStore = new RootStore([
   { authStore: AuthStore },
   { userStore: UserStore },
   { uiStore: UiStore },
@@ -14,6 +14,6 @@ const rootStore = new RootStore([
   { profileViewStore: ProfileViewStore },
 ]);
 
-const StoreContext = React.createContext(rootStore);
+export const StoreContext = React.createContext(rootStore);
 
 export const useStores = () => useContext(StoreContext);
