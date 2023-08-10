@@ -7,7 +7,7 @@ const useStyles = () => {
 
   return StyleSheet.create({
     container: {
-      backgroundColor: colors.white,
+      backgroundColor: colors.card,
       borderRadius: spacingBase.s1,
       overflow: 'hidden',
     },

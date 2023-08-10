@@ -4,15 +4,15 @@
  * @subcategory Settings subscreens
  */
 import React, { useLayoutEffect, useRef } from 'react';
-import { ActionSheetIOS, Alert, ScrollView, Text } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import useStyles from './styles';
 import { useStores } from '@store';
 import { useNavigation } from '@react-navigation/native';
 import { Pressable } from '@components';
-import { SessionItem } from './components';
+import { SessionBottomSheet, SessionItem } from './components';
 import { SwipeableItemHandler } from './components/SessionItem/types';
-import { IS_IOS } from '@common/helpers';
 import { observer } from 'mobx-react-lite';
+import terminateConfirmationRequest from './terminateConfirmationRequest';
 
 /**
  * Sessions
@@ -31,6 +31,7 @@ const Sessions: React.FC = () => {
       user: { sessions },
       terminateSession,
     },
+    userSessionSheetStore: { setSession },
   } = useStores();
 
   const [isEditMode, setIsEditMode] = React.useState(false);
@@ -48,25 +49,8 @@ const Sessions: React.FC = () => {
   const handlePressDeleteSession = React.useCallback(
     (sessionId: string) => {
       closeAllSwipers();
-      if (IS_IOS) {
-        ActionSheetIOS.showActionSheetWithOptions(
-          {
-            options: ['Скасувати', 'Завершити сеанс'],
-            destructiveButtonIndex: 1,
-            cancelButtonIndex: 0,
-            message: 'Ви дійсно хочете завершити сеанс на данному пристрої?',
-          },
-          index => {
-            if (index === 0) {
-              return;
-            }
 
-            terminateSession(sessionId);
-          },
-        );
-      } else {
-        Alert.alert();
-      }
+      terminateConfirmationRequest(() => terminateSession(sessionId));
     },
     [closeAllSwipers, terminateSession],
   );
@@ -79,13 +63,13 @@ const Sessions: React.FC = () => {
             closeAllSwipers();
             setIsEditMode(prev => !prev);
           }}>
-          <Text style={{ color: props.tintColor }}>
+          <Text style={(styles.headerRightText, { color: props.tintColor })}>
             {isEditMode ? 'Готово' : 'Змінити'}
           </Text>
         </Pressable>
       ),
     });
-  }, [setOptions, isEditMode, closeAllSwipers]);
+  }, [setOptions, isEditMode, closeAllSwipers, styles.headerRightText]);
 
   return (
     <>
@@ -102,7 +86,7 @@ const Sessions: React.FC = () => {
               session={item}
               isEditMode={isEditMode}
               onDelete={async () => handlePressDeleteSession(item.id)}
-              onPress={() => {}}
+              onPress={() => setSession(item)}
               onPressMinus={() => {
                 closeAllSwipers();
                 refs.current[index].openRight();
@@ -111,6 +95,7 @@ const Sessions: React.FC = () => {
           );
         })}
       </ScrollView>
+      <SessionBottomSheet />
     </>
   );
 };

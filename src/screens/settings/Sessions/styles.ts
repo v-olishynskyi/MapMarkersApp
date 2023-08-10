@@ -3,7 +3,7 @@ import { spacingBase } from '@styles';
 import { StyleSheet } from 'react-native';
 
 const useStyles = () => {
-  const {} = getTheme();
+  const { typography } = getTheme();
 
   return StyleSheet.create({
     container: {
@@ -21,6 +21,7 @@ const useStyles = () => {
       flexDirection: 'column',
       backgroundColor: 'white',
     },
+    headerRightText: { ...typography.regular.body },
   });
 };
 

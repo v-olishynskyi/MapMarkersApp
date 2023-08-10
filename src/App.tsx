@@ -17,6 +17,7 @@ import { Dimensions, StyleSheet } from 'react-native';
 import { isPortrait } from '@common/helpers';
 import { RootLoading, Toast } from '@components';
 import { observer } from 'mobx-react-lite';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 const App = observer(() => {
   const {
@@ -42,13 +43,15 @@ const App = observer(() => {
   return (
     <>
       <GestureHandlerRootView style={styles.container}>
-        <SafeAreaProvider>
-          <NavigationContainer ref={navigationRef} theme={DefaultTheme}>
-            <RootLoading>
-              <RootNavigation />
-            </RootLoading>
-          </NavigationContainer>
-        </SafeAreaProvider>
+        <BottomSheetModalProvider>
+          <SafeAreaProvider>
+            <NavigationContainer ref={navigationRef} theme={DefaultTheme}>
+              <RootLoading>
+                <RootNavigation />
+              </RootLoading>
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </BottomSheetModalProvider>
       </GestureHandlerRootView>
       <Toast />
     </>

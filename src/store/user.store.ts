@@ -10,6 +10,7 @@ export class UserStore {
 
   isLoading: boolean = false;
   isSaving: boolean = false;
+  isTerminatingSession: boolean = false;
 
   user: UserModel = {} as UserModel;
 
@@ -83,6 +84,8 @@ export class UserStore {
   }
 
   async terminateSession(sessionId: string) {
+    this.isTerminatingSession = true;
+
     const sessions = this.user.sessions;
 
     try {
@@ -92,9 +95,13 @@ export class UserStore {
           ({ id }) => sessionId === id,
         );
         this.user.sessions.remove(sessionIndex);
+        this.isTerminatingSession = false;
       });
-    } catch (error) {
+    } catch (error: any) {
+      showToast('error', error.message);
+
       this.user.sessions = sessions;
+      this.isTerminatingSession = false;
     }
   }
 
