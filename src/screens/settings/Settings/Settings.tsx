@@ -7,7 +7,7 @@ import React from 'react';
 import useStyles from './styles';
 import { useStores } from '@store';
 import { ScrollView } from 'react-native';
-import { Menu, MenuItem } from '@components';
+import { Menu } from '@components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStackParamsList } from '@navigation';
@@ -38,22 +38,23 @@ const Settings: React.FC = () => {
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.contentContainer}>
-      <Menu>
-        <MenuItem
-          label="Пристрої"
-          icon={
-            <Icon
-              size={20}
-              name="phone-portrait-outline"
-              color={colors.white}
-            />
-          }
-          onPress={() => navigate('sessions')}
-          iconColor={colors.orange}
-          secondaryLabel={user.sessions.items.length.toString()}
-          isLast
-        />
-      </Menu>
+      <Menu
+        items={[
+          {
+            label: 'Пристрої',
+            icon: (
+              <Icon
+                size={20}
+                name="phone-portrait-outline"
+                color={colors.white}
+              />
+            ),
+            onPress: () => navigate('sessions'),
+            iconColor: colors.orange,
+            secondaryLabel: user.sessions.items.length.toString(),
+          },
+        ]}
+      />
     </ScrollView>
   );
 };

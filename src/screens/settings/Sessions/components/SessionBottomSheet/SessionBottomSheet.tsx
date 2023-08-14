@@ -14,10 +14,12 @@ import {
 import { Text } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
-import { Button, Pressable } from '@components';
+import { Button, Menu, Pressable } from '@components';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getTheme } from '@common/helpers';
 import terminateConfirmationRequest from '../../terminateConfirmationRequest';
+import { PlatformIcon } from '../';
+import { getVersion } from 'react-native-device-info';
 
 /**
  * SessionBottomSheet
@@ -35,11 +37,12 @@ const SessionBottomSheet: React.FC = () => {
   const {
     userSessionSheetStore: { session, setSession },
     userStore: { terminateSession, isTerminatingSession },
+    authStore: { currentSession },
   } = useStores();
 
   const sheetRef = React.useRef<BottomSheetModal>(null);
 
-  const snapPoints = React.useMemo(() => ['25%', '50%', '85%'], []);
+  const snapPoints = React.useMemo(() => ['50%', '85%'], []);
 
   const closeModal = React.useCallback(() => sheetRef.current?.dismiss(), []);
   const handleTerminateSession = React.useCallback(async () => {
@@ -60,20 +63,34 @@ const SessionBottomSheet: React.FC = () => {
           <Icon name="close" size={20} color={colors.black} />
         </Pressable>
         <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
-          <>
-            <Text>{session.id}</Text>
-            <Text>{session.device}</Text>
-            <Text>{session.created_at.toString()}</Text>
-            <Text>{session.updated_at.toString()}</Text>
-          </>
-          <Button
-            label="Завершити сеанс"
-            backgroundColor={colors.card}
-            color={colors.red}
-            style={styles.terminateSessionButton}
-            loading={isTerminatingSession}
-            onPress={handleTerminateSession}
+          <PlatformIcon size="large" platform={session.device.platform} />
+          <Text style={styles.deviceName}>{session.device.name}</Text>
+          <Menu
+            items={[
+              {
+                label: 'Застосунок',
+                secondaryLabel: `Markers ${getVersion()}`,
+              },
+              // {
+              //   label: 'IP-адреса',
+              //   secondaryLabel: session.ip?.toString(),
+              // },
+              // {
+              //   label: 'Розташування',
+              //   secondaryLabel: session.location?.toString(),
+              // },
+            ]}
           />
+          {currentSession?.id !== session.id && (
+            <Button
+              label="Завершити сеанс"
+              backgroundColor={colors.card}
+              color={colors.red}
+              style={styles.terminateSessionButton}
+              loading={isTerminatingSession}
+              onPress={handleTerminateSession}
+            />
+          )}
         </BottomSheetScrollView>
       </>
     );
@@ -82,9 +99,17 @@ const SessionBottomSheet: React.FC = () => {
   }, [session, terminateSession, isTerminatingSession]);
 
   const renderBackdrop = React.useCallback(
-    (props: BottomSheetBackdropProps) => <BottomSheetBackdrop {...props} />,
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={1}
+        disappearsOnIndex={-1}
+      />
+    ),
     [],
   );
+
+  const onDismiss = React.useCallback(() => setSession(null), [setSession]);
 
   React.useEffect(() => {
     if (session) {
@@ -97,9 +122,9 @@ const SessionBottomSheet: React.FC = () => {
   return (
     <BottomSheetModal
       ref={sheetRef}
-      index={2}
+      index={1}
       snapPoints={snapPoints}
-      onDismiss={() => setSession(null)}
+      onDismiss={onDismiss}
       backdropComponent={renderBackdrop}
       backgroundStyle={styles.background}>
       {content}

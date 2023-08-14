@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TabNavigation, navigationRef } from './';
 import { AppStackParamsList } from './types';
@@ -19,7 +19,7 @@ import { generalStyles, spacingBase } from '@styles';
 
 const Stack = createNativeStackNavigator<AppStackParamsList>();
 
-const EditProfileHeaderButton: FC<{
+const EditProfileHeaderButton: React.FC<{
   canGoBack: boolean;
   label: string;
   color: string;

@@ -1,7 +1,9 @@
-import { showToast } from '@common/helpers';
+import { IS_IOS, showToast } from '@common/helpers';
+import { Device, Platforms } from '@common/types';
 import { AuthService, LoginData, RegistrationData } from '@services';
 import { RootStore } from '@store/root.store';
 import { makeAutoObservable, runInAction } from 'mobx';
+import DeviceInfo, { getUniqueId } from 'react-native-device-info';
 import * as Keychain from 'react-native-keychain';
 
 export class AuthStore {
@@ -17,14 +19,26 @@ export class AuthStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  async signIn({ email, password }: LoginData) {
+  async signIn({ email, password }: Omit<LoginData, 'device'>) {
     try {
       this.isLoading = true;
+
+      // const deviceInfo = await DeviceInfo.id
+      const name = IS_IOS
+        ? await DeviceInfo.getDeviceName()
+        : DeviceInfo.getSystemName();
+
+      const device: Device = {
+        id: await getUniqueId(),
+        name,
+        platform: IS_IOS ? Platforms.IOS : Platforms.ANDROID, // TODO: change if need support web
+      };
 
       const { access_token, refresh_token, session_id } =
         await AuthService.login({
           email: email.toLowerCase(),
           password,
+          device,
         });
 
       await Keychain.setGenericPassword(
@@ -32,13 +46,13 @@ export class AuthStore {
         JSON.stringify({ accessToken: access_token }),
       );
 
-      Keychain.setInternetCredentials(
+      await Keychain.setInternetCredentials(
         'refresh_tkn',
         'rfsh_tkn',
         JSON.stringify({ refreshToken: refresh_token }),
       );
 
-      Keychain.setInternetCredentials(
+      await Keychain.setInternetCredentials(
         'session_id',
         'session_id',
         JSON.stringify({ sessionId: session_id }),
@@ -51,9 +65,12 @@ export class AuthStore {
       });
     } catch (error: any) {
       showToast('error', error.message, '');
+
       runInAction(() => {
         this.isLoading = false;
+        this.isAuth = false;
       });
+
       throw error;
     }
   }
@@ -115,5 +132,15 @@ export class AuthStore {
 
   setIsAuth(value: boolean) {
     this.isAuth = value;
+  }
+
+  setSessionId(id: string) {
+    this.sessionId = id;
+  }
+
+  get currentSession() {
+    return this.rootStore.userStore.user.sessions.items.find(
+      session => session.id === this.sessionId,
+    );
   }
 }

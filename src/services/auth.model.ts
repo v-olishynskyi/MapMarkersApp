@@ -1,8 +1,10 @@
+import { Device } from '@common/types';
 import { User } from '@common/types/entities';
 
 export type LoginData = {
   email: string;
   password: string;
+  device: Device;
 };
 
 export type LoginResponse = {

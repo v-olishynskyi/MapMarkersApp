@@ -3,7 +3,7 @@
  * @category
  * @subcategory
  *  */
-import React, { useMemo } from 'react';
+import React from 'react';
 import useStyles from './styles';
 import { MenuItemProps } from './types';
 import { Pressable, Text, View } from 'react-native';
@@ -36,16 +36,18 @@ const MenuItem: React.FC<MenuItemProps> = ({
 
   const styles = useStyles(!!disabled, iconColor, icon);
 
-  const defaultActions = useMemo(
+  const defaultActions = React.useMemo(
     () => (
       <>
         {secondaryLabel && (
           <Text style={styles.secondaryLabel}>{secondaryLabel}</Text>
         )}
-        <Icon name="chevron-forward" size={20} color={colors.gray2} />
+        {onPress && (
+          <Icon name="chevron-forward" size={20} color={colors.gray2} />
+        )}
       </>
     ),
-    [colors.gray2, secondaryLabel, styles.secondaryLabel],
+    [colors.gray2, secondaryLabel, styles.secondaryLabel, onPress],
   );
 
   return (
@@ -55,7 +57,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
         styles.container,
         pressed && styles.pressed,
         containerStyle,
-      ]}>
+      ]}
+      disabled={!onPress}>
       {icon && <View style={styles.iconContainer}>{icon}</View>}
       <View style={styles.main}>
         <Text style={styles.primaryLabel}>{label}</Text>

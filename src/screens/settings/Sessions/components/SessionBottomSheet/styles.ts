@@ -3,7 +3,7 @@ import { spacingBase } from '@styles';
 import { StyleSheet } from 'react-native';
 
 const useStyles = () => {
-  const { colors } = getTheme();
+  const { colors, typography } = getTheme();
 
   return StyleSheet.create({
     contentContainer: {
@@ -22,6 +22,12 @@ const useStyles = () => {
     },
     terminateSessionButton: {
       marginTop: spacingBase.s3,
+    },
+
+    deviceName: {
+      ...typography.regular.title2,
+      textAlign: 'center',
+      marginBottom: spacingBase.s3,
     },
   });
 };

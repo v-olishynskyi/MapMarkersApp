@@ -1,41 +1,54 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import useStyles from './styles';
 import { ActivityIndicator, View } from 'react-native';
 import { useStores } from '@store';
-import { getGenericPassword } from 'react-native-keychain';
-import { wait } from '@common/helpers';
+import {
+  getGenericPassword,
+  getInternetCredentials,
+} from 'react-native-keychain';
 import { observer } from 'mobx-react-lite';
 
-const RootLoading: React.FC<PropsWithChildren<any>> = observer(
+const RootLoading: React.FC<React.PropsWithChildren<any>> = observer(
   ({ children }) => {
     const styles = useStyles();
-    const [isLoading, setIsLoading] = React.useState(false);
 
     const {
-      authStore: { setIsAuth },
+      authStore: { setIsAuth, setSessionId },
+      uiStore: { isInitApp, setIsInitApp },
     } = useStores();
 
     React.useEffect(() => {
       (async () => {
         try {
-          setIsLoading(true);
-          await wait(1000);
+          setIsInitApp(true);
           const creds = await getGenericPassword();
           if (creds) {
             const token = JSON.parse(creds.password);
-            setIsAuth(!!token?.accessToken);
+            const isAuth = !!token?.accessToken;
+            setIsAuth(isAuth);
+          }
+
+          const sessionInternetCredentials = await getInternetCredentials(
+            'session_id',
+          );
+
+          if (sessionInternetCredentials) {
+            const { sessionId: storedSessionId } = JSON.parse(
+              sessionInternetCredentials.password,
+            );
+            setSessionId(storedSessionId);
           }
         } catch (error) {
           setIsAuth(false);
         } finally {
-          setIsLoading(false);
+          setIsInitApp(false);
         }
       })();
 
       // eslint-disable-next-line
     }, []);
 
-    return isLoading ? (
+    return isInitApp ? (
       <View style={styles.container}>
         <ActivityIndicator size={'large'} />
       </View>

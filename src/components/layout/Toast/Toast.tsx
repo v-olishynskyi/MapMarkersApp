@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import LibToast, {
   ToastConfig,
   SuccessToast,
@@ -8,7 +8,7 @@ import LibToast, {
 
 type Props = {};
 
-const Toast: FC<Props> = () => {
+const Toast: React.FC<Props> = () => {
   const toastConfig: ToastConfig = {
     success: props => <SuccessToast {...props} />,
     error: props => <ErrorToast {...props} />,

@@ -43,15 +43,15 @@ const App = observer(() => {
   return (
     <>
       <GestureHandlerRootView style={styles.container}>
-        <BottomSheetModalProvider>
-          <SafeAreaProvider>
-            <NavigationContainer ref={navigationRef} theme={DefaultTheme}>
+        <SafeAreaProvider>
+          <NavigationContainer ref={navigationRef} theme={DefaultTheme}>
+            <BottomSheetModalProvider>
               <RootLoading>
                 <RootNavigation />
               </RootLoading>
-            </NavigationContainer>
-          </SafeAreaProvider>
-        </BottomSheetModalProvider>
+            </BottomSheetModalProvider>
+          </NavigationContainer>
+        </SafeAreaProvider>
       </GestureHandlerRootView>
       <Toast />
     </>

@@ -7,7 +7,7 @@ import React from 'react';
 import View from 'react-native-ui-lib/view';
 import { useFormik } from 'formik';
 import { FormState } from './types';
-import { KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView, TextInput } from 'react-native';
 import { Input, Button } from '@components';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
@@ -38,6 +38,9 @@ const SignIn: React.FC = observer(() => {
     useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
   const height = useHeaderHeight();
   const styles = useStyles();
+
+  const emailInputRef = React.useRef<TextInput>(null);
+  const passwordInputRef = React.useRef<TextInput>(null);
 
   const {
     authStore: { signIn, isLoading },
@@ -77,6 +80,7 @@ const SignIn: React.FC = observer(() => {
       keyboardVerticalOffset={height + 64}>
       <View style={[styles.form]}>
         <Input
+          ref={emailInputRef}
           value={values.email}
           caption={'E-mail'}
           onChangeText={handleChangeInput('email')}
@@ -85,8 +89,12 @@ const SignIn: React.FC = observer(() => {
           error={touched.email && errors.email}
           clearButtonMode="while-editing"
           placeholder="E-mail"
+          keyboardType="email-address"
+          textContentType="emailAddress"
+          onSubmitEditing={() => passwordInputRef.current?.focus()}
         />
         <Input
+          ref={passwordInputRef}
           value={values.password}
           caption={'Пароль'}
           onChangeText={handleChangeInput('password')}
@@ -95,6 +103,7 @@ const SignIn: React.FC = observer(() => {
           placeholder="Не менше 6 символів"
           password
           style={styles.input}
+          textContentType="password"
         />
         <Button
           label="Забули пароль?"

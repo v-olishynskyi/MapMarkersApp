@@ -1,3 +1,5 @@
+import { Device } from '@common/types';
+
 export type User = {
   id: string;
   email: string;
@@ -15,7 +17,10 @@ export type User = {
 export type UserSession = {
   id: string;
   user_id: string;
-  device: string;
+  device: Device;
+  ip: string | null;
+  app_version: string | null;
+  location: string | null;
   created_at: Date;
   updated_at: Date;
 };

@@ -3,16 +3,17 @@
  * @category Screens
  * @subcategory Settings subscreens
  */
-import React, { useLayoutEffect, useRef } from 'react';
-import { ScrollView, Text } from 'react-native';
+import React from 'react';
+import { ListRenderItem, Text } from 'react-native';
 import useStyles from './styles';
 import { useStores } from '@store';
 import { useNavigation } from '@react-navigation/native';
-import { Pressable } from '@components';
+import { BaseList, Pressable } from '@components';
 import { SessionBottomSheet, SessionItem } from './components';
 import { SwipeableItemHandler } from './components/SessionItem/types';
 import { observer } from 'mobx-react-lite';
 import terminateConfirmationRequest from './terminateConfirmationRequest';
+import { UserSessionModel } from '@models';
 
 /**
  * Sessions
@@ -30,24 +31,25 @@ const Sessions: React.FC = () => {
     userStore: {
       user: { sessions },
       terminateSession,
+      loadProfile,
+      isLoading,
     },
     userSessionSheetStore: { setSession },
+    authStore: { currentSession },
   } = useStores();
 
   const [isEditMode, setIsEditMode] = React.useState(false);
 
-  const refs = useRef<Array<SwipeableItemHandler>>([]);
+  const refs = React.useRef<Array<SwipeableItemHandler>>([]);
 
-  const closeAllSwipers = React.useCallback(
-    () =>
-      sessions.items.forEach((_, index) => {
-        refs.current[index].close();
-      }),
-    [refs, sessions],
-  );
+  const closeAllSwipers = React.useCallback(() => {
+    for (const ref of refs.current) {
+      ref.close();
+    }
+  }, [refs]);
 
-  const handlePressDeleteSession = React.useCallback(
-    (sessionId: string) => {
+  const onDeleteSession = React.useCallback(
+    async (sessionId: string) => {
       closeAllSwipers();
 
       terminateConfirmationRequest(() => terminateSession(sessionId));
@@ -55,46 +57,62 @@ const Sessions: React.FC = () => {
     [closeAllSwipers, terminateSession],
   );
 
-  useLayoutEffect(() => {
-    setOptions({
-      headerRight: props => (
-        <Pressable
-          onPress={() => {
+  const renderSession: ListRenderItem<UserSessionModel> = React.useCallback(
+    ({ item, index }) => {
+      const isCurrentSession = currentSession?.id === item.id;
+
+      return (
+        <SessionItem
+          key={item.id}
+          ref={ref => {
+            refs.current[index] = ref!;
+          }}
+          session={item}
+          isEditMode={isEditMode}
+          onDelete={onDeleteSession}
+          onPress={() => setSession(item)}
+          onPressMinus={() => {
             closeAllSwipers();
-            setIsEditMode(prev => !prev);
-          }}>
-          <Text style={(styles.headerRightText, { color: props.tintColor })}>
-            {isEditMode ? 'Готово' : 'Змінити'}
-          </Text>
-        </Pressable>
-      ),
+            refs.current[index].openRight();
+          }}
+          enableSwipeable={!isCurrentSession}
+        />
+      );
+    },
+    [closeAllSwipers, currentSession, isEditMode, onDeleteSession, setSession],
+  );
+
+  const renderHeaderRight = React.useCallback(
+    props => (
+      <Pressable
+        onPress={() => {
+          closeAllSwipers();
+          setIsEditMode(prev => !prev);
+        }}>
+        <Text style={(styles.headerRightText, { color: props.tintColor })}>
+          {isEditMode ? 'Готово' : 'Змінити'}
+        </Text>
+      </Pressable>
+    ),
+    [closeAllSwipers, isEditMode, styles.headerRightText],
+  );
+
+  React.useLayoutEffect(() => {
+    setOptions({
+      headerRight: renderHeaderRight,
     });
-  }, [setOptions, isEditMode, closeAllSwipers, styles.headerRightText]);
+  }, [setOptions, renderHeaderRight]);
 
   return (
     <>
-      <ScrollView
+      <BaseList
+        data={sessions.items}
+        renderItem={renderSession}
         style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        {sessions.items.map((item, index) => {
-          return (
-            <SessionItem
-              key={item.id}
-              ref={ref => {
-                refs.current[index] = ref!;
-              }}
-              session={item}
-              isEditMode={isEditMode}
-              onDelete={async () => handlePressDeleteSession(item.id)}
-              onPress={() => setSession(item)}
-              onPressMinus={() => {
-                closeAllSwipers();
-                refs.current[index].openRight();
-              }}
-            />
-          );
-        })}
-      </ScrollView>
+        contentContainerStyle={styles.contentContainer}
+        onRefresh={loadProfile}
+        isLoading={isLoading}
+      />
       <SessionBottomSheet />
     </>
   );

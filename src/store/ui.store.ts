@@ -1,10 +1,13 @@
+import { Orientations } from '@common/types';
 import { RootStore } from '@store/root.store';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 export class UiStore {
   rootStore: RootStore;
   dark: boolean = false;
-  orientation: 'portrait' | 'landscape' = 'portrait';
+  orientation: Orientations = Orientations.PORTRAIT;
+
+  isInitApp: boolean = false;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -24,14 +27,18 @@ export class UiStore {
   setDark(value: boolean) {
     this.dark = value;
   }
-  setOrientation(orientation: 'portrait' | 'landscape') {
+  setOrientation(orientation: Orientations) {
     this.orientation = orientation;
   }
 
+  setIsInitApp(value: boolean) {
+    this.isInitApp = value;
+  }
+
   get isPortrait() {
-    return this.orientation === 'portrait';
+    return this.orientation === Orientations.PORTRAIT;
   }
   get isLandscape() {
-    return this.orientation === 'landscape';
+    return this.orientation === Orientations.LANDSCAPE;
   }
 }

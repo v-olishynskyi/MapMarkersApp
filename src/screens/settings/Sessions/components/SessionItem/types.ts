@@ -7,9 +7,10 @@ import { UserSessionModel } from '@models';
 export type SessionItemProps = {
   session: UserSessionModel;
   isEditMode: boolean;
-  onDelete: () => Promise<void>;
+  onDelete: (sessionId: string) => Promise<void>;
   onPress: VoidFunction;
   onPressMinus: VoidFunction;
+  enableSwipeable?: boolean;
 };
 
 export type SwipeableItemHandler = {

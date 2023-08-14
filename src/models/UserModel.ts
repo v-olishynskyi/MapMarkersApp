@@ -10,7 +10,7 @@ export default class UserModel {
   middle_name: User['middle_name'];
   username: User['username'];
   avatar_url: User['avatar_url'];
-  sessions: ListItems<UserSessionModel>;
+  sessions: ListItems<UserSession>;
 
   created_at: User['created_at'];
   updated_at: User['updated_at'];

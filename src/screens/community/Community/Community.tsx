@@ -3,7 +3,7 @@
  * @category
  * @subcategory
  *  */
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import useStyles from './styles';
 import { CommunityProps, NavigationType } from './types';
 import { observer } from 'mobx-react-lite';
@@ -79,16 +79,16 @@ const Community: React.FC<CommunityProps> = () => {
     [initialLoadData],
   );
 
-  const renderItem: ListRenderItem<UserModel> = useCallback(
+  const renderItem: ListRenderItem<UserModel> = React.useCallback(
     ({ item: user }) => <UserItem user={user} onPress={() => onPress(user)} />,
     [onPress],
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     debouncedLoad();
   }, [searchValue, debouncedLoad]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     loadUsers();
   }, [loadUsers]);
 

@@ -8,13 +8,9 @@ const useStyles = () => {
   return StyleSheet.create({
     container: { paddingVertical: spacingBase.s1 },
     iconContainer: {
-      borderRadius: 4,
-      padding: 4,
       marginRight: spacingBase.s2,
       alignSelf: 'flex-start',
-      backgroundColor: colors.green,
     },
-    icon: {},
     info: {
       flex: 1,
       paddingBottom: spacingBase.s2,

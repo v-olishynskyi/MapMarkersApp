@@ -3,7 +3,7 @@
  * @category
  * @subcategory
  *  */
-import React, { useEffect, useImperativeHandle } from 'react';
+import React from 'react';
 import useStyles from './styles';
 import { SessionItemProps, SwipeableItemHandler } from './types';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -17,6 +17,8 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+import { PlatformIcon } from '../';
+import { useStores } from '@store';
 
 /**
  * SessionItem
@@ -30,16 +32,39 @@ import Animated, {
  *  <SessionItem />
  */
 const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
-  ({ isEditMode, onDelete, onPress, onPressMinus, session }, ref) => {
+  (
+    {
+      isEditMode,
+      onDelete,
+      onPress,
+      onPressMinus,
+      session,
+      enableSwipeable = true,
+    },
+    ref,
+  ) => {
     const { colors } = getTheme();
     const styles = useStyles();
+    const {
+      authStore: { currentSession },
+    } = useStores();
 
     const swipeableRef = React.useRef<Swipeable>(null);
 
-    useImperativeHandle(ref, () => ({
+    const isCurrentSession = React.useMemo(
+      () => currentSession?.id === session.id,
+      [currentSession, session],
+    );
+
+    React.useImperativeHandle(ref, () => ({
       close: () => swipeableRef.current?.close(),
       openRight: () => swipeableRef.current?.openRight(),
     }));
+
+    const handleDelete = React.useCallback(
+      () => onDelete(session.id),
+      [onDelete, session],
+    );
 
     const renderRightActions = (
       progressAnimatedValue: RNAnimated.AnimatedInterpolation<string | number>,
@@ -58,7 +83,7 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
                 transform: [{ translateX: trans }],
               },
             ]}>
-            <RectButton style={styles.rectButton} onPress={onDelete}>
+            <RectButton style={styles.rectButton} onPress={handleDelete}>
               <Icon size={26} name="trash" color={colors.white} />
               <Text style={styles.actionText}>Видалити</Text>
             </RectButton>
@@ -69,7 +94,7 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
 
     const isShowMinus = useSharedValue(isEditMode);
 
-    useEffect(() => {
+    React.useEffect(() => {
       if (isEditMode) {
         isShowMinus.value = true;
       } else {
@@ -90,7 +115,8 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
         rightThreshold={40}
         renderRightActions={renderRightActions}
         containerStyle={styles.container}
-        childrenContainerStyle={[generalStyles.row]}>
+        childrenContainerStyle={[generalStyles.row]}
+        enabled={enableSwipeable}>
         <Pressable style={[generalStyles.row]} onPress={onPress}>
           {isEditMode && (
             <Animated.View style={minusIconStyle}>
@@ -106,20 +132,21 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
               </Pressable>
             </Animated.View>
           )}
-          <View style={styles.iconContainer}>
-            <Icon size={20} name="logo-apple" />
-          </View>
+          <PlatformIcon
+            size="small"
+            platform={session.device.platform}
+            style={styles.iconContainer}
+          />
           <View style={styles.info}>
             <Text style={styles.device} numberOfLines={1}>
-              {session.id}
-              {session.device}
+              {session.device.name} {isCurrentSession && '(Цей пристрій)'}
             </Text>
             <Text style={styles.version} numberOfLines={1}>
-              Markers 0.0.1
+              Markers {session.device.platform} {session.app_version}
             </Text>
-            <Text style={styles.location} numberOfLines={1}>
+            {/* <Text style={styles.location} numberOfLines={1}>
               Kamianets-Podilskyi, Ukraine
-            </Text>
+            </Text> */}
           </View>
         </Pressable>
       </Swipeable>
@@ -127,4 +154,4 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
   },
 );
 
-export default SessionItem;
+export default React.memo(SessionItem);

@@ -4,6 +4,9 @@ export default class UserSessionModel {
   id: UserSession['id'];
   user_id: UserSession['user_id'];
   device: UserSession['device'];
+  ip: UserSession['ip'];
+  app_version: UserSession['app_version'];
+  location: UserSession['location'];
   created_at: UserSession['created_at'];
   updated_at: UserSession['updated_at'];
 

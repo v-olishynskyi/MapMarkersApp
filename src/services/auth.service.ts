@@ -1,18 +1,10 @@
-import env from '@env';
+import { authApi } from '@api';
 import {
   LoginData,
   LoginResponse,
   RefreshTokenResponse,
   RegistrationData,
 } from './auth.model';
-import axios from 'axios';
-
-const authApi = axios.create({ baseURL: `${env.BASE_URL}api/v1` });
-
-authApi.interceptors.response.use(
-  res => res,
-  error => Promise.reject(error.response.data),
-);
 
 export class AuthService {
   public static async login(body: LoginData) {
