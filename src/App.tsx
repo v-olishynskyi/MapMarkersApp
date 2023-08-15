@@ -18,6 +18,7 @@ import { isPortrait } from '@common/helpers';
 import { RootLoading, Toast } from '@components';
 import { observer } from 'mobx-react-lite';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { Orientations } from '@common/types';
 
 const App = observer(() => {
   const {
@@ -29,8 +30,8 @@ const App = observer(() => {
   React.useEffect(() => {
     Dimensions.addEventListener('change', () => {
       isPortrait()
-        ? uiStore.setOrientation('portrait')
-        : uiStore.setOrientation('landscape');
+        ? uiStore.setOrientation(Orientations.PORTRAIT)
+        : uiStore.setOrientation(Orientations.LANDSCAPE);
     });
   }, [uiStore]);
 

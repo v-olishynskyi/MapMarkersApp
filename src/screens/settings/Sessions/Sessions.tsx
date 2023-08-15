@@ -89,7 +89,7 @@ const Sessions: React.FC = () => {
           closeAllSwipers();
           setIsEditMode(prev => !prev);
         }}>
-        <Text style={(styles.headerRightText, { color: props.tintColor })}>
+        <Text style={[styles.headerRightText, { color: props.tintColor }]}>
           {isEditMode ? 'Готово' : 'Змінити'}
         </Text>
       </Pressable>

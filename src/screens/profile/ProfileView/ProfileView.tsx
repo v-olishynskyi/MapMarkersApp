@@ -5,7 +5,7 @@
  *  */
 import React from 'react';
 import useStyles from './styles';
-import { ProfileViewProps } from './types';
+import { NavigationType, ProfileViewProps } from './types';
 import {
   ActivityIndicator,
   RefreshControl,
@@ -19,7 +19,7 @@ import { Avatar, Pressable } from '@components';
 import { generalStyles } from '@styles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getTheme } from '@common/helpers';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 /**
  * ProfileView
@@ -35,6 +35,7 @@ import { useFocusEffect } from '@react-navigation/native';
 const ProfileView: React.FC<ProfileViewProps> = observer(() => {
   const { colors } = getTheme();
   const styles = useStyles();
+  const { navigate } = useNavigation<NavigationType>();
 
   const {
     userStore: { loadProfile },
@@ -81,8 +82,10 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
           {user?.username ? (
             <Text style={styles.email}>@{user.username}</Text>
           ) : isMe ? (
-            <Pressable style={generalStyles.rowBetween}>
-              <Text>@ Додати username</Text>
+            <Pressable
+              style={generalStyles.rowBetween}
+              onPress={() => navigate('edit-profile')}>
+              <Text>Додати імʼя користувача</Text>
               <Icon
                 name="chevron-forward-outline"
                 size={24}

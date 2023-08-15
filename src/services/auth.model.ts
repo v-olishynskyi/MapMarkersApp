@@ -1,5 +1,4 @@
 import { Device } from '@common/types';
-import { User } from '@common/types/entities';
 
 export type LoginData = {
   email: string;
@@ -11,7 +10,6 @@ export type LoginResponse = {
   access_token: string;
   refresh_token: string;
   session_id: string;
-  user: Omit<User, 'sessions'>;
 };
 
 export type RegistrationData = {

@@ -1,6 +1,6 @@
 import { Orientations } from '@common/types';
 import { RootStore } from '@store/root.store';
-import { action, computed, makeObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 export class UiStore {
   rootStore: RootStore;
@@ -12,16 +12,7 @@ export class UiStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
 
-    makeObservable(this, {
-      dark: observable,
-      orientation: observable,
-
-      setDark: action,
-      setOrientation: action,
-
-      isPortrait: computed,
-      isLandscape: computed,
-    });
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
   setDark(value: boolean) {

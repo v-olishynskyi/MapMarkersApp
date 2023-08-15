@@ -19,7 +19,7 @@ import { Text, View } from 'react-native';
  *
  * @example
  * // How to use UserItem:
- *  <UserItem />
+ *  <UserItem user={user} onPress={() => {}} />
  */
 const UserItem: React.FC<UserItemProps> = ({ user, onPress }) => {
   const styles = useStyles();
@@ -41,4 +41,4 @@ const UserItem: React.FC<UserItemProps> = ({ user, onPress }) => {
   );
 };
 
-export default UserItem;
+export default React.memo(UserItem);

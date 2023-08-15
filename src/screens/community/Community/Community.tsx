@@ -45,8 +45,6 @@ const Community: React.FC<CommunityProps> = () => {
   const navigation = useNavigation<NavigationType>();
   const isMounted = useIsMounted();
 
-  const [searchValue, setSearchValue] = React.useState('');
-
   const {
     communityStore: {
       initialLoadData,
@@ -55,13 +53,15 @@ const Community: React.FC<CommunityProps> = () => {
       isFetchingNextPage,
       fetchNextPage,
       hasNextPage,
+      search,
+      setSearch,
     },
     profileViewStore: { setUserId },
   } = useStores();
 
   const debouncedLoad = useDebouncedCallback(() => {
     if (isMounted) {
-      loadUsers(searchValue);
+      loadUsers(search);
     }
   }, 1000);
 
@@ -74,8 +74,8 @@ const Community: React.FC<CommunityProps> = () => {
   );
 
   const loadUsers = React.useCallback(
-    (search?: string, silent?: boolean) =>
-      initialLoadData(0, 20, search, silent),
+    (searchValue?: string, silent?: boolean) =>
+      initialLoadData(0, 20, searchValue, silent),
     [initialLoadData],
   );
 
@@ -86,7 +86,7 @@ const Community: React.FC<CommunityProps> = () => {
 
   React.useEffect(() => {
     debouncedLoad();
-  }, [searchValue, debouncedLoad]);
+  }, [search, debouncedLoad]);
 
   React.useEffect(() => {
     loadUsers();
@@ -97,8 +97,8 @@ const Community: React.FC<CommunityProps> = () => {
       <View style={styles.searchContainer}>
         <Input
           placeholder="Пошук"
-          value={searchValue}
-          onChangeText={setSearchValue}
+          value={search}
+          onChangeText={setSearch}
           leftIcon={<Icon name="search" size={16} color={colors.gray} />}
           clearButtonMode="while-editing"
         />
@@ -107,7 +107,7 @@ const Community: React.FC<CommunityProps> = () => {
         data={data}
         isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}
-        onRefresh={() => loadUsers(searchValue, true)}
+        onRefresh={() => loadUsers(search, true)}
         onEndReached={() => hasNextPage && fetchNextPage()}
         style={styles.listContainer}
         contentContainerStyle={styles.contentContainer}
