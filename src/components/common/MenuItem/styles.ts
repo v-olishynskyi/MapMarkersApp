@@ -23,7 +23,7 @@ const useStyles = (
   return StyleSheet.create({
     container: {
       ...generalStyles.row,
-      backgroundColor: colors.white,
+      backgroundColor: colors.card,
       paddingLeft: PADDING_LEFT,
       paddingVertical: spacingBase.s1,
     },

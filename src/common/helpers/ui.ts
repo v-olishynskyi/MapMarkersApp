@@ -1,11 +1,5 @@
-import { useTheme } from '@react-navigation/native';
-import { ITheme } from '@styles';
-import { Dimensions, Platform } from 'react-native';
-
-export const getTheme = useTheme as () => ITheme;
-
-export const IS_ANDROID = Platform.OS === 'android';
-export const IS_IOS = Platform.OS === 'ios';
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from '@gorhom/bottom-sheet';
+import { Dimensions } from 'react-native';
 
 /**
  * Returns true if the screen is in portrait mode
@@ -22,3 +16,5 @@ export const isLandscape = () => {
   const dim = Dimensions.get('screen');
   return dim.width >= dim.height;
 };
+
+export const ASPECT_RATIO = WINDOW_WIDTH / WINDOW_HEIGHT;

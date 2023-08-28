@@ -11,29 +11,38 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { RootNavigation, navigationRef } from '@navigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { DefaultTheme } from '@styles';
+import { DarkTheme, DefaultTheme } from '@styles';
 import { useStores } from '@store';
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet, useColorScheme } from 'react-native';
 import { isPortrait } from '@common/helpers';
-import { RootLoading, Toast } from '@components';
+import { RootLoading, StatusBar, Toast } from '@components';
 import { observer } from 'mobx-react-lite';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Orientations } from '@common/types';
+import { useUserCoordinates } from '@common/hooks';
 
 const App = observer(() => {
   const {
-    uiStore,
+    uiStore: { setOrientation, setDark, dark },
     authStore: { isAuth },
     userStore: { loadProfile },
   } = useStores();
+  const colorScheme = useColorScheme();
+
+  useUserCoordinates();
 
   React.useEffect(() => {
     Dimensions.addEventListener('change', () => {
       isPortrait()
-        ? uiStore.setOrientation(Orientations.PORTRAIT)
-        : uiStore.setOrientation(Orientations.LANDSCAPE);
+        ? setOrientation(Orientations.PORTRAIT)
+        : setOrientation(Orientations.LANDSCAPE);
     });
-  }, [uiStore]);
+  }, [setOrientation]);
+
+  React.useEffect(() => {
+    const isDark = colorScheme === 'dark';
+    setDark(isDark);
+  }, [colorScheme, setDark]);
 
   React.useEffect(() => {
     if (isAuth) {
@@ -43,9 +52,12 @@ const App = observer(() => {
 
   return (
     <>
+      <StatusBar />
       <GestureHandlerRootView style={styles.container}>
         <SafeAreaProvider>
-          <NavigationContainer ref={navigationRef} theme={DefaultTheme}>
+          <NavigationContainer
+            ref={navigationRef}
+            theme={dark ? DarkTheme : DefaultTheme}>
             <BottomSheetModalProvider>
               <RootLoading>
                 <RootNavigation />

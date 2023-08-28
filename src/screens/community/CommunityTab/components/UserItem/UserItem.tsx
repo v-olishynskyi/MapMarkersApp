@@ -34,8 +34,8 @@ const UserItem: React.FC<UserItemProps> = ({ user, onPress }) => {
         containerStyle={styles.avatar}
       />
       <View>
-        <Text>{user.fullname}</Text>
-        <Text>{user.email}</Text>
+        <Text style={styles.fullname}>{user.fullname}</Text>
+        <Text style={styles.email}>{user.email}</Text>
       </View>
     </Pressable>
   );

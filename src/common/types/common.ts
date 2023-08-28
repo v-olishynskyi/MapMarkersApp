@@ -20,3 +20,13 @@ export enum Orientations {
   PORTRAIT = 'portrait',
   LANDSCAPE = 'landscape',
 }
+
+export type LatLng = {
+  latitude: number;
+  longitude: number;
+};
+
+export type Coordinates = LatLng & {
+  latitudeDelta: number;
+  longitudeDelta: number;
+};

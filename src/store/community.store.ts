@@ -2,6 +2,7 @@ import { UserModel } from '@models';
 import { CommunityUser, UsersService } from '@services';
 import { PaginationStore } from '@store/pagination.store';
 import { RootStore } from '@store/root.store';
+import { action, makeObservable, observable } from 'mobx';
 
 export class CommunityStore extends PaginationStore<CommunityUser, UserModel> {
   rootStore: RootStore;
@@ -12,7 +13,7 @@ export class CommunityStore extends PaginationStore<CommunityUser, UserModel> {
     super(UsersService.getCommunityUsers, UserModel);
     this.rootStore = rootStore;
 
-    // makeObservable(this, { isLoading: observable });
+    makeObservable(this, { search: observable, setSearch: action });
   }
 
   setSearch(value: string) {

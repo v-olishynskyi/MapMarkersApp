@@ -1,9 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Map, Community, ProfileTab } from '@screens';
+import { MapTab, CommunityTab, ProfileTab } from '@screens';
 import { TabsStackParamsList } from './types';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getTheme } from '@common/helpers';
+import { useLocationPermission } from '@common/hooks';
 
 const Tab = createBottomTabNavigator<TabsStackParamsList>();
 
@@ -33,6 +34,8 @@ const TabBarIcons: Record<
 const TabNavigation = () => {
   const { colors } = getTheme();
 
+  useLocationPermission({ withRequest: true });
+
   return (
     <Tab.Navigator
       initialRouteName="profile-tab"
@@ -60,7 +63,7 @@ const TabNavigation = () => {
           title: 'Карта',
           tabBarIcon: TabBarIcons['map-tab'],
         }}
-        component={Map}
+        component={MapTab}
       />
       <Tab.Screen
         name="community-tab"
@@ -68,7 +71,7 @@ const TabNavigation = () => {
           title: 'Спільнота',
           tabBarIcon: TabBarIcons['community-tab'],
         }}
-        component={Community}
+        component={CommunityTab}
       />
       <Tab.Screen
         name="profile-tab"

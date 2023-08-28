@@ -4,6 +4,7 @@ import { RootStore } from '@store/root.store';
 import { showToast } from '@common/helpers';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { User } from '@common/types/entities';
+import { Coordinates } from '@common/types';
 
 export class UserStore {
   rootStore: RootStore;
@@ -13,6 +14,8 @@ export class UserStore {
   isTerminatingSession: boolean = false;
 
   user: UserModel = {} as UserModel;
+
+  userCoordinates: Coordinates | null = null;
 
   updateFormData: UpdateProfileData = {} as UpdateProfileData;
   updateFormErrors: Partial<UpdateProfileData>;
@@ -81,6 +84,10 @@ export class UserStore {
 
   setIsLoading(value: boolean) {
     this.isLoading = value;
+  }
+
+  setUserCoordinates(coordinates: Coordinates) {
+    this.userCoordinates = coordinates;
   }
 
   async terminateSession(sessionId: string) {

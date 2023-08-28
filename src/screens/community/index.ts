@@ -1,1 +1,1 @@
-export { default as Community } from './Community/Community';
+export { default as CommunityTab } from './CommunityTab/CommunityTab';

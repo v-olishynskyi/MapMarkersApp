@@ -38,26 +38,30 @@ const EditProfile: React.FC = () => {
           caption="Імʼя"
           value={first_name}
           onChangeText={value => onChangeUpdateData('first_name', value)}
-          style={styles.input}
+          style={styles.inputContainer}
+          inputStyle={styles.input}
         />
         <Input
           caption="Прізвище"
           value={last_name}
           onChangeText={value => onChangeUpdateData('last_name', value)}
-          style={styles.input}
+          style={styles.inputContainer}
+          inputStyle={styles.input}
         />
         <Input
           caption="По-батькові"
           value={middle_name || ''}
           placeholder=""
           onChangeText={value => onChangeUpdateData('middle_name', value)}
-          style={styles.input}
+          style={styles.inputContainer}
+          inputStyle={styles.input}
         />
         <Input
           caption="Імʼя користувача"
           value={username || ''}
           placeholder=""
           onChangeText={value => onChangeUpdateData('username', value)}
+          inputStyle={styles.input}
         />
       </KeyboardAwareScrollView>
       <Toast />

@@ -19,10 +19,12 @@ const useStyles = () => {
     },
     device: {
       flex: 1,
+      color: colors.text,
       ...typography.bold.footnote,
     },
     version: {
       flex: 1,
+      color: colors.gray,
       ...typography.bold.caption1,
     },
     location: {

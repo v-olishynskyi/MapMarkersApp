@@ -26,6 +26,7 @@ const useStyles = () => {
     fullname: {
       ...typography.bold.body,
       textAlign: 'center',
+      color: colors.text,
       marginBottom: 4,
     },
     email: {

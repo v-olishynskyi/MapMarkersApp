@@ -1,10 +1,13 @@
 import { StyleSheet } from 'react-native';
-import { spacingBase } from '@styles';
+import { getTheme } from '@common/helpers';
 
 const useStyles = () => {
+  const {} = getTheme();
+
   return StyleSheet.create({
-    container: { marginBottom: spacingBase.s3 },
-    avatar: { marginRight: spacingBase.s2 },
+    map: {
+      ...StyleSheet.absoluteFillObject,
+    },
   });
 };
 

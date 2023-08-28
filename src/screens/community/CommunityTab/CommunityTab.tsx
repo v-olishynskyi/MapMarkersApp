@@ -5,7 +5,7 @@
  *  */
 import React from 'react';
 import useStyles from './styles';
-import { CommunityProps, NavigationType } from './types';
+import { NavigationType } from './types';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '@store';
 import { ListRenderItem, View } from 'react-native';
@@ -29,17 +29,17 @@ const skeleton = (
 );
 
 /**
- * Community
+ * CommunityTab
  *
  *
  * @memberof
- * @param {CommunityProps} params
+ * @param {CommunityTabProps} params
  *
  * @example
  * // How to use Community:
- *  <Community />
+ *  <CommunityTab />
  */
-const Community: React.FC<CommunityProps> = () => {
+const CommunityTab: React.FC = () => {
   const { colors } = getTheme();
   const styles = useStyles();
   const navigation = useNavigation<NavigationType>();
@@ -118,4 +118,4 @@ const Community: React.FC<CommunityProps> = () => {
   );
 };
 
-export default observer(Community);
+export default observer(CommunityTab);

@@ -1,4 +1,4 @@
-import { StyleProp, ViewStyle, TextInputProps } from 'react-native';
+import { StyleProp, ViewStyle, TextInputProps, TextStyle } from 'react-native';
 
 /**
  * @memberof Input
@@ -13,5 +13,5 @@ export type InputProps = {
   rightIcon?: React.ReactNode;
   caption?: string;
   password?: boolean;
-  inputStyle?: StyleProp<ViewStyle>;
+  inputStyle?: StyleProp<TextStyle>;
 } & Partial<Omit<TextInputProps, 'value' | 'onChangeText' | 'style'>>;

@@ -34,8 +34,8 @@ const LoaderRefresh: React.FC<LoaderRefreshProps> = ({
       refreshing={isRefreshing}
       onRefresh={onRefresh}
       title={!isRefreshing ? 'Потягніть для оновлення' : ''}
-      tintColor={colors.black} // Change color by THEME
-      titleColor={colors.black} // Change color by THEME
+      tintColor={colors.text} // Change color by THEME
+      titleColor={colors.text} // Change color by THEME
     />
   );
 };

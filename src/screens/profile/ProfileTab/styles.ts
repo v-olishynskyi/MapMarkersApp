@@ -11,8 +11,8 @@ const useStyles = () => {
       paddingTop: spacingBase.s3,
       backgroundColor: colors.card,
     },
-    fullname: { ...typography.bold.title3 },
-    email: { ...typography.regular.subhead },
+    fullname: { ...typography.bold.title3, color: colors.text },
+    email: { ...typography.regular.subhead, color: colors.gray },
     divider: {
       height: spacingBase.s2,
       backgroundColor: colors.background,

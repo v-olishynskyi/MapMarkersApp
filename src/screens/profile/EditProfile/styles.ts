@@ -23,9 +23,10 @@ const useStyles = () => {
       paddingRight: isPortrait ? spacingBase.s4 : right,
       paddingTop: spacingBase.s3,
     },
-    input: {
+    inputContainer: {
       marginBottom: spacingBase.s3,
     },
+    input: { color: colors.text },
   });
 };
 
