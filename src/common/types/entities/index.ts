@@ -1,4 +1,5 @@
 import { Device } from '@common/types';
+import { UserModel } from '@models';
 
 export type User = {
   id: string;
@@ -25,4 +26,16 @@ export type UserSession = {
   updated_at: Date;
 };
 
-export type Entities = User | UserSession;
+export type Marker = {
+  id: string;
+  name: string;
+  description: string | null;
+  latitude: number;
+  longitude: number;
+  user_id: string;
+  user: User | UserModel; // TODO: CHANGE TO User
+  created_at: Date;
+  updated_at: Date;
+};
+
+export type Entities = User | Marker | UserSession;

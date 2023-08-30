@@ -51,7 +51,6 @@ const EditProfile: React.FC = () => {
         <Input
           caption="По-батькові"
           value={middle_name || ''}
-          placeholder=""
           onChangeText={value => onChangeUpdateData('middle_name', value)}
           style={styles.inputContainer}
           inputStyle={styles.input}
@@ -59,7 +58,6 @@ const EditProfile: React.FC = () => {
         <Input
           caption="Імʼя користувача"
           value={username || ''}
-          placeholder=""
           onChangeText={value => onChangeUpdateData('username', value)}
           inputStyle={styles.input}
         />

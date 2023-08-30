@@ -22,6 +22,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Pressable } from '@components';
+import { getTheme } from '@common/helpers';
 
 /**
  *
@@ -59,6 +60,8 @@ const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
     ...rest
   } = props;
 
+  const { colors } = getTheme();
+
   const [isFocused, setIsFocused] = React.useState(false);
   const styles = useStyles(!!error, isFocused);
 
@@ -94,6 +97,7 @@ const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
         name={showPassword ? 'eye-outline' : 'eye-off-outline'}
         style={styles.iconContainer}
         size={24}
+        color={colors.gray}
       />
     </Pressable>
   );
@@ -123,6 +127,7 @@ const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
           style={[styles.input, inputStyle]}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          placeholderTextColor={colors.gray2}
           {...(password ? passwordProps : {})}
           {...rest}
         />

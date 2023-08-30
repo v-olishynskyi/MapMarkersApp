@@ -20,6 +20,7 @@ const useStyles = (error: boolean, focused: boolean) => {
     caption: {
       marginBottom: spacingBase.s2,
       ...typography.regular.headline,
+      color: colors.gray,
     },
     leftIcon: {
       paddingLeft: spacingBase.s1,
@@ -31,6 +32,7 @@ const useStyles = (error: boolean, focused: boolean) => {
       height: '100%',
       flex: 1,
       ...typography.regular.body,
+      color: colors.text,
       paddingHorizontal: spacingBase.s1,
       paddingVertical: spacingBase.s2,
       ...(IS_ANDROID

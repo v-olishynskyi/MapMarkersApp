@@ -44,6 +44,10 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
     ref,
   ) => {
     const { colors } = getTheme();
+    console.log(
+      'file: SessionItem.tsx:47 - colors:',
+      JSON.stringify(colors, null, 2),
+    );
     const styles = useStyles();
     const {
       authStore: { currentSession },
@@ -84,7 +88,7 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
               },
             ]}>
             <RectButton style={styles.rectButton} onPress={handleDelete}>
-              <Icon size={26} name="trash" color={colors.white} />
+              <Icon size={20} name="trash" color={colors.white} />
               <Text style={styles.actionText}>Видалити</Text>
             </RectButton>
           </RNAnimated.View>

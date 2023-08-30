@@ -39,7 +39,7 @@ export const DarkTheme: ITheme = {
   ...DefaultTheme,
   dark: true,
   colors: {
-    ...DefaultTheme,
+    ...DefaultTheme.colors,
     red: '#FF453A',
     pink: '#FF375F',
     purple: '#BF5AF2',

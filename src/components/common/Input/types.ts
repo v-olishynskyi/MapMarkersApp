@@ -6,7 +6,7 @@ import { StyleProp, ViewStyle, TextInputProps, TextStyle } from 'react-native';
  */
 export type InputProps = {
   value: string;
-  onChangeText: (value: string) => void;
+  onChangeText?: (value: string) => void;
   error?: string | boolean;
   style?: StyleProp<ViewStyle>;
   leftIcon?: React.ReactNode;

@@ -32,7 +32,7 @@ const MapTab: React.FC = () => {
   const styles = useStyles();
   const {
     appStore: { coordinates, isGrantedLocationPermission },
-    mapStore: { setCamera },
+    mapStore: {},
   } = useStores();
   const {} = getTheme();
 

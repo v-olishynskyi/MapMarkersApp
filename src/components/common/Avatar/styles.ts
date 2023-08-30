@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const useStyles = () => {
-  const { colors } = getTheme();
+  const { colors, dark } = getTheme();
   const { top } = useSafeAreaInsets();
 
   return StyleSheet.create({
@@ -22,7 +22,7 @@ const useStyles = () => {
     },
     closeButton: {
       fontSize: 20,
-      color: colors.gray6,
+      color: dark ? colors.gray : colors.gray6,
     },
   });
 };
