@@ -20,6 +20,7 @@ export default class UserModel {
   }
 
   private handleData(user: User) {
+    // @ts-ignore
     Object.keys(user).forEach(key => (this[key] = user[key]));
     if (user.sessions) {
       this.sessions = new ListItems<UserSession>(

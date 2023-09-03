@@ -8,6 +8,7 @@ import { ProfileViewStore } from '@store/profile-view.store';
 import { UserSessionSheetStore } from '@store/user-session-sheet.store';
 import { MapStore } from '@store/map.store';
 import { AppStore } from '@store/app.store';
+import MarkersStore from '@store/markers.store';
 
 export const rootStore = new RootStore([
   { authStore: AuthStore },
@@ -18,6 +19,7 @@ export const rootStore = new RootStore([
   { userSessionSheetStore: UserSessionSheetStore },
   { mapStore: MapStore },
   { appStore: AppStore },
+  { markersStore: MarkersStore },
 ]);
 
 export const StoreContext = React.createContext(rootStore);

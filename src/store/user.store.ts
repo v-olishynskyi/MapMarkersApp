@@ -32,6 +32,7 @@ export class UserStore {
     const updateDataKeys = Object.keys(user).filter(
       key => key !== 'id' && key !== 'email' && key !== 'sessions',
     );
+    // @ts-ignore
     updateDataKeys.forEach(key => (this.updateFormData[key] = user[key]));
   }
 
@@ -51,6 +52,13 @@ export class UserStore {
         this.isLoading = false;
       });
     }
+  }
+
+  testRootStore() {
+    this.rootStore.markersStore.createTemporaryMarker({
+      latitude: 50.430397616916096,
+      longitude: 30.541007622159007,
+    });
   }
 
   async updateProfile() {
@@ -78,6 +86,7 @@ export class UserStore {
 
   resetUpdateFormData() {
     Object.keys(this.updateFormData).forEach(
+      // @ts-ignore
       key => (this.updateFormData[key] = this[key]),
     );
   }

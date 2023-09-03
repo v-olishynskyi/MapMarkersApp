@@ -31,7 +31,7 @@ import { RESULTS, openSettings } from 'react-native-permissions';
 const MapTab: React.FC = () => {
   const styles = useStyles();
   const {
-    appStore: { coordinates, isGrantedLocationPermission },
+    appStore: { deviceCoordinates, isGrantedLocationPermission },
     mapStore: {},
   } = useStores();
   const {} = getTheme();
@@ -54,18 +54,14 @@ const MapTab: React.FC = () => {
     }
 
     if (hasLocationPermission) {
-      coordinates
-        ? mapViewRef.current?.animateToRegion(
-            {
-              ...coordinates,
-              latitudeDelta: 0.1,
-              longitudeDelta: 0.1,
-            },
-            500,
+      deviceCoordinates
+        ? mapViewRef.current?.animateCamera(
+            { center: { ...deviceCoordinates }, altitude: 1000, zoom: 10 },
+            { duration: 500 },
           )
         : null;
     }
-  }, [coordinates, isGrantedLocationPermission]);
+  }, [deviceCoordinates, isGrantedLocationPermission]);
 
   const onPressPlus = React.useCallback(async () => {
     let lastCamera = await mapViewRef.current?.getCamera();
@@ -99,10 +95,6 @@ const MapTab: React.FC = () => {
 
   const handleRegionChangeComplete = async () => {
     const camera = await mapViewRef.current?.getCamera();
-    console.log(
-      'file: MapTab.tsx:102 - handleRegionChangeComplete - camera:',
-      camera,
-    );
 
     if (!camera) {
       return;

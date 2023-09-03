@@ -67,6 +67,38 @@ const AppNavigation = () => {
     profileViewStore: { isMe },
   } = useStores();
 
+  const profileHeaderRight = React.useCallback(() => {
+    return isMe ? (
+      <Pressable onPress={() => navigationRef.navigate('edit-profile' as any)}>
+        <Icon name="md-pencil" size={24} color={colors.primary} />
+      </Pressable>
+    ) : null;
+  }, [colors.primary, isMe]);
+
+  const editProfileHeaderLeft = React.useCallback(
+    ({ canGoBack }: { canGoBack: boolean }) => (
+      <EditProfileHeaderButton
+        canGoBack={canGoBack}
+        color={colors.red}
+        label={'Відмінити'}
+        onPress={resetUpdateFormData}
+      />
+    ),
+    [colors.red, resetUpdateFormData],
+  );
+  const editProfileHeaderRight = React.useCallback(
+    ({ canGoBack }: { canGoBack: boolean }) => (
+      <EditProfileHeaderButton
+        canGoBack={canGoBack}
+        color={colors.primary}
+        label={'Зберегти'}
+        loading={isSaving}
+        onPress={updateProfile}
+      />
+    ),
+    [colors.primary, updateProfile, isSaving],
+  );
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -96,14 +128,7 @@ const AppNavigation = () => {
         component={ProfileView}
         options={{
           title: 'Профіль',
-          headerRight: () => {
-            return isMe ? (
-              <Pressable
-                onPress={() => navigationRef.navigate('edit-profile' as any)}>
-                <Icon name="md-pencil" size={24} color={colors.primary} />
-              </Pressable>
-            ) : null;
-          },
+          headerRight: profileHeaderRight,
         }}
       />
       <Stack.Screen
@@ -115,23 +140,8 @@ const AppNavigation = () => {
           title: 'Редагування профілю',
           // gestureEnabled: false,
           headerBackVisible: true,
-          headerLeft: ({ canGoBack }) => (
-            <EditProfileHeaderButton
-              canGoBack={canGoBack}
-              color={colors.red}
-              label={'Відмінити'}
-              onPress={resetUpdateFormData}
-            />
-          ),
-          headerRight: ({ canGoBack }) => (
-            <EditProfileHeaderButton
-              canGoBack={canGoBack}
-              color={colors.primary}
-              label={'Зберегти'}
-              loading={isSaving}
-              onPress={updateProfile}
-            />
-          ),
+          headerLeft: editProfileHeaderLeft,
+          headerRight: editProfileHeaderRight,
         }}
       />
       <Stack.Screen

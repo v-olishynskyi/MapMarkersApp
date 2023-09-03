@@ -34,7 +34,7 @@ authApi.interceptors.response.use(
 
 let isAlreadyFetchingNewToken = false;
 let failedRequests: any[] = [];
-const addFailedRequest = callback => failedRequests.push(callback);
+const addFailedRequest = (callback: any) => failedRequests.push(callback);
 const rerunFailedRequests = (newToken: string) => {
   failedRequests.reverse().forEach(callback => callback(newToken));
 };
@@ -111,7 +111,7 @@ api.interceptors.response.use(
       refreshToken();
 
       return new Promise(resolve => {
-        addFailedRequest(newToken => {
+        addFailedRequest((newToken: string) => {
           const originalRequest = { ...config };
           originalRequest!.headers!.Authorization = `Bearer ${newToken}`;
           resolve(axios(originalRequest));

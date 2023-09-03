@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
+    "lib": ["DOM"],
     "strictPropertyInitialization": false,
     "baseUrl": "./src" /* Base directory to resolve non-absolute module names. */,
     "paths": {

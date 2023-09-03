@@ -1,5 +1,7 @@
 import { Marker } from '@common/types/entities';
 import UserModel from '@models/UserModel';
+import { CreateMarkerData, MarkersService, UpdateMarkerData } from '@services';
+import { makeAutoObservable } from 'mobx';
 
 export default class MarkerModel {
   id: Marker['id'];
@@ -14,15 +16,43 @@ export default class MarkerModel {
 
   constructor(marker: Marker) {
     this.handleData(marker);
+
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  private handleData(marker: Marker) {
+  public handleData(marker: Marker) {
     const keys = Object.keys(marker);
-    keys.forEach(key => (this[key] = marker[key]));
+    // @ts-ignore
+    keys.forEach((key: any) => (this[key] = marker[key]));
+
     if (marker.user instanceof UserModel) {
       this.user = marker.user;
     } else {
       this.user = new UserModel(marker.user);
     }
+  }
+
+  setName(value: string) {
+    this.name = value;
+  }
+
+  setDescription(value: string) {
+    this.description = value;
+  }
+
+  static async create(data: CreateMarkerData) {
+    const marker = await MarkersService.create(data);
+
+    return marker;
+  }
+
+  static async update(data: UpdateMarkerData) {
+    const newMarker = await MarkersService.update(data);
+
+    return newMarker;
+  }
+
+  static async delete(id: string) {
+    return await MarkersService.delete(id);
   }
 }

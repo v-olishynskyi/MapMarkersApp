@@ -1,7 +1,4 @@
-/**
- * @memberof AddEditMarkerModal
- * @typedef {Object} AddEditMarkerModalProps
- */
-export type AddEditMarkerModalProps = {
-  
-}
+export type FormState = {
+  name: string;
+  description: string;
+};

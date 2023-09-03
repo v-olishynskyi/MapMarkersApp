@@ -18,3 +18,6 @@ declare module 'react-native-svg' {
     pathProps?: PathProps;
   }
 }
+
+declare type VoidFunction = () => void;
+declare type AsyncVoidFunction = () => Promise<void>;

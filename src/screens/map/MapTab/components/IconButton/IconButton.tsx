@@ -5,10 +5,10 @@
  *  */
 import React from 'react';
 import useStyles from './styles';
-import { IconButtonProps } from './types';
 import { Pressable } from '@components';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getTheme } from '@common/helpers';
+import { IconButtonProps } from './types';
 
 /**
  * IconButton

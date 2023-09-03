@@ -9,8 +9,8 @@ const useStyles = () => {
     container: {
       backgroundColor: colors.card,
       borderRadius: spacingBase.s1,
-      paddingBottom: spacingBase.s2,
-      paddingTop: spacingBase.s1,
+      paddingVertical: spacingBase.s2,
+      gap: spacingBase.s3,
     },
     header: {
       ...generalStyles.row,
@@ -18,7 +18,7 @@ const useStyles = () => {
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
       justifyContent: 'space-between',
-      paddingBottom: 4,
+      paddingBottom: spacingBase.s1,
     },
     title: {
       ...typography.regular.title3,
@@ -27,9 +27,8 @@ const useStyles = () => {
       textAlign: 'center',
     },
     body: {
-      padding: spacingBase.s2,
+      paddingHorizontal: spacingBase.s2,
       gap: 10,
-      marginBottom: spacingBase.s2,
     },
     actions: {
       ...generalStyles.rowBetween,

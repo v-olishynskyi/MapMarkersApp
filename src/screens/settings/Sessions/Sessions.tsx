@@ -83,7 +83,7 @@ const Sessions: React.FC = () => {
   );
 
   const renderHeaderRight = React.useCallback(
-    props => (
+    (props: any) => (
       <Pressable
         onPress={() => {
           closeAllSwipers();

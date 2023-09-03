@@ -15,6 +15,7 @@ export default class UserSessionModel {
   }
 
   private handleData(userSession: UserSession) {
+    // @ts-ignore
     Object.keys(userSession).forEach(key => (this[key] = userSession[key]));
 
     return this;

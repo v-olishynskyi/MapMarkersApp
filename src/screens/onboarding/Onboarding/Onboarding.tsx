@@ -84,7 +84,7 @@ const Onboarding: React.FC = () => {
   };
 
   const renderStep = React.useCallback(
-    (_, index) => {
+    (_: any, index: number) => {
       const isActive = index === step;
 
       return <Step key={index} isActive={isActive} />;
@@ -94,7 +94,7 @@ const Onboarding: React.FC = () => {
 
   const carousel = (
     <Carousel
-      onChangePage={index => setStep(index)}
+      onChangePage={(index: number) => setStep(index)}
       containerStyle={{ height: carouselWrapperHeight }}>
       {steps.map((item, index) => (
         <React.Fragment key={index}>

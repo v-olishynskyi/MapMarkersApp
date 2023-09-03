@@ -112,6 +112,7 @@ export class PaginationStore<TData, TModel> {
 
   get data() {
     return Object.keys(this.pages).reduce((arr, key) => {
+      // @ts-ignore
       arr.replace([...arr, ...this.pages[key]]);
       return arr;
     }, observable.array<TModel>([]));

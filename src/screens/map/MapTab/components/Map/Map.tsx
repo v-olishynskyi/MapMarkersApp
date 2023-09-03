@@ -37,21 +37,22 @@ const Map = React.forwardRef<MapView, MapProps>((props, ref) => {
   const styles = useStyles();
   const { colors } = getTheme();
   const {
-    mapStore: { camera, markers, createTemporaryMarker },
-    appStore: { coordinates },
+    mapStore: { camera },
+    markersStore: { markers, createTemporaryMarker },
+    appStore: { deviceCoordinates },
   } = useStores();
 
   useLocationPermission({ withRequest: true });
 
   const initialCamera = React.useMemo<Camera>(
     () => ({
-      center: { ...(coordinates ? coordinates : KYIV_COORDINATES) },
+      center: { ...(deviceCoordinates ? deviceCoordinates : KYIV_COORDINATES) },
       heading: DEFAULT_HEADING,
       pitch: DEFAULT_PITCH,
       zoom: DEFAULT_ZOOM,
       altitude: DEFAULT_ALATITUDE,
     }),
-    [coordinates],
+    [deviceCoordinates],
   );
 
   const handleCreateTemporaryMarker = (event: LongPressEvent) =>

@@ -24,8 +24,7 @@ import { useUserCoordinates } from '@common/hooks';
 const App = observer(() => {
   const {
     uiStore: { setOrientation, setDark, dark },
-    authStore: { isAuth },
-    userStore: { loadProfile },
+    appStore: { initApplication },
   } = useStores();
   const colorScheme = useColorScheme();
 
@@ -45,10 +44,8 @@ const App = observer(() => {
   }, [colorScheme, setDark]);
 
   React.useEffect(() => {
-    if (isAuth) {
-      loadProfile();
-    }
-  }, [isAuth, loadProfile]);
+    initApplication();
+  }, [initApplication]);
 
   return (
     <>

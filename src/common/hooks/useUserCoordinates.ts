@@ -4,7 +4,7 @@ import GetLocation from 'react-native-get-location';
 
 const useUserCoordinates = () => {
   const {
-    appStore: { isGrantedLocationPermission, setCoordinates },
+    appStore: { isGrantedLocationPermission, setDeviceCoordinates },
   } = useStores();
 
   const requestCoordinates = React.useCallback(() => {
@@ -12,12 +12,12 @@ const useUserCoordinates = () => {
       enableHighAccuracy: true,
       timeout: 0,
     }).then(({ latitude, longitude }) => {
-      setCoordinates({
+      setDeviceCoordinates({
         latitude,
         longitude,
       });
     });
-  }, [setCoordinates]);
+  }, [setDeviceCoordinates]);
 
   React.useEffect(() => {
     if (isGrantedLocationPermission) {

@@ -4,7 +4,7 @@ import { fireEvent, render } from '@testing-library/react-native';
 
 const fn = jest.fn;
 
-const TestedInput = props => {
+const TestedInput = (props: any) => {
   return <Input {...props} />;
 };
 

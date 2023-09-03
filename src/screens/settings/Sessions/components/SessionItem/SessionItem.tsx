@@ -44,10 +44,6 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
     ref,
   ) => {
     const { colors } = getTheme();
-    console.log(
-      'file: SessionItem.tsx:47 - colors:',
-      JSON.stringify(colors, null, 2),
-    );
     const styles = useStyles();
     const {
       authStore: { currentSession },

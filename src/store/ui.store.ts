@@ -7,8 +7,6 @@ export class UiStore {
   dark: boolean = false;
   orientation: Orientations = Orientations.PORTRAIT;
 
-  isInitApp: boolean = false;
-
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
 
@@ -20,10 +18,6 @@ export class UiStore {
   }
   setOrientation(orientation: Orientations) {
     this.orientation = orientation;
-  }
-
-  setIsInitApp(value: boolean) {
-    this.isInitApp = value;
   }
 
   get isPortrait() {
