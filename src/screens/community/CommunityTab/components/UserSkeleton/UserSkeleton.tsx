@@ -3,12 +3,14 @@ import { View } from 'react-native';
 import { generalStyles, spacingBase } from '@styles';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import useStyles from './styles';
+import { getTheme } from '@common/helpers';
 
 const UserSkeleton: React.FC = () => {
   const styles = useStyles();
+  const { colors } = getTheme();
 
   return (
-    <SkeletonPlaceholder>
+    <SkeletonPlaceholder backgroundColor={colors.card}>
       <View style={[generalStyles.row, styles.container]}>
         <SkeletonPlaceholder.Item
           borderRadius={100}

@@ -13,7 +13,7 @@ export class CommunityStore extends PaginationStore<CommunityUser, UserModel> {
     super(UsersService.getCommunityUsers, UserModel);
     this.rootStore = rootStore;
 
-    makeObservable(this, { search: observable, setSearch: action });
+    makeObservable(this, { search: observable, setSearch: action.bound });
   }
 
   setSearch(value: string) {

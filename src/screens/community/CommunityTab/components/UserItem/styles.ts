@@ -14,7 +14,7 @@ const useStyles = () => {
     },
     email: {
       ...typography.regular.callout,
-      color: colors.text,
+      color: colors.gray,
     },
   });
 };
