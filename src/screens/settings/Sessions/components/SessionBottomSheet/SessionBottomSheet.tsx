@@ -126,7 +126,8 @@ const SessionBottomSheet: React.FC = () => {
       snapPoints={snapPoints}
       onDismiss={onDismiss}
       backdropComponent={renderBackdrop}
-      backgroundStyle={styles.background}>
+      backgroundStyle={styles.background}
+      handleIndicatorStyle={styles.handleIndicator}>
       {content}
     </BottomSheetModal>
   );

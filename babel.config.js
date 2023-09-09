@@ -34,7 +34,7 @@ module.exports = {
           '@styles': './src/styles',
           '@env': './src/environments',
           '@models': './src/models',
-          '@type': './src/types',
+          '@modules': './src/modules',
         },
       },
     ],

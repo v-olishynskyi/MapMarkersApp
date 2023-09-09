@@ -12,6 +12,7 @@ import { useLocationPermission } from '@common/hooks';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
 import { AddEditMarkerModal } from '../';
+import { autorun } from 'mobx';
 
 const KYIV_COORDINATES = {
   latitude: 50.430397616916096,
@@ -37,7 +38,7 @@ const Map = React.forwardRef<MapView, MapProps>((props, ref) => {
   const styles = useStyles();
   const { colors } = getTheme();
   const {
-    mapStore: { camera },
+    mapStore: { camera, setActiveMarkerId, activeMarkerId, loadActiveMarker },
     markersStore: { markers, createTemporaryMarker },
     appStore: { deviceCoordinates },
   } = useStores();
@@ -61,6 +62,14 @@ const Map = React.forwardRef<MapView, MapProps>((props, ref) => {
       longitude: event.nativeEvent.coordinate.longitude,
     });
 
+  autorun(() => {
+    if (!activeMarkerId) {
+      return;
+    }
+
+    loadActiveMarker();
+  });
+
   return (
     <>
       <MapView
@@ -80,6 +89,9 @@ const Map = React.forwardRef<MapView, MapProps>((props, ref) => {
               coordinate={{
                 latitude: marker.latitude,
                 longitude: marker.longitude,
+              }}
+              onPress={() => {
+                setActiveMarkerId(marker.id);
               }}
             />
           );

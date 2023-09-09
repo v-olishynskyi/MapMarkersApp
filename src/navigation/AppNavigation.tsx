@@ -16,6 +16,7 @@ import { ActivityIndicator, Text } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
 import { generalStyles, spacingBase } from '@styles';
+import { MarkerBottomSheet } from '@modules';
 
 const Stack = createNativeStackNavigator<AppStackParamsList>();
 
@@ -100,56 +101,59 @@ const AppNavigation = () => {
   );
 
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="tabs"
-        component={TabNavigation}
-        options={{ headerShown: false }}
-      />
+    <>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="tabs"
+          component={TabNavigation}
+          options={{ headerShown: false }}
+        />
 
-      <Stack.Screen
-        name="settings"
-        component={Settings}
-        options={{
-          title: 'Налаштування',
-          headerBackTitle: 'Назад',
-        }}
-      />
-      <Stack.Screen
-        name="sessions"
-        component={Sessions}
-        options={{
-          title: 'Пристрої',
-          headerBackTitle: 'Назад',
-        }}
-      />
-      <Stack.Screen
-        name="profile-view"
-        component={ProfileView}
-        options={{
-          title: 'Профіль',
-          headerRight: profileHeaderRight,
-        }}
-      />
-      <Stack.Screen
-        name="edit-profile"
-        component={EditProfile}
-        options={{
-          presentation: 'formSheet',
-          // headerShown: false,
-          title: 'Редагування профілю',
-          // gestureEnabled: false,
-          headerBackVisible: true,
-          headerLeft: editProfileHeaderLeft,
-          headerRight: editProfileHeaderRight,
-        }}
-      />
-      <Stack.Screen
-        name="about-us"
-        component={AboutUs}
-        options={{ title: 'Про нас' }}
-      />
-    </Stack.Navigator>
+        <Stack.Screen
+          name="settings"
+          component={Settings}
+          options={{
+            title: 'Налаштування',
+            headerBackTitle: 'Назад',
+          }}
+        />
+        <Stack.Screen
+          name="sessions"
+          component={Sessions}
+          options={{
+            title: 'Пристрої',
+            headerBackTitle: 'Назад',
+          }}
+        />
+        <Stack.Screen
+          name="profile-view"
+          component={ProfileView}
+          options={{
+            title: 'Профіль',
+            headerRight: profileHeaderRight,
+          }}
+        />
+        <Stack.Screen
+          name="edit-profile"
+          component={EditProfile}
+          options={{
+            presentation: 'formSheet',
+            // headerShown: false,
+            title: 'Редагування профілю',
+            // gestureEnabled: false,
+            headerBackVisible: true,
+            headerLeft: editProfileHeaderLeft,
+            headerRight: editProfileHeaderRight,
+          }}
+        />
+        <Stack.Screen
+          name="about-us"
+          component={AboutUs}
+          options={{ title: 'Про нас' }}
+        />
+      </Stack.Navigator>
+      <MarkerBottomSheet />
+    </>
   );
 };
 

@@ -6,3 +6,5 @@ export { default as LoaderRefresh } from './LoaderRefresh/LoaderRefresh';
 export { default as Pressable } from './Pressable/Pressable';
 export { default as Menu } from './Menu/Menu';
 export { default as MenuItem } from './MenuItem/MenuItem';
+export { default as Loader } from './Loader/Loader';
+export { default as IconButton } from './IconButton/IconButton';

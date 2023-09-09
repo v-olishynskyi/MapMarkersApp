@@ -37,6 +37,7 @@ export class AppStore {
         if (token) {
           await this.rootStore.userStore.loadProfile();
           this.rootStore.authStore.setIsAuth(true);
+          await this.rootStore.markersStore.loadMarkers();
         }
       }
 

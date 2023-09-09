@@ -1,8 +1,8 @@
-import { showToast, wait } from '@common/helpers';
+import { showToast } from '@common/helpers';
 import { LatLng } from '@common/types';
 import { Marker } from '@common/types/entities';
 import { ListItems, MarkerModel } from '@models';
-import { CreateMarkerData } from '@services';
+import { CreateMarkerData, MarkersService } from '@services';
 import { RootStore } from '@store/root.store';
 import { makeAutoObservable, runInAction } from 'mobx';
 
@@ -22,16 +22,30 @@ export default class MarkersStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
+  async loadMarkers() {
+    try {
+      const markersList = await MarkersService.getAll();
+
+      runInAction(() => {
+        this.markers = new ListItems<Marker>(MarkerModel, markersList);
+      });
+    } catch (error: any) {
+      showToast('error', error.message);
+    }
+  }
+
   createTemporaryMarker(coordinates: LatLng) {
     const temporaryMarker = new MarkerModel({
-      id: `temporary-${Math.random().toString()}`,
       ...coordinates,
+      id: `temporary-${Math.random().toString()}`,
       name: '',
       created_at: new Date(),
       updated_at: new Date(),
       description: '',
       user: this.rootStore.userStore.user,
       user_id: this.rootStore.userStore.user.id,
+      preview_image: null,
+      images: [],
     });
 
     this.markers.push(temporaryMarker);
@@ -46,8 +60,6 @@ export default class MarkersStore {
     try {
       this.isProcessing = true;
 
-      console.log('qweqweq', this.rootStore);
-
       const data: CreateMarkerData = {
         description: markerData.description || '',
         name: markerData.name,
@@ -55,17 +67,9 @@ export default class MarkersStore {
         longitude: markerData.longitude,
         user_id: this.rootStore.userStore.user.id,
       };
-      console.log(
-        'file: markers.store.ts:55 - MarkersStore - createMarker - data:',
-        data,
-      );
 
       const marker = await MarkerModel.create(data);
       const markerModel = new MarkerModel(marker);
-      console.log(
-        'file: markers.store.ts:58 - MarkersStore - createMarker - markerModel:',
-        markerModel,
-      );
 
       runInAction(() => {
         const temporaryMarkerIndex = this.markers.items.findIndex(item =>

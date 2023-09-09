@@ -7,6 +7,8 @@ export default class MarkerModel {
   id: Marker['id'];
   name: Marker['name'];
   description: Marker['description'];
+  preview_image: Marker['preview_image'];
+  images: Marker['images'];
   latitude: Marker['latitude'];
   longitude: Marker['longitude'];
   user_id: string;
@@ -25,10 +27,12 @@ export default class MarkerModel {
     // @ts-ignore
     keys.forEach((key: any) => (this[key] = marker[key]));
 
-    if (marker.user instanceof UserModel) {
-      this.user = marker.user;
-    } else {
-      this.user = new UserModel(marker.user);
+    if (marker.user) {
+      if (marker.user instanceof UserModel) {
+        this.user = marker.user;
+      } else {
+        this.user = new UserModel(marker.user);
+      }
     }
   }
 

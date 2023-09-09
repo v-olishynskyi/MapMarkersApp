@@ -36,9 +36,9 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-  <string>Додатку потрібен доступ до вашого місцеположення.</string>
-  <key>NSLocationAlwaysUsageDescription</key>
-  <string>Додатку потрібен доступ до вашого місцеположення.</string>
+	<string>Додатку потрібен доступ до вашого місцеположення.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Додатку потрібен доступ до вашого місцеположення.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Додатку потрібен доступ до вашого місцеположення.</string>
 	<key>UIAppFonts</key>

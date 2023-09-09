@@ -21,8 +21,7 @@
       "@api": ["./axios-config"],
       "@models": ["./models"],
       "@models/*": ["./models/*"],
-      "@type": ["./@types"],
-      "@type/*": ["./@types/*"]
+      "@modules": ["./modules"]
     }
   },
   "exclude": [

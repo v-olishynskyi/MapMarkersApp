@@ -32,6 +32,8 @@ export type Marker = {
   description: string | null;
   latitude: number;
   longitude: number;
+  preview_image: string | null;
+  images: string[];
   user_id: string;
   user: User | UserModel; // TODO: CHANGE TO User
   created_at: Date;

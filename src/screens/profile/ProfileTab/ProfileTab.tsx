@@ -40,13 +40,10 @@ const ProfileTab: React.FC = () => {
   const {
     userStore: {
       user: { id, avatar_url, fullname, initials, email },
-      testRootStore,
     },
     authStore: { logout, isLoading },
     profileViewStore: { setUserId },
-    markersStore: { markers },
   } = useStores();
-  console.log('file: ProfileTab.tsx:48 - markers:', markers);
 
   const goToProfile = () => {
     setUserId(id);
@@ -55,7 +52,6 @@ const ProfileTab: React.FC = () => {
   const goToSettins = () => navigate('settings');
   const goToSupport = () => navigate('support');
   const goToAboutUs = () => navigate('about-us');
-  const test = () => testRootStore();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -125,18 +121,6 @@ const ProfileTab: React.FC = () => {
               color={colors.text}
             />
             <Text style={styles.pressableText}>Про нас</Text>
-          </View>
-          <Icon name="chevron-forward-outline" size={24} color={colors.gray} />
-        </Pressable>
-        <Pressable style={styles.pressable} onPress={test}>
-          <View style={styles.row}>
-            <Icon
-              name="information-circle-outline"
-              size={24}
-              style={styles.icon}
-              color={colors.text}
-            />
-            <Text style={styles.pressableText}>test</Text>
           </View>
           <Icon name="chevron-forward-outline" size={24} color={colors.gray} />
         </Pressable>

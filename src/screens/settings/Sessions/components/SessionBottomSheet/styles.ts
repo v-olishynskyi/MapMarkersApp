@@ -23,6 +23,9 @@ const useStyles = () => {
     terminateSessionButton: {
       marginTop: spacingBase.s3,
     },
+    handleIndicator: {
+      backgroundColor: colors.gray,
+    },
 
     deviceName: {
       ...typography.regular.title2,
