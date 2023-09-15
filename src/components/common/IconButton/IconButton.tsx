@@ -9,7 +9,7 @@ import { IconButtonProps } from './types';
 import { Pressable } from '@components';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getTheme, isTypeof } from '@common/helpers';
-import { useStores } from '@store';
+import { StyleProp, ViewStyle } from 'react-native';
 
 /**
  * IconButton
@@ -24,9 +24,6 @@ import { useStores } from '@store';
 const IconButton: React.FC<IconButtonProps> = ({ icon, ...rest }) => {
   const styles = useStyles();
   const { colors } = getTheme();
-  const {
-    uiStore: { dark },
-  } = useStores();
 
   const iconComponent = isTypeof(icon, 'string') ? (
     <Icon name={icon as string} color={colors.text} size={16} />
@@ -35,7 +32,9 @@ const IconButton: React.FC<IconButtonProps> = ({ icon, ...rest }) => {
   );
 
   return (
-    <Pressable style={[styles.container]} {...rest}>
+    <Pressable
+      {...rest}
+      style={[styles.container, rest.style as StyleProp<ViewStyle>]}>
       {iconComponent}
     </Pressable>
   );

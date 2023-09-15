@@ -5,17 +5,17 @@
  *  */
 import React from 'react';
 import useStyles from './styles';
-import { Alert, View } from 'react-native';
-import { IconButton, Map } from './components';
+import { View } from 'react-native';
 import { useStores } from '@store';
-import {
-  IS_ANDROID,
-  getTheme,
-  requestLocationPermission,
-} from '@common/helpers';
+import { getTheme } from '@common/helpers';
 import { observer } from 'mobx-react-lite';
-import MapView from 'react-native-maps';
-import { RESULTS, openSettings } from 'react-native-permissions';
+import MapView, { LongPressEvent, Marker } from 'react-native-maps';
+import { useNavigation } from '@react-navigation/native';
+import { MarkerManagementModes } from '@navigation';
+import { Navigation } from './types';
+import { MarkerModel } from '@models';
+import { autorun } from 'mobx';
+import { Map } from '@modules';
 
 /**
  * MapTab
@@ -29,69 +29,15 @@ import { RESULTS, openSettings } from 'react-native-permissions';
  *  <MapTab />
  */
 const MapTab: React.FC = () => {
+  const { navigate } = useNavigation<Navigation>();
   const styles = useStyles();
   const {
-    appStore: { deviceCoordinates, isGrantedLocationPermission },
-    mapStore: {},
+    mapStore: { setActiveMarkerId, activeMarkerId, loadActiveMarker },
+    markersStore: { markers, createTemporaryMarker, loadMarkers },
   } = useStores();
   const {} = getTheme();
 
   const mapViewRef = React.useRef<MapView>(null);
-
-  const goToCurrentLocation = React.useCallback(async () => {
-    let hasLocationPermission = isGrantedLocationPermission;
-
-    if (!isGrantedLocationPermission) {
-      const { granted, result } = await requestLocationPermission();
-      hasLocationPermission = granted;
-
-      if (result === RESULTS.BLOCKED) {
-        return Alert.alert('', 'Надайте доступ до місцеположення', [
-          { style: 'cancel', text: 'Відміна' },
-          { style: 'default', text: 'Налаштування', onPress: openSettings },
-        ]);
-      }
-    }
-
-    if (hasLocationPermission) {
-      deviceCoordinates
-        ? mapViewRef.current?.animateCamera(
-            { center: { ...deviceCoordinates }, altitude: 1000, zoom: 10 },
-            { duration: 500 },
-          )
-        : null;
-    }
-  }, [deviceCoordinates, isGrantedLocationPermission]);
-
-  const onPressPlus = React.useCallback(async () => {
-    let lastCamera = await mapViewRef.current?.getCamera();
-    if (!lastCamera) {
-      return;
-    }
-
-    if (IS_ANDROID) {
-      lastCamera.zoom! += 1;
-    }
-
-    lastCamera.altitude! /= 2;
-
-    mapViewRef.current?.animateCamera(lastCamera);
-  }, []);
-
-  const onPressMinus = React.useCallback(async () => {
-    let lastCamera = await mapViewRef.current?.getCamera();
-    if (!lastCamera) {
-      return;
-    }
-
-    if (IS_ANDROID) {
-      lastCamera.zoom! -= 1;
-    }
-
-    lastCamera.altitude! *= 2;
-
-    mapViewRef.current?.animateCamera(lastCamera);
-  }, []);
 
   const handleRegionChangeComplete = async () => {
     const camera = await mapViewRef.current?.getCamera();
@@ -103,27 +49,56 @@ const MapTab: React.FC = () => {
     // setCamera(camera);
   };
 
+  const onCreateTemporaryMarker = (event: LongPressEvent) => {
+    createTemporaryMarker({
+      latitude: event.nativeEvent.coordinate.latitude,
+      longitude: event.nativeEvent.coordinate.longitude,
+    });
+    navigate('marker-management', { mode: MarkerManagementModes.CREATE });
+  };
+
+  const renderMarker = React.useCallback(
+    (marker: MarkerModel) => {
+      const markerComponent = (
+        <Marker
+          key={marker.id}
+          coordinate={{
+            latitude: marker.latitude,
+            longitude: marker.longitude,
+          }}
+          onPress={() => {
+            setActiveMarkerId(marker.id);
+          }}
+        />
+      );
+
+      return markerComponent;
+    },
+    [setActiveMarkerId],
+  );
+
+  const autorunDisposer = autorun(() => {
+    if (!activeMarkerId) {
+      return;
+    }
+
+    loadActiveMarker();
+  });
+
+  React.useEffect(() => {
+    loadMarkers();
+  }, [loadMarkers]);
+
+  React.useEffect(() => () => autorunDisposer(), [autorunDisposer]);
+
   return (
     <View style={styles.container}>
       <Map
         ref={mapViewRef}
         onRegionChangeComplete={handleRegionChangeComplete}
-      />
-      <IconButton
-        style={styles.myLocationButton}
-        iconName={'locate-outline'}
-        onPress={goToCurrentLocation}
-      />
-      <IconButton
-        style={styles.plusButton}
-        iconName={'add-sharp'}
-        onPress={onPressPlus}
-      />
-      <IconButton
-        style={styles.minusButton}
-        iconName={'remove-sharp'}
-        onPress={onPressMinus}
-      />
+        onLongPress={onCreateTemporaryMarker}>
+        {markers.items.map(renderMarker)}
+      </Map>
     </View>
   );
 };

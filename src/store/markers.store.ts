@@ -44,7 +44,6 @@ export default class MarkersStore {
       description: '',
       user: this.rootStore.userStore.user,
       user_id: this.rootStore.userStore.user.id,
-      preview_image: null,
       images: [],
     });
 

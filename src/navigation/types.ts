@@ -24,4 +24,15 @@ export type AppStackParamsList = {
   sessions: undefined;
   'profile-view': { userId?: string } | undefined;
   'edit-profile': undefined;
+  'marker-management': { mode: MarkerManagementModes };
+  'map-view': undefined;
+};
+
+export enum MarkerManagementModes {
+  CREATE = 'create',
+  EDIT = 'edit',
+}
+
+export type MapStackParamsList = {
+  'map-screen': undefined;
 };

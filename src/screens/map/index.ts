@@ -1,1 +1,2 @@
-export { default as MapTab } from './MapTab/MapTab';
+export { default as MapStack } from './MapStack';
+export { default as MarkerManagement } from './MarkerManagement/MarkerManagement';

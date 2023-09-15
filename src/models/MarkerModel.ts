@@ -7,14 +7,13 @@ export default class MarkerModel {
   id: Marker['id'];
   name: Marker['name'];
   description: Marker['description'];
-  preview_image: Marker['preview_image'];
   images: Marker['images'];
   latitude: Marker['latitude'];
   longitude: Marker['longitude'];
   user_id: string;
   user: UserModel;
-  created_at: Date;
-  updated_at: Date;
+  created_at: Marker['created_at'];
+  updated_at: Marker['updated_at'];
 
   constructor(marker: Marker) {
     this.handleData(marker);
@@ -42,6 +41,14 @@ export default class MarkerModel {
 
   setDescription(value: string) {
     this.description = value;
+  }
+
+  setLatitude(value: number) {
+    this.latitude = value;
+  }
+
+  setLongitude(value: number) {
+    this.longitude = value;
   }
 
   static async create(data: CreateMarkerData) {

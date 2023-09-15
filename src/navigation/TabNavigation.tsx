@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MapTab, CommunityTab, ProfileTab } from '@screens';
+import { MapStack, CommunityTab, ProfileTab } from '@screens';
 import { TabsStackParamsList } from './types';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getTheme } from '@common/helpers';
@@ -63,7 +63,7 @@ const TabNavigation = () => {
           title: 'Карта',
           tabBarIcon: TabBarIcons['map-tab'],
         }}
-        component={MapTab}
+        component={MapStack}
       />
       <Tab.Screen
         name="community-tab"

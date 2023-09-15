@@ -8,17 +8,9 @@ const useStyles = () => {
   return StyleSheet.create({
     container: {
       backgroundColor: colors.card,
-      borderRadius: spacingBase.s1,
       paddingVertical: spacingBase.s2,
+      paddingHorizontal: spacingBase.s3,
       gap: spacingBase.s3,
-    },
-    header: {
-      ...generalStyles.row,
-      paddingHorizontal: spacingBase.s2,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.border,
-      justifyContent: 'space-between',
-      paddingBottom: spacingBase.s1,
     },
     title: {
       ...typography.regular.title3,
@@ -27,15 +19,23 @@ const useStyles = () => {
       textAlign: 'center',
     },
     body: {
-      paddingHorizontal: spacingBase.s2,
       gap: 10,
     },
     actions: {
       ...generalStyles.rowBetween,
-      paddingHorizontal: spacingBase.s2,
     },
     button: { flex: 1 },
     mr1: { marginRight: spacingBase.s1 },
+
+    descriptionInput: {
+      maxHeight: 200,
+    },
+    iconContainer: {
+      width: 24,
+      height: 24,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });
 };
 

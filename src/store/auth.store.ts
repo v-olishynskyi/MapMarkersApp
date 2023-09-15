@@ -45,14 +45,17 @@ export class AuthStore {
         'acs_tkn',
         JSON.stringify({ accessToken: access_token }),
       );
+      await this.rootStore.userStore.loadProfile();
 
-      await Keychain.setInternetCredentials(
+      this.rootStore.markersStore.loadMarkers();
+
+      Keychain.setInternetCredentials(
         'refresh_tkn',
         'rfsh_tkn',
         JSON.stringify({ refreshToken: refresh_token }),
       );
 
-      await Keychain.setInternetCredentials(
+      Keychain.setInternetCredentials(
         'session_id',
         'session_id',
         JSON.stringify({ sessionId: session_id }),
