@@ -1,13 +1,13 @@
-import { Marker } from '@common/types/entities';
-import UserModel from '@models/UserModel';
+import { Marker, PublicFile } from '@common/types/entities';
 import { CreateMarkerData, MarkersService, UpdateMarkerData } from '@services';
 import { makeAutoObservable } from 'mobx';
+import { ListItems, PublicFileModel, UserModel } from '@models';
 
 export default class MarkerModel {
   id: Marker['id'];
   name: Marker['name'];
   description: Marker['description'];
-  images: Marker['images'];
+  images: ListItems<PublicFileModel>;
   latitude: Marker['latitude'];
   longitude: Marker['longitude'];
   user_id: string;
@@ -23,8 +23,14 @@ export default class MarkerModel {
 
   public handleData(marker: Marker) {
     const keys = Object.keys(marker);
+
     // @ts-ignore
     keys.forEach((key: any) => (this[key] = marker[key]));
+
+    this.images = new ListItems<PublicFile>(
+      PublicFileModel,
+      marker?.images || [],
+    );
 
     if (marker.user) {
       if (marker.user instanceof UserModel) {
@@ -49,6 +55,29 @@ export default class MarkerModel {
 
   setLongitude(value: number) {
     this.longitude = value;
+  }
+
+  addImage(id: string, uri?: string) {
+    const temporaryImage: PublicFileModel = new PublicFileModel({
+      id,
+      key: null,
+      url: uri || '',
+      created_at: new Date().toString(),
+      updated_at: new Date().toString(),
+    });
+    this.images.push(temporaryImage);
+  }
+
+  replaceImage(id: string, newImage: PublicFile | PublicFileModel) {
+    const image =
+      newImage instanceof PublicFileModel
+        ? newImage
+        : new PublicFileModel(newImage);
+    const temporaryImageIndex = this.images.items.findIndex(
+      item => item.id === id,
+    );
+    this.images.remove(temporaryImageIndex);
+    this.images.push(image);
   }
 
   static async create(data: CreateMarkerData) {

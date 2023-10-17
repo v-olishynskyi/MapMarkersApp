@@ -30,3 +30,13 @@ export type Coordinates = LatLng & {
   latitudeDelta: number;
   longitudeDelta: number;
 };
+
+export type File = {
+  id: string;
+  url: string;
+  key: string;
+  created_at: Date;
+  updated_at: Date;
+};
+
+export type BaseImage = Pick<File, 'id' | 'url'>;

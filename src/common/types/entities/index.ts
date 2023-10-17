@@ -32,11 +32,19 @@ export type Marker = {
   description: string | null;
   latitude: number;
   longitude: number;
-  images: string[];
+  images: PublicFile[];
   user_id: string;
   user: User | UserModel; // TODO: CHANGE TO User
   created_at: Date;
   updated_at: Date;
 };
 
-export type Entities = User | Marker | UserSession;
+export type PublicFile = {
+  id: string;
+  key: string | null;
+  url: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Entities = User | Marker | UserSession | PublicFile;

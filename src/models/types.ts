@@ -1,7 +1,22 @@
-import { Entities, Marker, User, UserSession } from '@common/types/entities';
-import { MarkerModel, UserModel, UserSessionModel } from '@models';
+import {
+  Entities,
+  Marker,
+  PublicFile,
+  User,
+  UserSession,
+} from '@common/types/entities';
+import {
+  MarkerModel,
+  UserModel,
+  UserSessionModel,
+  PublicFileModel,
+} from '@models';
 
-export type Models = UserModel;
+export type Models =
+  | UserModel
+  | MarkerModel
+  | UserSessionModel
+  | PublicFileModel;
 
 export type EntityToModel<T extends Entities> = T extends User
   ? UserModel
@@ -9,6 +24,8 @@ export type EntityToModel<T extends Entities> = T extends User
   ? MarkerModel
   : T extends UserSession
   ? UserSessionModel
+  : T extends PublicFileModel
+  ? PublicFileModel
   : never;
 
 export type ModelConstructor<T extends Entities> = T extends User
@@ -17,4 +34,6 @@ export type ModelConstructor<T extends Entities> = T extends User
   ? typeof MarkerModel
   : T extends UserSession
   ? typeof UserSessionModel
+  : T extends PublicFile
+  ? typeof PublicFileModel
   : never;
