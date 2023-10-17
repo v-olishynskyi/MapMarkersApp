@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const AuthNavigation = () => {
+const AuthNavigation: React.FC = () => {
   const shouldShowOnboarding = !globalStorage.getBoolean(
     'is-visited-onboarding',
   );

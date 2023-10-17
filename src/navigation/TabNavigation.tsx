@@ -31,7 +31,7 @@ const TabBarIcons: Record<
   ),
 };
 
-const TabNavigation = () => {
+const TabNavigation: React.FC = () => {
   const { colors } = getTheme();
 
   useLocationPermission({ withRequest: true });

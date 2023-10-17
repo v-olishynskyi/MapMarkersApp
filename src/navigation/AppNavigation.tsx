@@ -19,7 +19,7 @@ import { Map, MarkerBottomSheet } from '@modules';
 
 const Stack = createNativeStackNavigator<AppStackParamsList>();
 
-const AppNavigation = () => {
+const AppNavigation: React.FC = () => {
   const { colors } = getTheme();
   const {
     userStore: { isSaving, updateProfile, resetUpdateFormData },
@@ -58,6 +58,10 @@ const AppNavigation = () => {
       />
     ),
     [colors.primary, updateProfile, isSaving],
+  );
+  const locationHeaderLeft = React.useCallback(
+    () => <IconButton icon="close" onPress={navigationRef.goBack} />,
+    [],
   );
 
   return (
@@ -124,6 +128,7 @@ const AppNavigation = () => {
           options={{
             presentation: 'fullScreenModal',
             title: 'Вибір локації',
+            headerLeft: locationHeaderLeft,
           }}
         />
       </Stack.Navigator>

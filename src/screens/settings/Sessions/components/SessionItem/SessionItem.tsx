@@ -51,10 +51,7 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
 
     const swipeableRef = React.useRef<Swipeable>(null);
 
-    const isCurrentSession = React.useMemo(
-      () => currentSession?.id === session.id,
-      [currentSession, session],
-    );
+    const isCurrentSession = currentSession?.id === session.id;
 
     React.useImperativeHandle(ref, () => ({
       close: () => swipeableRef.current?.close(),
