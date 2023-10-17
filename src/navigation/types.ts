@@ -25,7 +25,7 @@ export type AppStackParamsList = {
   'profile-view': { userId?: string } | undefined;
   'edit-profile': undefined;
   'marker-management': { mode: MarkerManagementModes };
-  'map-view': undefined;
+  location: undefined;
 };
 
 export enum MarkerManagementModes {

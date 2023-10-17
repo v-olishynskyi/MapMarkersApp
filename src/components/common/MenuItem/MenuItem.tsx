@@ -36,18 +36,15 @@ const MenuItem: React.FC<MenuItemProps> = ({
 
   const styles = useStyles(!!disabled, iconColor, icon);
 
-  const defaultActions = React.useMemo(
-    () => (
-      <>
-        {secondaryLabel && (
-          <Text style={styles.secondaryLabel}>{secondaryLabel}</Text>
-        )}
-        {onPress && (
-          <Icon name="chevron-forward" size={20} color={colors.gray2} />
-        )}
-      </>
-    ),
-    [colors.gray2, secondaryLabel, styles.secondaryLabel, onPress],
+  const defaultActions = (
+    <>
+      {secondaryLabel && (
+        <Text style={styles.secondaryLabel}>{secondaryLabel}</Text>
+      )}
+      {onPress && (
+        <Icon name="chevron-forward" size={20} color={colors.gray2} />
+      )}
+    </>
   );
 
   return (

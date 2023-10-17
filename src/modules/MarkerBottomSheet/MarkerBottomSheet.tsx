@@ -18,12 +18,10 @@ import { Button, IconButton, Loader } from '@components';
 import { observer } from 'mobx-react-lite';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MapStackParamsList, MarkerManagementModes } from '@navigation';
+import { AppStackParamsList, MarkerManagementModes } from '@navigation';
 
 /**
  * MarkerBottomSheet
- *
- * @memberof
  *
  * @example
  * // How to use MarkerBottomSheet:
@@ -41,8 +39,9 @@ const MarkerBottomSheet: React.FC = () => {
     },
     markersStore: { setEditableMarker },
   } = useStores();
+
   const { navigate } =
-    useNavigation<NativeStackNavigationProp<MapStackParamsList>>();
+    useNavigation<NativeStackNavigationProp<AppStackParamsList>>();
 
   const sheetRef = React.useRef<BottomSheetModal>(null);
 
@@ -101,16 +100,11 @@ const MarkerBottomSheet: React.FC = () => {
       <>
         <BottomSheetFlatList
           horizontal
+          showsHorizontalScrollIndicator={false}
           data={
-            activeMarker
-              ? [
-                  ...activeMarker.images,
-                  ...activeMarker.images,
-                  ...activeMarker.images,
-                ]
-              : []
+            activeMarker?.images?.items?.length ? activeMarker.images.items : []
           }
-          renderItem={({ item: url }) => (
+          renderItem={({ item: { url } }) => (
             <Image
               style={{ width: 60, height: 60, borderRadius: 8 }}
               source={{ uri: url }}
@@ -118,11 +112,11 @@ const MarkerBottomSheet: React.FC = () => {
           )}
           style={{
             marginHorizontal: -12,
-            paddingLeft: 12,
-            paddingRight: 24,
+            marginBottom: 8,
           }}
-          contentContainerStyle={{ gap: 12 }}
+          contentContainerStyle={{ gap: 12, paddingHorizontal: 12 }}
         />
+        <Text style={styles.description}>{activeMarker?.description}</Text>
       </>
     );
 
@@ -144,12 +138,13 @@ const MarkerBottomSheet: React.FC = () => {
     isLoadingMarker,
     activeMarker,
     activeMarkerId,
-    loadActiveMarker,
     styles.errorLabel,
     styles.header,
     styles.headerActions,
     styles.contentContainer,
     styles.name,
+    styles.description,
+    loadActiveMarker,
     closeModal,
     onPressEditButton,
   ]);

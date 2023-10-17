@@ -9,4 +9,5 @@ export type HeaderButtonProps = {
   loading?: boolean;
   onPress?: VoidFunction | (() => Promise<any>);
   backRoute: any;
+  disabled?: boolean;
 };

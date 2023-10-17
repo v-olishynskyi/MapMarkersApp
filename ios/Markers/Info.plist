@@ -41,6 +41,8 @@
 	<string>Додатку потрібен доступ до вашого місцеположення.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Додатку потрібен доступ до вашого місцеположення.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Додатку потрібен доступ до ваших фото.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Ionicons.ttf</string>

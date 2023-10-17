@@ -28,8 +28,9 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({
   loading,
   onPress,
   backRoute,
+  disabled,
 }) => {
-  const styles = useStyles(!!loading, color);
+  const styles = useStyles(!!loading || !!disabled, color);
 
   const onPressCancel = async () => {
     try {
@@ -43,7 +44,7 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({
     <Pressable
       onPress={onPressCancel}
       style={[generalStyles.row]}
-      disabled={loading}>
+      disabled={disabled || loading}>
       {loading && <ActivityIndicator size={'small'} style={styles.loader} />}
       <Text style={styles.label}>{label}</Text>
     </Pressable>

@@ -37,6 +37,10 @@ const useStyles = () => {
       ...typography.regular.title3,
       color: colors.text,
     },
+    description: {
+      ...typography.regular.body,
+      color: colors.gray,
+    },
   });
 };
 
