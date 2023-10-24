@@ -10,6 +10,8 @@ export default class MarkerModel {
   images: ListItems<PublicFileModel>;
   latitude: Marker['latitude'];
   longitude: Marker['longitude'];
+  is_draft: Marker['is_draft'] = false;
+  is_hidden: Marker['is_hidden'] = false;
   user_id: string;
   user: UserModel;
   created_at: Marker['created_at'];

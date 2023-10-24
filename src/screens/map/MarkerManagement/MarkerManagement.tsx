@@ -28,6 +28,7 @@ const MarkerManagement: React.FC = () => {
       createMarker,
       isProcessing,
       clearEditableMarker,
+      createDraftMarker,
     },
   } = useStores();
 
@@ -161,12 +162,13 @@ const MarkerManagement: React.FC = () => {
         e.preventDefault();
 
         return Alert.alert(
-          'Підтвердження',
-          'Ви впевнені, що хочете завершити створення?',
+          '',
+          `Ви впевнені, що хочете перервати ${headerTitle.toLowerCase()}?`,
           [
-            { text: 'Скасувати' },
+            { text: 'Продовжити' },
+
             {
-              text: 'Підтвердити',
+              text: 'Вийти',
               isPreferred: false,
               style: 'destructive',
               onPress: onGoBack,
@@ -177,7 +179,14 @@ const MarkerManagement: React.FC = () => {
     });
 
     return () => removeListener('beforeRemove', listener);
-  }, [addListener, removeListener, dispatch, clearEditableMarker, isValid]);
+  }, [
+    addListener,
+    removeListener,
+    dispatch,
+    clearEditableMarker,
+    isValid,
+    createDraftMarker,
+  ]);
 
   return (
     <KeyboardAwareScrollView style={styles.container}>

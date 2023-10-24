@@ -1,9 +1,8 @@
-export type CreateMarkerData = {
-  latitude: number;
-  longitude: number;
-  name: string;
-  description: string;
-  user_id: string;
-};
+import { Marker } from '@common/types/entities';
 
-export type UpdateMarkerData = Partial<Omit<CreateMarkerData, 'userId'>>;
+export type CreateMarkerData = Omit<
+  Marker,
+  'id' | 'created_at' | 'updated_at' | 'images' | 'user'
+> & { images?: string[] };
+
+export type UpdateMarkerData = CreateMarkerData;

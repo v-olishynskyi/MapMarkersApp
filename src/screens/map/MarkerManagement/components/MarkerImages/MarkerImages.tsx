@@ -48,7 +48,6 @@ const MarkerImages: React.FC = () => {
       marker?.addImage(temporaryId);
 
       let formData = new FormData();
-      formData.append('type', 'marker_image');
       formData.append('file', {
         name: file.filename || 'filename',
         type: file.mime,

@@ -35,6 +35,8 @@ export type Marker = {
   images: PublicFile[];
   user_id: string;
   user: User | UserModel; // TODO: CHANGE TO User
+  is_draft: boolean;
+  is_hidden: boolean;
   created_at: Date;
   updated_at: Date;
 };

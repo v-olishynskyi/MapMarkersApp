@@ -54,13 +54,6 @@ export class UserStore {
     }
   }
 
-  testRootStore() {
-    this.rootStore.markersStore.createTemporaryMarker({
-      latitude: 50.430397616916096,
-      longitude: 30.541007622159007,
-    });
-  }
-
   async updateProfile() {
     try {
       this.isSaving = true;

@@ -27,28 +27,58 @@ export default class MarkersStore {
       const markersList = await MarkersService.getAll();
 
       runInAction(() => {
-        this.markers = new ListItems<Marker>(MarkerModel, markersList);
+        this.markers = new ListItems<Marker>(MarkerModel, markersList || []);
       });
     } catch (error: any) {
       showToast('error', error.message);
     }
   }
 
-  createTemporaryMarker(coordinates: LatLng) {
-    const temporaryMarker = new MarkerModel({
+  async createTemporaryMarker(coordinates: LatLng) {
+    const temporaryMarkerData: Marker = {
       ...coordinates,
       id: `temporary-${Math.random().toString()}`,
       name: '',
+      description: '',
+      is_draft: false,
+      is_hidden: false,
+      user_id: this.rootStore.userStore.user.id,
+      user: this.rootStore.userStore.user,
+      images: [],
       created_at: new Date(),
       updated_at: new Date(),
-      description: '',
-      user: this.rootStore.userStore.user,
-      user_id: this.rootStore.userStore.user.id,
-      images: [],
-    });
+    };
 
-    this.markers.push(temporaryMarker);
-    this.setEditableMarker(temporaryMarker);
+    const markerModel = new MarkerModel(temporaryMarkerData);
+
+    this.markers.push(markerModel);
+    this.setEditableMarker(markerModel);
+  }
+
+  async createDraftMarker(coordinates: LatLng) {
+    try {
+      const images = this.editableMarker?.images.items.map(({ id }) => id);
+
+      const draftData: CreateMarkerData = {
+        ...coordinates,
+        name: this.editableMarker?.name || '',
+        description: this.editableMarker?.description || '',
+        is_draft: true,
+        is_hidden: true,
+        user_id: this.rootStore.userStore.user.id,
+        images,
+      };
+
+      const marker = await MarkersService.create(draftData);
+
+      const markerModel = new MarkerModel(marker);
+
+      runInAction(() => {
+        this.markers.push(markerModel);
+      });
+    } catch (error: any) {
+      showToast('error', error.message);
+    }
   }
 
   setEditableMarker(marker: MarkerModel) {
@@ -59,12 +89,17 @@ export default class MarkersStore {
     try {
       this.isProcessing = true;
 
+      const images = markerData.images.items.map(({ id }) => id);
+
       const data: CreateMarkerData = {
         description: markerData.description || '',
         name: markerData.name,
         latitude: markerData.latitude,
         longitude: markerData.longitude,
         user_id: this.rootStore.userStore.user.id,
+        is_draft: true,
+        is_hidden: true,
+        images,
       };
 
       const marker = await MarkerModel.create(data);
