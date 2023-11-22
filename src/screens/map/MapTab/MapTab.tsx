@@ -7,7 +7,6 @@ import React from 'react';
 import useStyles from './styles';
 import { View } from 'react-native';
 import { useStores } from '@store';
-import { getTheme } from '@common/helpers';
 import { observer } from 'mobx-react-lite';
 import MapView, { LongPressEvent, Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
@@ -35,7 +34,6 @@ const MapTab: React.FC = () => {
     mapStore: { setActiveMarkerId, activeMarkerId, loadActiveMarker },
     markersStore: { markers, createTemporaryMarker, loadMarkers },
   } = useStores();
-  const {} = getTheme();
 
   const mapViewRef = React.useRef<MapView>(null);
 

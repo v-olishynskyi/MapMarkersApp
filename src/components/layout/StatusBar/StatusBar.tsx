@@ -19,7 +19,7 @@ import { getTheme } from '@common/helpers';
  */
 const StatusBar: React.FC = () => {
   const {
-    uiStore: { dark },
+    uiStore: { isDark },
   } = useStores();
   const { colors } = getTheme();
 
@@ -29,7 +29,7 @@ const StatusBar: React.FC = () => {
     <RNStatusBar
       animated
       backgroundColor={bgColor}
-      barStyle={dark ? 'light-content' : 'dark-content'}
+      barStyle={isDark ? 'light-content' : 'dark-content'}
     />
   );
 };

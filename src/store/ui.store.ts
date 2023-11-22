@@ -4,7 +4,7 @@ import { makeAutoObservable } from 'mobx';
 
 export class UiStore {
   rootStore: RootStore;
-  dark: boolean = false;
+  isDark: boolean = false;
   orientation: Orientations = Orientations.PORTRAIT;
 
   constructor(rootStore: RootStore) {
@@ -13,8 +13,8 @@ export class UiStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  setDark(value: boolean) {
-    this.dark = value;
+  setIsDark(value: boolean) {
+    this.isDark = value;
   }
   setOrientation(orientation: Orientations) {
     this.orientation = orientation;
@@ -25,5 +25,9 @@ export class UiStore {
   }
   get isLandscape() {
     return this.orientation === Orientations.LANDSCAPE;
+  }
+
+  get theme() {
+    return this.isDark ? 'dark' : 'light';
   }
 }

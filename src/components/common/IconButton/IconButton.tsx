@@ -26,7 +26,12 @@ const IconButton: React.FC<IconButtonProps> = ({ icon, ...rest }) => {
   const { colors } = getTheme();
 
   const iconComponent = isTypeof(icon, 'string') ? (
-    <Icon name={icon as string} color={colors.text} size={16} />
+    <Icon
+      name={icon as string}
+      color={colors.text}
+      size={16}
+      style={styles.icon}
+    />
   ) : (
     icon
   );

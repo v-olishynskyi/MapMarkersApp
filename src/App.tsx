@@ -23,7 +23,7 @@ import { useUserCoordinates } from '@common/hooks';
 
 const App = observer(() => {
   const {
-    uiStore: { setOrientation, setDark, dark },
+    uiStore: { setOrientation, setIsDark, isDark },
     appStore: { initApplication },
   } = useStores();
   const colorScheme = useColorScheme();
@@ -39,9 +39,9 @@ const App = observer(() => {
   }, [setOrientation]);
 
   React.useEffect(() => {
-    const isDark = colorScheme === 'dark';
-    setDark(isDark);
-  }, [colorScheme, setDark]);
+    const isDarkTheme = colorScheme === 'dark';
+    setIsDark(isDarkTheme);
+  }, [colorScheme, setIsDark]);
 
   React.useEffect(() => {
     initApplication();
@@ -54,7 +54,7 @@ const App = observer(() => {
         <SafeAreaProvider>
           <NavigationContainer
             ref={navigationRef}
-            theme={dark ? DarkTheme : DefaultTheme}>
+            theme={isDark ? DarkTheme : DefaultTheme}>
             <BottomSheetModalProvider>
               <RootLoading>
                 <RootNavigation />
