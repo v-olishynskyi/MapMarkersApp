@@ -27,4 +27,17 @@ export default class ListItems<T extends Entities> {
 
     return this;
   }
+
+  replace(index: number, newItem: EntityToModel<T>) {
+    const isIndexExist = index >= 0 && index <= this.items.length - 1;
+
+    if (!isIndexExist) {
+      return;
+    }
+
+    const newItems = this.items;
+    newItems.splice(index, 1, newItem);
+
+    this.items = newItems;
+  }
 }

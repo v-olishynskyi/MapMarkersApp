@@ -2,7 +2,7 @@ import { showToast } from '@common/helpers';
 import { LatLng } from '@common/types';
 import { Marker } from '@common/types/entities';
 import { ListItems, MarkerModel } from '@models';
-import { CreateMarkerData, MarkersService } from '@services';
+import { CreateMarkerData, MarkersService, UpdateMarkerData } from '@services';
 import { RootStore } from '@store/root.store';
 import { makeAutoObservable, runInAction } from 'mobx';
 
@@ -119,6 +119,37 @@ export default class MarkersStore {
       runInAction(() => {
         this.isProcessing = false;
       });
+    }
+  }
+
+  async updateMarker(id: string, body: UpdateMarkerData) {
+    try {
+      const response = await MarkerModel.update(id, body);
+      this.rootStore.mapStore.loadActiveMarker(false);
+      const updatedMarkerModel = new MarkerModel(response);
+
+      runInAction(() => {
+        this.editableMarker = updatedMarkerModel;
+        const index = this.markers.items.findIndex(el => el.id === response.id);
+
+        this.markers.replace(index, updatedMarkerModel);
+      });
+    } catch (error) {}
+  }
+
+  async removeMarker(id: string) {
+    try {
+      await MarkersService.delete(id);
+      runInAction(() => {
+        const removedMarkerIndex = this.markers.items.findIndex(
+          marker => marker.id === id,
+        );
+
+        this.markers.remove(removedMarkerIndex);
+        this.rootStore.mapStore.clearActiveMarker();
+      });
+    } catch (error: any) {
+      showToast('error', error.message);
     }
   }
 

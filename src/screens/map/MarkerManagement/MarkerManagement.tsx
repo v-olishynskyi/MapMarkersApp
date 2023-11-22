@@ -13,6 +13,7 @@ import { HeaderButton, Input, Pressable } from '@components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { MarkerImages } from './components';
+import { UpdateMarkerData } from '@services';
 
 const MarkerManagement: React.FC = () => {
   const { params } = useRoute<RouteType>();
@@ -26,6 +27,7 @@ const MarkerManagement: React.FC = () => {
     markersStore: {
       editableMarker,
       createMarker,
+      updateMarker,
       isProcessing,
       clearEditableMarker,
       createDraftMarker,
@@ -47,10 +49,30 @@ const MarkerManagement: React.FC = () => {
         return;
       }
 
-      await createMarker(editableMarker);
+      if (isCreateMode) {
+        await createMarker(editableMarker);
+      } else {
+        const images = editableMarker.images.items.map(({ id }) => id);
+        const data: UpdateMarkerData = {
+          ...editableMarker,
+          ...values,
+          id: editableMarker.id,
+          images,
+        };
+
+        await updateMarker(editableMarker.id, data);
+      }
     },
-    //@ts-ignore
-    [createMarker, editableMarker, setErrors, validateForm],
+    [
+      //@ts-ignore
+      setErrors,
+      //@ts-ignore
+      validateForm,
+      createMarker,
+      updateMarker,
+      isCreateMode,
+      editableMarker,
+    ],
   );
 
   const {
@@ -151,42 +173,52 @@ const MarkerManagement: React.FC = () => {
     });
   }, [setOptions, headerLeftButton, headerRightButton, headerTitle]);
 
-  React.useEffect(() => {
-    const listener = addListener('beforeRemove', async e => {
-      const onGoBack = () => {
-        clearEditableMarker();
-        dispatch(e.data.action);
-      };
+  React.useEffect(
+    () => {
+      const listener = addListener('beforeRemove', async e => {
+        const onGoBack = () => {
+          clearEditableMarker();
+          dispatch(e.data.action);
+        };
 
-      if (shouldPreventGoBack.current) {
-        e.preventDefault();
+        const onCreateDraftAndGoBack = async () => {
+          await createDraftMarker({
+            latitude: editableMarker!.latitude,
+            longitude: editableMarker!.longitude,
+          });
+          return onGoBack();
+        };
 
-        return Alert.alert(
-          '',
-          `Ви впевнені, що хочете перервати ${headerTitle.toLowerCase()}?`,
-          [
-            { text: 'Продовжити' },
+        if (shouldPreventGoBack.current) {
+          e.preventDefault();
 
-            {
-              text: 'Вийти',
-              isPreferred: false,
-              style: 'destructive',
-              onPress: onGoBack,
-            },
-          ],
-        );
-      }
-    });
+          return Alert.alert(
+            '',
+            `Ви впевнені, що хочете перервати ${headerTitle.toLowerCase()}?`,
+            [
+              { text: 'Продовжити' },
+              {
+                text: 'Зберегти як чернетку',
+                style: 'destructive',
+                isPreferred: true,
+                onPress: onCreateDraftAndGoBack,
+              },
+              {
+                text: 'Вийти',
+                isPreferred: false,
+                style: 'destructive',
+                onPress: onGoBack,
+              },
+            ],
+          );
+        }
+      });
 
-    return () => removeListener('beforeRemove', listener);
-  }, [
-    addListener,
-    removeListener,
-    dispatch,
-    clearEditableMarker,
-    isValid,
-    createDraftMarker,
-  ]);
+      return () => removeListener('beforeRemove', listener);
+    },
+    // eslint-disable-next-line
+    [],
+  );
 
   return (
     <KeyboardAwareScrollView style={styles.container}>

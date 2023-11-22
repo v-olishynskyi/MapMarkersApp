@@ -21,8 +21,8 @@ export class MarkersService {
     return data;
   }
 
-  public static async update(body: UpdateMarkerData) {
-    const { data } = await api.put<Marker>('markers', body);
+  public static async update(id: string, body: UpdateMarkerData) {
+    const { data } = await api.put<Marker>(`markers/${id}`, body);
 
     return data;
   }

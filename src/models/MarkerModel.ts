@@ -88,8 +88,8 @@ export default class MarkerModel {
     return marker;
   }
 
-  static async update(data: UpdateMarkerData) {
-    const newMarker = await MarkersService.update(data);
+  static async update(id: string, data: UpdateMarkerData) {
+    const newMarker = await MarkersService.update(id, data);
 
     return newMarker;
   }

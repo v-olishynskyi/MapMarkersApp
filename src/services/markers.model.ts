@@ -5,4 +5,7 @@ export type CreateMarkerData = Omit<
   'id' | 'created_at' | 'updated_at' | 'images' | 'user'
 > & { images?: string[] };
 
-export type UpdateMarkerData = CreateMarkerData;
+export type UpdateMarkerData = Omit<
+  Marker,
+  'created_at' | 'updated_at' | 'images'
+> & { images?: string[] };

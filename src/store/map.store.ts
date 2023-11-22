@@ -42,10 +42,15 @@ export class MapStore {
     this.activeMarkerId = id;
   }
 
-  async loadActiveMarker() {
-    const possibledCachedMarker = this.cachedMarkers[this.activeMarkerId];
-    if (possibledCachedMarker && Date.now() < possibledCachedMarker.expiresIn) {
-      this.activeMarker = possibledCachedMarker.marker;
+  async loadActiveMarker(fromCache: boolean = true) {
+    const maybeCachedMarker = this.cachedMarkers[this.activeMarkerId];
+
+    if (
+      fromCache &&
+      maybeCachedMarker &&
+      Date.now() < maybeCachedMarker.expiresIn
+    ) {
+      this.activeMarker = maybeCachedMarker.marker;
       return;
     } else {
       try {
