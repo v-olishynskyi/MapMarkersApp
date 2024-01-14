@@ -14,6 +14,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Icon from 'react-native-vector-icons/Ionicons';
 import { MarkerImages } from './components';
 import { UpdateMarkerData } from '@services';
+import { Toast } from '@components';
 
 const MarkerManagement: React.FC = () => {
   const { params } = useRoute<RouteType>();
@@ -221,44 +222,47 @@ const MarkerManagement: React.FC = () => {
   );
 
   return (
-    <KeyboardAwareScrollView style={styles.container}>
-      <View style={styles.body}>
-        <Input
-          value={values.name}
-          placeholder="Введіть імʼя маркеру"
-          caption="Імʼя"
-          onChangeText={handleChangeInput('name')}
-          onFocus={() => setFieldTouched('name')}
-          editable={!isProcessing}
-          onBlur={handleBlur('name')}
-          error={errors.name}
-        />
-        <Input
-          value={values.description}
-          placeholder="Введіть опис маркеру"
-          caption="Опис"
-          onChangeText={handleChangeInput('description')}
-          onFocus={() => setFieldTouched('description')}
-          editable={!isProcessing}
-          onBlur={handleBlur('description')}
-          error={errors.description}
-          multiline
-          inputStyle={styles.descriptionInput}
-        />
+    <>
+      <KeyboardAwareScrollView style={styles.container}>
+        <View style={styles.body}>
+          <Input
+            value={values.name}
+            placeholder="Введіть імʼя маркеру"
+            caption="Імʼя"
+            onChangeText={handleChangeInput('name')}
+            onFocus={() => setFieldTouched('name')}
+            editable={!isProcessing}
+            onBlur={handleBlur('name')}
+            error={errors.name}
+          />
+          <Input
+            value={values.description}
+            placeholder="Введіть опис маркеру"
+            caption="Опис"
+            onChangeText={handleChangeInput('description')}
+            onFocus={() => setFieldTouched('description')}
+            editable={!isProcessing}
+            onBlur={handleBlur('description')}
+            error={errors.description}
+            multiline
+            inputStyle={styles.descriptionInput}
+          />
 
-        <MarkerImages />
-        <Input
-          value={editableMarker?.latitude.toString() || ''}
-          caption="Широта"
-          rightIcon={mapIcon}
-        />
-        <Input
-          value={editableMarker?.longitude.toString() || ''}
-          caption="Довгота"
-          rightIcon={mapIcon}
-        />
-      </View>
-    </KeyboardAwareScrollView>
+          <MarkerImages />
+          <Input
+            value={editableMarker?.latitude.toString() || ''}
+            caption="Широта"
+            rightIcon={mapIcon}
+          />
+          <Input
+            value={editableMarker?.longitude.toString() || ''}
+            caption="Довгота"
+            rightIcon={mapIcon}
+          />
+        </View>
+      </KeyboardAwareScrollView>
+      <Toast />
+    </>
   );
 };
 

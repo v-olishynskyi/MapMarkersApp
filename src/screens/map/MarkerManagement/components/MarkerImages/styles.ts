@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native';
 import { getTheme } from '@common/helpers';
 import { spacingBase, generalStyles } from '@styles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const useStyles = () => {
   const { colors } = getTheme();
+  const { top, bottom } = useSafeAreaInsets();
 
   return StyleSheet.create({
     images: {
@@ -23,6 +25,7 @@ const useStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
     },
+    addImageIcon: { paddingLeft: 1 },
     imageLoader: {
       borderWidth: 1,
       borderColor: colors.gray,
@@ -33,6 +36,12 @@ const useStyles = () => {
       ...generalStyles.row,
       gap: spacingBase.s2,
       paddingHorizontal: spacingBase.s3,
+    },
+
+    carouselContainer: {
+      paddingTop: top,
+      paddingBottom: bottom,
+      backgroundColor: 'black',
     },
   });
 };

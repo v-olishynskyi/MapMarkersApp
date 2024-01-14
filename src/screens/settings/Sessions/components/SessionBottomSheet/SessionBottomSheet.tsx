@@ -94,7 +94,6 @@ const SessionBottomSheet: React.FC = () => {
         </BottomSheetScrollView>
       </>
     );
-    /* eslint eslint-comments/no-unlimited-disable: */
     // eslint-disable-next-line
   }, [session, terminateSession, isTerminatingSession]);
 
