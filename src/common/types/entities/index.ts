@@ -8,7 +8,7 @@ export type User = {
   last_name: string;
   middle_name: string | null;
   username: string | null;
-  avatar_url: string | null;
+  avatar: PublicFile | null;
   sessions?: UserSession[];
 
   created_at: string;

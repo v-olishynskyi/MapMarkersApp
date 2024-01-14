@@ -29,11 +29,11 @@ export class UserStore {
   handleData(user: User) {
     this.user = new UserModel(user);
 
-    const updateDataKeys = Object.keys(user).filter(
+    const updatedKeys = Object.keys(user).filter(
       key => key !== 'id' && key !== 'email' && key !== 'sessions',
     );
     // @ts-ignore
-    updateDataKeys.forEach(key => (this.updateFormData[key] = user[key]));
+    updatedKeys.forEach(key => (this.updateFormData[key] = user[key]));
   }
 
   async loadProfile() {

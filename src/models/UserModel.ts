@@ -9,7 +9,7 @@ export default class UserModel {
   last_name: User['last_name'];
   middle_name: User['middle_name'];
   username: User['username'];
-  avatar_url: User['avatar_url'];
+  avatar: User['avatar'];
   sessions: ListItems<UserSession>;
 
   created_at: User['created_at'];
@@ -64,5 +64,9 @@ export default class UserModel {
     return `${this.first_name.charAt(0).toUpperCase()}${this.last_name
       .charAt(0)
       .toUpperCase()}`;
+  }
+
+  get avatar_url() {
+    return this.avatar?.url ?? '';
   }
 }

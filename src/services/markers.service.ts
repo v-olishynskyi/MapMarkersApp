@@ -4,7 +4,7 @@ import { Marker } from '@common/types/entities';
 
 export class MarkersService {
   public static async getAll() {
-    const { data } = await api.get<Marker[]>('markers');
+    const { data } = await api.get<Marker[]>('markers/all');
 
     return data;
   }
