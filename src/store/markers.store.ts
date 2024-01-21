@@ -42,11 +42,11 @@ export default class MarkersStore {
       description: '',
       is_draft: false,
       is_hidden: false,
-      user_id: this.rootStore.userStore.user.id,
-      user: this.rootStore.userStore.user,
+      author_id: this.rootStore.userStore.user.id,
+      author: this.rootStore.userStore.user,
       images: [],
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: new Date().toDateString(),
+      updated_at: new Date().toDateString(),
     };
 
     const markerModel = new MarkerModel(temporaryMarkerData);
@@ -65,7 +65,7 @@ export default class MarkersStore {
         description: this.editableMarker?.description || '',
         is_draft: true,
         is_hidden: true,
-        user_id: this.rootStore.userStore.user.id,
+        author_id: this.rootStore.userStore.user.id,
         images,
       };
 
@@ -96,7 +96,7 @@ export default class MarkersStore {
         name: markerData.name,
         latitude: markerData.latitude,
         longitude: markerData.longitude,
-        user_id: this.rootStore.userStore.user.id,
+        author_id: this.rootStore.userStore.user.id,
         is_draft: true,
         is_hidden: true,
         images,

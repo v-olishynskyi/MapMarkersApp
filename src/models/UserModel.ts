@@ -1,5 +1,5 @@
-import { User, UserSession } from '@common/types/entities';
-import { ListItems, UserSessionModel } from '@models';
+import { Group, Marker, User, UserSession } from '@common/types/entities';
+import { ListItems, UserSessionModel, GroupModel } from '@models';
 import { UpdateUserData, UsersService } from '@services';
 
 export default class UserModel {
@@ -11,9 +11,12 @@ export default class UserModel {
   username: User['username'];
   avatar: User['avatar'];
   sessions: ListItems<UserSession>;
+  groups: ListItems<Group>;
+  own_groups: ListItems<Group>;
+  markers: ListItems<Marker>;
 
-  created_at: User['created_at'];
-  updated_at: User['updated_at'];
+  created_at: string;
+  updated_at: string;
 
   constructor(user: User) {
     return this.handleData(user);
@@ -22,11 +25,20 @@ export default class UserModel {
   private handleData(user: User) {
     // @ts-ignore
     Object.keys(user).forEach(key => (this[key] = user[key]));
-    if (user.sessions) {
+
+    if (user.sessions?.length) {
       this.sessions = new ListItems<UserSession>(
         UserSessionModel,
         user.sessions,
       );
+    }
+
+    if (user.groups?.length) {
+      this.groups = new ListItems<Group>(GroupModel, user.groups);
+    }
+
+    if (user?.own_groups?.length) {
+      //   this.own_groups = new ListItems<Group>(GroupModel, user.own_groups);
     }
 
     return this;
@@ -45,7 +57,7 @@ export default class UserModel {
     return response;
   }
 
-  async update(data: UpdateUserData) {
+  async update(data: UpdateUserData | FormData) {
     const newUserData = await UsersService.update(this.id, data);
 
     this.handleData(newUserData);
@@ -53,7 +65,7 @@ export default class UserModel {
   }
 
   public static async update(id: string, data: UpdateUserData) {
-    return await UsersService.update(id, data);
+    return UsersService.update(id, data);
   }
 
   get fullname() {

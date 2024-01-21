@@ -1,10 +1,11 @@
 import { UserModel } from '@models';
-import { AuthService, UpdateProfileData, UsersService } from '@services';
+import { AuthService, UsersService } from '@services';
 import { RootStore } from '@store/root.store';
-import { showToast } from '@common/helpers';
+import { IS_IOS, showToast } from '@common/helpers';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { User } from '@common/types/entities';
 import { Coordinates } from '@common/types';
+import { Image } from 'react-native-image-crop-picker';
 
 export class UserStore {
   rootStore: RootStore;
@@ -12,13 +13,11 @@ export class UserStore {
   isLoading: boolean = false;
   isSaving: boolean = false;
   isTerminatingSession: boolean = false;
+  isUpdatingAvatar: boolean = false;
 
   user: UserModel = {} as UserModel;
 
   userCoordinates: Coordinates | null = null;
-
-  updateFormData: UpdateProfileData = {} as UpdateProfileData;
-  updateFormErrors: Partial<UpdateProfileData>;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -28,12 +27,6 @@ export class UserStore {
 
   handleData(user: User) {
     this.user = new UserModel(user);
-
-    const updatedKeys = Object.keys(user).filter(
-      key => key !== 'id' && key !== 'email' && key !== 'sessions',
-    );
-    // @ts-ignore
-    updatedKeys.forEach(key => (this.updateFormData[key] = user[key]));
   }
 
   async loadProfile() {
@@ -54,11 +47,11 @@ export class UserStore {
     }
   }
 
-  async updateProfile() {
+  async updateProfile(values: any) {
     try {
       this.isSaving = true;
 
-      const newData = await this.user.update(this.updateFormData);
+      const newData = await this.user.update(values);
 
       runInAction(() => {
         this.handleData(newData);
@@ -73,15 +66,41 @@ export class UserStore {
     }
   }
 
-  onChangeUpdateData(field: keyof UpdateProfileData, value: any) {
-    this.updateFormData[field] = value;
+  async changeAvatar(file: Image) {
+    try {
+      const name = file.filename || `${this.user.id}-avatar`;
+      const type = file.mime;
+      const uri = IS_IOS ? file.path?.replace('file://', '') : file.path;
+
+      let formData = new FormData();
+
+      formData.append('file', {
+        name,
+        type,
+        uri,
+      } as unknown as Blob);
+
+      const response = await this.user.update(formData);
+
+      const newUser = new UserModel(response);
+      runInAction(() => {
+        this.user = newUser;
+      });
+    } catch (error: any) {
+      showToast('error', error.message);
+      runInAction(() => {});
+      throw error;
+    }
   }
 
-  resetUpdateFormData() {
-    Object.keys(this.updateFormData).forEach(
-      // @ts-ignore
-      key => (this.updateFormData[key] = this[key]),
-    );
+  async removeAvatar() {
+    try {
+      await this.user.update({ avatar: null });
+    } catch (error: any) {
+      showToast('error', error.message);
+      runInAction(() => {});
+      throw error;
+    }
   }
 
   setIsLoading(value: boolean) {
@@ -112,14 +131,5 @@ export class UserStore {
       this.user.sessions = sessions;
       this.isTerminatingSession = false;
     }
-  }
-
-  async validateUpdateForm() {
-    // return await new Promise(resolve => {
-    //   let errors = {};
-    //   Object.keys(this.updateFormData).forEach(key => {
-    //     const value = this.updateFormData[key];
-    //   });
-    // });
   }
 }

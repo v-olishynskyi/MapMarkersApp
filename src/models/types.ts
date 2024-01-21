@@ -4,19 +4,22 @@ import {
   PublicFile,
   User,
   UserSession,
+  Group,
 } from '@common/types/entities';
 import {
   MarkerModel,
   UserModel,
   UserSessionModel,
   PublicFileModel,
+  GroupModel,
 } from '@models';
 
 export type Models =
   | UserModel
   | MarkerModel
   | UserSessionModel
-  | PublicFileModel;
+  | PublicFileModel
+  | GroupModel;
 
 export type EntityToModel<T extends Entities> = T extends User
   ? UserModel
@@ -24,8 +27,10 @@ export type EntityToModel<T extends Entities> = T extends User
   ? MarkerModel
   : T extends UserSession
   ? UserSessionModel
-  : T extends PublicFileModel
+  : T extends PublicFile
   ? PublicFileModel
+  : T extends Group
+  ? GroupModel
   : never;
 
 export type ModelConstructor<T extends Entities> = T extends User
@@ -36,4 +41,6 @@ export type ModelConstructor<T extends Entities> = T extends User
   ? typeof UserSessionModel
   : T extends PublicFile
   ? typeof PublicFileModel
+  : T extends Group
+  ? typeof GroupModel
   : never;

@@ -42,16 +42,36 @@ const ProfileTab: React.FC = () => {
       user: { id, avatar_url, fullname, initials, email },
     },
     authStore: { logout, isLoading },
-    profileViewStore: { setUserId },
   } = useStores();
 
   const goToProfile = () => {
-    setUserId(id);
-    navigate('profile-view');
+    navigate('profile-view', { userId: id });
   };
   const goToSettins = () => navigate('settings');
   const goToSupport = () => navigate('support');
   const goToAboutUs = () => navigate('about-us');
+
+  const MenuItem = React.useCallback(
+    ({
+      icon,
+      label,
+      onPress,
+    }: {
+      icon: string;
+      label: string;
+      onPress: VoidFunction;
+    }) => (
+      <Pressable style={styles.pressable} onPress={onPress}>
+        <View style={styles.row}>
+          <Icon name={icon} size={24} style={styles.icon} color={colors.text} />
+          <Text style={styles.pressableText}>{label}</Text>
+        </View>
+        <Icon name="chevron-forward-outline" size={24} color={colors.gray} />
+      </Pressable>
+    ),
+    // eslint-disable-next-line
+    [],
+  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -71,59 +91,27 @@ const ProfileTab: React.FC = () => {
       <View style={styles.divider} />
 
       <View style={styles.block}>
-        <Pressable style={styles.pressable} onPress={goToProfile}>
-          <View style={styles.row}>
-            <Icon
-              name="person-outline"
-              size={24}
-              style={styles.icon}
-              color={colors.text}
-            />
-            <Text style={styles.pressableText}>Профіль</Text>
-          </View>
-          <Icon name="chevron-forward-outline" size={24} color={colors.gray} />
-        </Pressable>
-        <Pressable style={styles.pressable} onPress={goToSettins}>
-          <View style={styles.row}>
-            <Icon
-              name="settings-outline"
-              size={24}
-              style={styles.icon}
-              color={colors.text}
-            />
-            <Text style={styles.pressableText}>Налаштування</Text>
-          </View>
-          <Icon name="chevron-forward-outline" size={24} color={colors.gray} />
-        </Pressable>
+        <MenuItem icon="person-outline" label="Профіль" onPress={goToProfile} />
+        <MenuItem
+          icon="settings-outline"
+          label="Налаштування"
+          onPress={goToSettins}
+        />
       </View>
 
       <View style={styles.divider} />
 
       <View style={styles.block}>
-        <Pressable style={styles.pressable} onPress={goToSupport}>
-          <View style={styles.row}>
-            <Icon
-              name="help-circle-outline"
-              size={24}
-              style={styles.icon}
-              color={colors.text}
-            />
-            <Text style={styles.pressableText}>Підтримка</Text>
-          </View>
-          <Icon name="chevron-forward-outline" size={24} color={colors.gray} />
-        </Pressable>
-        <Pressable style={styles.pressable} onPress={goToAboutUs}>
-          <View style={styles.row}>
-            <Icon
-              name="information-circle-outline"
-              size={24}
-              style={styles.icon}
-              color={colors.text}
-            />
-            <Text style={styles.pressableText}>Про нас</Text>
-          </View>
-          <Icon name="chevron-forward-outline" size={24} color={colors.gray} />
-        </Pressable>
+        <MenuItem
+          icon="help-circle-outline"
+          label="Підтримка"
+          onPress={goToSupport}
+        />
+        <MenuItem
+          icon="information-circle-outline"
+          label="Про нас"
+          onPress={goToAboutUs}
+        />
       </View>
 
       <View style={styles.divider} />

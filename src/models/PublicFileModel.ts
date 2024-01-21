@@ -4,8 +4,8 @@ export default class PublicFileModel {
   id: PublicFile['id'];
   url: PublicFile['url'];
   key: PublicFile['key'];
-  created_at: PublicFile['created_at'];
-  updated_at: PublicFile['updated_at'];
+  created_at: string;
+  updated_at: string;
 
   constructor(file: PublicFile) {
     this.id = file.id;
@@ -14,10 +14,11 @@ export default class PublicFileModel {
   }
 
   handleData(file: PublicFile) {
-    this.id = file.id;
-    this.url = file.url;
-    this.key = file.key;
-    this.created_at = file.created_at;
-    this.updated_at = file.updated_at;
+    const keys = Object.keys(file);
+
+    // @ts-ignore
+    keys.forEach(key => (this[key] = file[key]));
+
+    return this;
   }
 }

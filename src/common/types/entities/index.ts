@@ -10,6 +10,8 @@ export type User = {
   username: string | null;
   avatar: PublicFile | null;
   sessions?: UserSession[];
+  groups: Group[];
+  own_groups?: Group[];
 
   created_at: string;
   updated_at: string;
@@ -22,8 +24,9 @@ export type UserSession = {
   ip: string | null;
   app_version: string | null;
   location: string | null;
-  created_at: Date;
-  updated_at: Date;
+
+  created_at: string;
+  updated_at: string;
 };
 
 export type Marker = {
@@ -33,20 +36,33 @@ export type Marker = {
   latitude: number;
   longitude: number;
   images: PublicFile[];
-  user_id: string;
-  user: User | UserModel; // TODO: CHANGE TO User
+  author_id: string;
+  author: User | UserModel; // TODO: CHANGE TO User
   is_draft: boolean;
   is_hidden: boolean;
-  created_at: Date;
-  updated_at: Date;
+
+  created_at: string;
+  updated_at: string;
 };
 
 export type PublicFile = {
   id: string;
   key: string | null;
   url: string;
+
   created_at: string;
   updated_at: string;
 };
 
-export type Entities = User | Marker | UserSession | PublicFile;
+export type Group = {
+  id: string;
+  name: string;
+  owner_id: string;
+  owner: User;
+  members: User[];
+
+  created_at: string;
+  updated_at: string;
+};
+
+export type Entities = User | Marker | UserSession | PublicFile | Group;

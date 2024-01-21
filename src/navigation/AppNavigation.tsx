@@ -10,55 +10,13 @@ import {
   Sessions,
   Settings,
 } from '@screens';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { HeaderButton, IconButton, Pressable } from '@components';
-import { getTheme } from '@common/helpers';
-import { useStores } from '@store';
+import { IconButton } from '@components';
 import { observer } from 'mobx-react-lite';
 import { Map, MarkerBottomSheet } from '@modules';
 
 const Stack = createNativeStackNavigator<AppStackParamsList>();
 
 const AppNavigation: React.FC = () => {
-  const { colors } = getTheme();
-  const {
-    userStore: { isSaving, updateProfile, resetUpdateFormData },
-    profileViewStore: { isMe },
-  } = useStores();
-
-  const profileHeaderRight = React.useCallback(() => {
-    return isMe ? (
-      <Pressable onPress={() => navigationRef.navigate('edit-profile' as any)}>
-        <Icon name="md-pencil" size={24} color={colors.primary} />
-      </Pressable>
-    ) : null;
-  }, [colors.primary, isMe]);
-
-  const editProfileHeaderLeft = React.useCallback(
-    ({ canGoBack }: { canGoBack: boolean }) => (
-      <HeaderButton
-        canGoBack={canGoBack}
-        color={colors.red}
-        label={'Відмінити'}
-        onPress={resetUpdateFormData}
-        backRoute={'profile-view'}
-      />
-    ),
-    [colors.red, resetUpdateFormData],
-  );
-  const editProfileHeaderRight = React.useCallback(
-    ({ canGoBack }: { canGoBack: boolean }) => (
-      <HeaderButton
-        canGoBack={canGoBack}
-        color={colors.primary}
-        label={'Зберегти'}
-        loading={isSaving}
-        onPress={updateProfile}
-        backRoute={'profile-view'}
-      />
-    ),
-    [colors.primary, updateProfile, isSaving],
-  );
   const locationHeaderLeft = React.useCallback(
     () => <IconButton icon="close" onPress={navigationRef.goBack} />,
     [],
@@ -94,7 +52,6 @@ const AppNavigation: React.FC = () => {
           component={ProfileView}
           options={{
             title: 'Профіль',
-            headerRight: profileHeaderRight,
           }}
         />
         <Stack.Screen
@@ -104,8 +61,6 @@ const AppNavigation: React.FC = () => {
             presentation: 'formSheet',
             title: 'Редагування профілю',
             headerBackVisible: true,
-            headerLeft: editProfileHeaderLeft,
-            headerRight: editProfileHeaderRight,
           }}
         />
         <Stack.Screen

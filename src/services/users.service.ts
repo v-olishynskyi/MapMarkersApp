@@ -16,7 +16,7 @@ export class UsersService {
     return data;
   }
 
-  public static async update(id: string, params: UpdateUserData) {
+  public static async update(id: string, params: UpdateUserData | FormData) {
     const { data } = await api.put<User>(`users/${id}`, params);
 
     return data;
@@ -28,7 +28,9 @@ export class UsersService {
     search?: string,
   ) {
     const { data } = await api.get<PaginationResponse<CommunityUser>>(
-      `users?page=${page}&limit=${limit}${search ? `&search=${search}` : ''}`,
+      `users/paginated?page=${page}&limit=${limit}${
+        search ? `&search=${search}` : ''
+      }`,
     );
 
     return data;

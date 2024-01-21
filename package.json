@@ -51,7 +51,7 @@
     "react-native-svg": "^13.9.0",
     "react-native-toast-message": "^2.1.6",
     "react-native-typography": "^1.4.1",
-    "react-native-ui-lib": "^7.11.3",
+    "react-native-ui-lib": "^7.15.0",
     "react-native-vector-icons": "^9.2.0",
     "use-debounce": "^9.0.4",
     "uuid": "^9.0.0",

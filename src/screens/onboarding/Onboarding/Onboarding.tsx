@@ -6,7 +6,8 @@
 import React from 'react';
 import useStyles from './styles';
 import { Image, ScrollView, Text, View } from 'react-native';
-import { Button, Carousel } from 'react-native-ui-lib';
+import Carousel from 'react-native-ui-lib/carousel';
+import Button from 'react-native-ui-lib/button';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamsList } from '@navigation';

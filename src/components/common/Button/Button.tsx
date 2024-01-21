@@ -7,7 +7,7 @@ import React from 'react';
 import useStyles from './styles';
 import { ButtonProps } from './types';
 import { ActivityIndicator } from 'react-native';
-import { Button as RNUILibButton } from 'react-native-ui-lib';
+import RNUILibButton from 'react-native-ui-lib/button';
 
 /**
  * Button

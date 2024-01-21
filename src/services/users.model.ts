@@ -2,12 +2,14 @@ import { User } from '@common/types/entities';
 
 export type CommunityUser = Omit<User, 'sessions'>;
 
-export type UpdateProfileData = Omit<
-  User,
-  'id' | 'email' | 'createdAt' | 'updatedAt'
+export type UpdateProfileData = Partial<
+  Pick<User, 'first_name' | 'last_name' | 'middle_name' | 'username'> & {
+    avatar?: null;
+  }
 >;
 
-export type UpdateUserData = Omit<
-  User,
-  'id' | 'email' | 'createdAt' | 'updatedAt'
+export type UpdateUserData = Partial<
+  Pick<User, 'first_name' | 'last_name' | 'middle_name' | 'username'> & {
+    avatar?: null;
+  }
 >;

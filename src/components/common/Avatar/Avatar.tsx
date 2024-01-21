@@ -7,7 +7,7 @@ import React from 'react';
 import { Image, Text, View } from 'react-native';
 import { AvatarProps } from './types';
 import useStyles from './styles';
-import { Avatar as RNUiLibAvatar } from 'react-native-ui-lib';
+import RNUiLibAvatar from 'react-native-ui-lib/avatar';
 import Modal from 'react-native-modal';
 import { WINDOW_WIDTH } from '@gorhom/bottom-sheet';
 import { useStores } from '@store';

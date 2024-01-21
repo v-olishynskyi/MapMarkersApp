@@ -7,8 +7,8 @@ export default class UserSessionModel {
   ip: UserSession['ip'];
   app_version: UserSession['app_version'];
   location: UserSession['location'];
-  created_at: UserSession['created_at'];
-  updated_at: UserSession['updated_at'];
+  created_at: string;
+  updated_at: string;
 
   constructor(userSession: UserSession) {
     return this.handleData(userSession);
