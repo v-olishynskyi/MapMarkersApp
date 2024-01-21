@@ -56,7 +56,6 @@ const CommunityTab: React.FC = () => {
       search,
       setSearch,
     },
-    profileViewStore: { setUserId },
   } = useStores();
 
   const debouncedLoad = useDebouncedCallback(() => {
@@ -67,10 +66,9 @@ const CommunityTab: React.FC = () => {
 
   const onPress = React.useCallback(
     (user: UserModel) => {
-      setUserId(user.id);
       navigation.navigate('profile-view', { userId: user.id });
     },
-    [navigation, setUserId],
+    [navigation],
   );
 
   const loadUsers = React.useCallback(
