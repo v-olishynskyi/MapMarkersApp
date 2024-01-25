@@ -11,9 +11,7 @@ const useStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
     },
-    bigAvatar: {
-      resizeMode: 'contain',
-    },
+
     actions: {
       position: 'absolute',
       top: top,

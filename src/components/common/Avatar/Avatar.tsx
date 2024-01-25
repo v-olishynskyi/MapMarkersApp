@@ -4,14 +4,14 @@
  * @subcategory
  *  */
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { AvatarProps } from './types';
 import useStyles from './styles';
 import RNUiLibAvatar from 'react-native-ui-lib/avatar';
 import Modal from 'react-native-modal';
 import { WINDOW_WIDTH } from '@gorhom/bottom-sheet';
 import { useStores } from '@store';
-import { Pressable } from '@components';
+import { FastImageProgress, Pressable } from '@components';
 import { Size } from '@common/types';
 
 /**
@@ -83,9 +83,10 @@ const Avatar: React.FC<AvatarProps> = ({
               </Pressable>
             </View>
             <View style={styles.avatarModalContainer}>
-              <Image
+              <FastImageProgress
                 source={{ uri: url || '' }}
-                style={[styles.bigAvatar, { ...imageSize }]}
+                style={[{ ...imageSize }]}
+                resizeMode="contain"
               />
             </View>
           </>

@@ -6,8 +6,8 @@
 import React from 'react';
 import { Image as NativeImage } from 'react-native';
 import { ResponsiveImageProps } from './types';
-import Image from 'react-native-image-progress';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { FastImageProgress } from '@components';
 
 /**
  * ResponsiveImage
@@ -35,12 +35,7 @@ const ResponsiveImage: React.FC<ResponsiveImageProps> = ({ uri, ...rest }) => {
   }, [uri]);
 
   return (
-    <Image
-      source={{ uri }}
-      resizeMode="contain"
-      style={{ ...imageSize }}
-      {...rest}
-    />
+    <FastImageProgress source={{ uri }} style={{ ...imageSize }} {...rest} />
   );
 };
 
