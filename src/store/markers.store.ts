@@ -59,14 +59,13 @@ export default class MarkersStore {
     try {
       const images = this.editableMarker?.images.items.map(({ id }) => id);
 
-      const draftData: CreateMarkerData = {
+      const draftData: CreateMarkerData['data'] = {
         ...coordinates,
         name: this.editableMarker?.name || '',
         description: this.editableMarker?.description || '',
         is_draft: true,
         is_hidden: true,
         author_id: this.rootStore.userStore.user.id,
-        images,
       };
 
       const marker = await MarkersService.create(draftData);
@@ -81,28 +80,25 @@ export default class MarkersStore {
     }
   }
 
-  setEditableMarker(marker: MarkerModel) {
-    this.editableMarker = marker;
-  }
-
   async createMarker(markerData: MarkerModel) {
     try {
       this.isProcessing = true;
 
-      const images = markerData.images.items.map(({ id }) => id);
+      const images = markerData.images.items;
 
-      const data: CreateMarkerData = {
+      const data: CreateMarkerData['data'] = {
         description: markerData.description || '',
         name: markerData.name,
         latitude: markerData.latitude,
         longitude: markerData.longitude,
         author_id: this.rootStore.userStore.user.id,
-        is_draft: true,
-        is_hidden: true,
-        images,
+        is_draft: false,
+        is_hidden: false,
       };
 
-      const marker = await MarkerModel.create(data);
+      throw new Error('as');
+
+      const marker = await MarkersService.create({ data, images });
       const markerModel = new MarkerModel(marker);
 
       runInAction(() => {
@@ -115,10 +111,14 @@ export default class MarkersStore {
         this.isProcessing = false;
       });
     } catch (error: any) {
-      showToast('error', error.message);
+      console.log('createMarker error', error);
+
+      showToast('error', error.message || error);
       runInAction(() => {
         this.isProcessing = false;
       });
+
+      throw error;
     }
   }
 
@@ -151,6 +151,10 @@ export default class MarkersStore {
     } catch (error: any) {
       showToast('error', error.message);
     }
+  }
+
+  setEditableMarker(marker: MarkerModel) {
+    this.editableMarker = marker;
   }
 
   clearEditableMarker() {

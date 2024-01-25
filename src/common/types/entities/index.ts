@@ -49,6 +49,7 @@ export type PublicFile = {
   id: string;
   key: string | null;
   url: string;
+  mime?: string;
 
   created_at: string;
   updated_at: string;

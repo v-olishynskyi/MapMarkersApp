@@ -36,32 +36,38 @@ const MarkerManagement: React.FC = () => {
   } = useStores();
 
   const shouldPreventGoBack = React.useRef<boolean>(true);
+  const shouldPreventGoBackCauseError = React.useRef<boolean>(false);
 
   const onSubmit: (values: FormState) => Promise<void> = React.useCallback(
     async values => {
-      shouldPreventGoBack.current = false;
-      if (!editableMarker) {
-        return;
-      }
+      try {
+        shouldPreventGoBack.current = false;
+        if (!editableMarker) {
+          return;
+        }
 
-      const validationErrors = await validateForm(values);
-      if (Object.keys(validationErrors).length) {
-        setErrors(validationErrors);
-        return;
-      }
+        const validationErrors = await validateForm(values);
+        if (Object.keys(validationErrors).length) {
+          setErrors(validationErrors);
+          return;
+        }
 
-      if (isCreateMode) {
-        await createMarker(editableMarker);
-      } else {
-        const images = editableMarker.images.items.map(({ id }) => id);
-        const data: UpdateMarkerData = {
-          ...editableMarker,
-          ...values,
-          id: editableMarker.id,
-          images,
-        };
+        if (isCreateMode) {
+          await createMarker(editableMarker);
+        } else {
+          const images = editableMarker.images.items.map(({ id }) => id);
+          const data: UpdateMarkerData = {
+            ...editableMarker,
+            ...values,
+            id: editableMarker.id,
+            images,
+          };
 
-        await updateMarker(editableMarker.id, data);
+          await updateMarker(editableMarker.id, data);
+        }
+      } catch (error) {
+        shouldPreventGoBackCauseError.current = true;
+        shouldPreventGoBack.current = true;
       }
     },
     [
@@ -138,7 +144,7 @@ const MarkerManagement: React.FC = () => {
         color={colors.primary}
         label={isCreateMode ? 'Створити' : 'Зберегти'}
         loading={isProcessing}
-        onPress={() => onSubmit(values)}
+        onPress={async () => await onSubmit(values)}
         backRoute={'map'}
         disabled={!isValid}
       />
@@ -183,12 +189,14 @@ const MarkerManagement: React.FC = () => {
         };
 
         const onCreateDraftAndGoBack = async () => {
-          await createDraftMarker({
-            latitude: editableMarker!.latitude,
-            longitude: editableMarker!.longitude,
-          });
+          await createDraftMarker(values);
           return onGoBack();
         };
+
+        if (shouldPreventGoBackCauseError.current) {
+          shouldPreventGoBackCauseError.current = false;
+          return e.preventDefault();
+        }
 
         if (shouldPreventGoBack.current) {
           e.preventDefault();

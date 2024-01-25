@@ -9,4 +9,6 @@ export { default as MenuItem } from './MenuItem/MenuItem';
 export { default as Loader } from './Loader/Loader';
 export { default as IconButton } from './IconButton/IconButton';
 export { default as HeaderButton } from './HeaderButton/HeaderButton';
-export { default as ImageViewerWrapper } from './ImageViewerWrapper/ImageViewerWrapper';
+export { default as ImageViewer } from './ImageViewer/ImageViewer';
+export { default as AnimatedImageLibrary } from './AnimatedImageLibrary/AnimatedImageLibrary';
+export { default as FastImageProgress } from './FastImageProgress/FastImageProgress';

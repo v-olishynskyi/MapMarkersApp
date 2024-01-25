@@ -4,6 +4,7 @@ export default class PublicFileModel {
   id: PublicFile['id'];
   url: PublicFile['url'];
   key: PublicFile['key'];
+  mime: PublicFile['mime'];
   created_at: string;
   updated_at: string;
 

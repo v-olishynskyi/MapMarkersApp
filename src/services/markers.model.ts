@@ -1,9 +1,9 @@
-import { Marker } from '@common/types/entities';
+import { Marker, PublicFile } from '@common/types/entities';
 
-export type CreateMarkerData = Omit<
-  Marker,
-  'id' | 'created_at' | 'updated_at' | 'images' | 'author'
-> & { images?: string[] };
+export type CreateMarkerData = {
+  data: Omit<Marker, 'id' | 'created_at' | 'updated_at' | 'images' | 'author'>;
+  images?: PublicFile[];
+};
 
 export type UpdateMarkerData = Omit<
   Marker,

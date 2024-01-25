@@ -16,7 +16,23 @@ export class MarkersService {
   }
 
   public static async create(body: CreateMarkerData) {
-    const { data } = await api.post<Marker>('markers', body);
+    const formData = new FormData();
+
+    body?.images?.forEach(file => {
+      formData.append('images', {
+        name: file.key || '',
+        type: file.mime || 'image/jpg',
+        uri: file.url,
+      } as unknown as Blob);
+    });
+
+    formData.append('marker', JSON.stringify(body.data));
+
+    const { data } = await api.post<Marker>('markers', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
     return data;
   }

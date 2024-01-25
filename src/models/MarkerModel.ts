@@ -2,6 +2,7 @@ import { Marker, PublicFile } from '@common/types/entities';
 import { CreateMarkerData, MarkersService, UpdateMarkerData } from '@services';
 import { makeAutoObservable } from 'mobx';
 import { ListItems, PublicFileModel, UserModel } from '@models';
+import { Image } from 'react-native-image-crop-picker';
 
 export default class MarkerModel {
   id: Marker['id'];
@@ -60,6 +61,19 @@ export default class MarkerModel {
 
   setLongitude(value: number) {
     this.longitude = value;
+  }
+
+  addTemporaryImage(index: string, file: Image) {
+    const temporaryImage = new PublicFileModel({
+      id: index,
+      url: file.path,
+      key: file.filename || `marker-${this.id}-image-${index}`,
+      mime: file.mime,
+      created_at: new Date().toString(),
+      updated_at: new Date().toString(),
+    });
+
+    this.images.push(temporaryImage);
   }
 
   addImage(id: string, uri?: string) {

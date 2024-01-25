@@ -6,20 +6,15 @@
 import React from 'react';
 import useStyles from './styles';
 import { MarkerBottomSheetContentProps } from './types';
-import {
-  BottomSheetScrollView,
-  BottomSheetFlatList,
-} from '@gorhom/bottom-sheet';
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useStores } from '@store';
-import { View, Text, Image } from 'react-native';
-import { Button, IconButton, Loader } from '@components';
+import { View, Text } from 'react-native';
+import { AnimatedImageLibrary, Button, IconButton, Loader } from '@components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStackParamsList, MarkerManagementModes } from '@navigation';
 import { MenuView, NativeActionEvent } from '@react-native-menu/menu';
 import { MenuActions } from './types';
-import { ListRenderItem } from 'react-native';
-import { PublicFile } from '@common/types/entities';
 import { observer } from 'mobx-react-lite';
 
 /**
@@ -71,19 +66,26 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
     }
   };
 
-  const renderMarkerImage: ListRenderItem<PublicFile> = React.useCallback(
-    ({ item: { url } }) => (
-      <Image style={styles.markerImage} source={{ uri: url }} />
-    ),
-    [styles.markerImage],
-  );
-
   const loadMarkerError = (
     <>
       <Text style={styles.errorLabel}>Щось пішло не так. Спробуйте ще раз</Text>
       <Button label="Повторити" onPress={loadActiveMarker} />
     </>
   );
+
+  const menuViewActions = [
+    {
+      id: MenuActions.DELETE,
+      title: 'Видалити',
+      attributes: { destructive: true },
+      image: 'trash',
+    },
+    {
+      id: MenuActions.EDIT,
+      title: 'Редагувати',
+      image: 'pencil',
+    },
+  ];
 
   const header = (
     <>
@@ -92,19 +94,7 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
         <View style={styles.headerActions}>
           <View style={styles.markerActions}>
             <MenuView
-              actions={[
-                {
-                  id: MenuActions.DELETE,
-                  title: 'Видалити',
-                  attributes: { destructive: true },
-                  image: 'trash',
-                },
-                {
-                  id: MenuActions.EDIT,
-                  title: 'Редагувати',
-                  image: 'pencil',
-                },
-              ]}
+              actions={menuViewActions}
               themeVariant={theme}
               onPressAction={handlePressMenuAction}>
               <IconButton icon="ellipsis-horizontal-sharp" />
@@ -117,22 +107,24 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
     </>
   );
 
-  const data = activeMarker?.images?.items?.length
-    ? activeMarker.images.items
-    : [];
+  const images = React.useMemo(
+    () =>
+      activeMarker?.images?.items?.length ? activeMarker.images.items : [],
+    [activeMarker?.images],
+  );
 
   const markerInfo = (
     <>
       <Text style={styles.description}>{activeMarker?.description}</Text>
-
-      <BottomSheetFlatList
+      <AnimatedImageLibrary images={images.map(({ url }) => url)} />
+      {/* <BottomSheetFlatList
         horizontal
         showsHorizontalScrollIndicator={false}
         data={data}
         renderItem={renderMarkerImage}
         style={styles.markerImageList}
         contentContainerStyle={styles.markerImageListContent}
-      />
+      /> */}
     </>
   );
 
