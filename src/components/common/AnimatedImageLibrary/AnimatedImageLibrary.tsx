@@ -91,7 +91,11 @@ const AnimatedImageLibrary: React.FC<AnimatedImageLibraryProps> = ({
 
   return (
     <>
-      <ImageStack images={images} onPress={showModal} />
+      <ImageStack
+        containerStyle={containerStyle}
+        images={images}
+        onPress={showModal}
+      />
       <Modal visible={isShowModal} transparent animationType={'fade'}>
         <Animated.View style={[styles.modalContainer]}>
           {modalHeader}

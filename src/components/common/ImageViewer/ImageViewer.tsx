@@ -7,12 +7,12 @@ import React from 'react';
 import useStyles from './styles';
 import { ImageViewerRef, ImageViewerProps } from './types';
 import { Modal, View } from 'react-native';
-import Carousel from 'react-native-ui-lib/carousel';
-import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ResponsiveImage } from './components';
-import { IconButton } from '@components';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Carousel from 'react-native-reanimated-carousel';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { AnimatedHeader, ResponsiveImage } from './components';
+import { StatusBar } from '@components';
+import { CarouselRenderItemInfo } from 'react-native-reanimated-carousel/lib/typescript/types';
+import { useSharedValue } from 'react-native-reanimated';
 
 /**
  * ImageViewer
@@ -27,12 +27,24 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const ImageViewer = React.forwardRef<ImageViewerRef, ImageViewerProps>(
   ({ images }, ref) => {
     const styles = useStyles();
-    const { top, bottom } = useSafeAreaInsets();
 
     const [visible, setVisible] = React.useState(false);
     const [viewedImageIndex, setViewedImageIndex] = React.useState(0);
+    const [isShowStatusBar] = React.useState(true);
+
+    const isShowHeaderSharedValue = useSharedValue(true);
 
     const closeModal = () => setVisible(false);
+
+    const onScrollEnd = (index: number) => {
+      setViewedImageIndex(index);
+    };
+
+    const renderItem = ({ item: url }: CarouselRenderItemInfo<string>) => (
+      <View style={styles.imageContainer}>
+        <ResponsiveImage uri={url} />
+      </View>
+    );
 
     React.useImperativeHandle(ref, () => ({
       show: index => {
@@ -44,30 +56,27 @@ const ImageViewer = React.forwardRef<ImageViewerRef, ImageViewerProps>(
       },
     }));
 
-    const header = (
-      <View style={styles.headerContainer}>
-        <IconButton
-          icon={<Icon name="close-outline" color={'white'} size={40} />}
-          style={styles.iconContainer}
-          onPress={closeModal}
-        />
-      </View>
-    );
-
     return (
       <Modal animationType="fade" transparent visible={visible}>
-        {header}
-        <Carousel
-          initialPage={viewedImageIndex}
-          pageHeight={SCREEN_HEIGHT - top - bottom}
-          showCounter
-          containerStyle={styles.carousel}>
-          <View style={styles.carousel}>
-            {images.map(uri => (
-              <ResponsiveImage key={uri} uri={uri} />
-            ))}
-          </View>
-        </Carousel>
+        <StatusBar hidden={isShowStatusBar} />
+        <AnimatedHeader
+          isShow={isShowHeaderSharedValue}
+          currentIndex={viewedImageIndex + 1}
+          numberOfAllItems={images.length}
+          onBack={closeModal}
+        />
+        <View style={styles.carousel}>
+          <Carousel
+            defaultIndex={viewedImageIndex}
+            loop
+            data={images}
+            renderItem={renderItem}
+            vertical={false}
+            width={SCREEN_WIDTH}
+            style={styles.carousel}
+            onScrollEnd={onScrollEnd}
+          />
+        </View>
       </Modal>
     );
   },

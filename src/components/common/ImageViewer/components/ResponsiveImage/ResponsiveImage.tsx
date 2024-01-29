@@ -4,10 +4,11 @@
  * @subcategory
  *  */
 import React from 'react';
-import { Image as NativeImage } from 'react-native';
+import { ActivityIndicator, Image as NativeImage } from 'react-native';
 import { ResponsiveImageProps } from './types';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { FastImageProgress } from '@components';
+import { Size } from '@common/types';
 
 /**
  * ResponsiveImage
@@ -20,10 +21,11 @@ import { FastImageProgress } from '@components';
  *  <ResponsiveImage />
  */
 const ResponsiveImage: React.FC<ResponsiveImageProps> = ({ uri, ...rest }) => {
-  const [imageSize, setImageSize] = React.useState<{
-    width: number;
-    height: number;
-  }>({ width: 0, height: 0 });
+  const [imageSize, setImageSize] = React.useState<Size>({
+    width: 0,
+    height: 0,
+  });
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     NativeImage.getSize(uri, (width, height) => {
@@ -31,11 +33,22 @@ const ResponsiveImage: React.FC<ResponsiveImageProps> = ({ uri, ...rest }) => {
       const newHeight = (height / width) * newWidth;
 
       setImageSize({ width: newWidth, height: newHeight });
+      setIsLoading(false);
     });
   }, [uri]);
 
-  return (
-    <FastImageProgress source={{ uri }} style={{ ...imageSize }} {...rest} />
+  return isLoading ? (
+    <ActivityIndicator />
+  ) : (
+    <FastImageProgress
+      source={{ uri }}
+      style={{
+        width: imageSize.width,
+        height: imageSize.height,
+        ...rest.style,
+      }}
+      {...rest}
+    />
   );
 };
 

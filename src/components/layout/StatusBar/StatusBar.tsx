@@ -4,7 +4,7 @@
  * @subcategory Layout component
  *  */
 import React from 'react';
-import { StatusBar as RNStatusBar } from 'react-native';
+import { StatusBar as RNStatusBar, StatusBarProps } from 'react-native';
 import { useStores } from '@store';
 import { getTheme } from '@common/helpers';
 
@@ -17,7 +17,7 @@ import { getTheme } from '@common/helpers';
  * // How to use StatusBar:
  *  <StatusBar />
  */
-const StatusBar: React.FC = () => {
+const StatusBar: React.FC<StatusBarProps> = props => {
   const {
     uiStore: { isDark },
   } = useStores();
@@ -30,6 +30,7 @@ const StatusBar: React.FC = () => {
       animated
       backgroundColor={bgColor}
       barStyle={isDark ? 'light-content' : 'dark-content'}
+      {...props}
     />
   );
 };
