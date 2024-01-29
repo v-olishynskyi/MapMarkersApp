@@ -14,9 +14,10 @@ type Props = {
   uri: string;
   isPressed: SharedValue<boolean>;
   index: number;
+  isLast?: boolean;
 };
 
-const AnimatedImage: React.FC<Props> = ({ uri, isPressed, index }) => {
+const AnimatedImage: React.FC<Props> = ({ uri, isPressed, index, isLast }) => {
   const styles = useStyles();
 
   const initialAngle = index === 0 ? 0 : getRandomInt(-10, 10, false);
@@ -37,7 +38,7 @@ const AnimatedImage: React.FC<Props> = ({ uri, isPressed, index }) => {
       zIndex: index,
       transform: [
         {
-          rotateZ: `${rotateAngle.value}deg`,
+          rotateZ: isLast ? '0deg' : `${rotateAngle.value}deg`,
         },
         { translateY },
       ],

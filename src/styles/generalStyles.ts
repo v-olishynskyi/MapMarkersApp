@@ -3,6 +3,7 @@ import { ViewStyle } from 'react-native';
 type GeneralStyles = {
   row: ViewStyle;
   rowBetween: ViewStyle;
+  flex1: ViewStyle;
 };
 
 export const generalStyles: GeneralStyles = {
@@ -15,4 +16,5 @@ export const generalStyles: GeneralStyles = {
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  flex1: { flex: 1 },
 };

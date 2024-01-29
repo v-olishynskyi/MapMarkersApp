@@ -16,11 +16,13 @@ import {
   Pressable,
 } from '@components';
 import Animated, {
+  SlideInDown,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
 import { ImageStack } from './components';
+import { generalStyles } from '@styles';
 
 /**
  * AnimatedImageLibrary
@@ -76,15 +78,19 @@ const AnimatedImageLibrary: React.FC<AnimatedImageLibraryProps> = ({
 
   const renderImage = React.useCallback(
     ({ item: url, index }: ListRenderItemInfo<string>) => (
-      <Pressable
-        style={styles.imageMiniatureContainer}
-        onPress={() => imageViewerRef.current?.show(index)}>
-        <FastImageProgress
-          source={{ uri: url }}
-          style={styles.imageMiniature}
-          resizeMode="cover"
-        />
-      </Pressable>
+      <Animated.View
+        style={[styles.imageMiniatureContainer]}
+        entering={SlideInDown}>
+        <Pressable
+          style={generalStyles.flex1}
+          onPress={() => imageViewerRef.current?.show(index)}>
+          <FastImageProgress
+            source={{ uri: url }}
+            style={styles.imageMiniature}
+            resizeMode="cover"
+          />
+        </Pressable>
+      </Animated.View>
     ),
     [styles.imageMiniature, styles.imageMiniatureContainer],
   );

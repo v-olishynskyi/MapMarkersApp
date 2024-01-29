@@ -49,6 +49,7 @@ const ImageStack: React.FC<ImageStackProps> = ({
             uri={uri}
             isPressed={isPressed}
             index={index}
+            isLast={index === images.length - 1}
           />
         );
       })}
