@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
-import { Avatar, ImageViewerWrapper, Pressable } from '@components';
+import { Avatar, ImageViewer, Pressable } from '@components';
 import { generalStyles } from '@styles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getTheme } from '@common/helpers';
@@ -23,7 +23,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionSheet from 'react-native-ui-lib/actionSheet';
 import { openPicker } from 'react-native-image-crop-picker';
 import useProfileViewUser from './hooks/useProfileViewUser';
-import { ImageViewerHandlers } from '@components/common/ImageViewerWrapper/ImageViewerWrapper';
 
 /**
  * ProfileView
@@ -46,7 +45,7 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
     userStore: { changeAvatar, removeAvatar },
   } = useStores();
 
-  const imageViewerRef = React.useRef<ImageViewerHandlers>(null);
+  const imageViewerRef = React.useRef<ImageViewer>(null);
 
   const { isLoading, user, loadUser, isMe } = useProfileViewUser(
     params?.userId || '',
@@ -160,10 +159,9 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
           onDismiss={onDismissActionSheet}
         />
       )}
-      <ImageViewerWrapper
-        ref={imageViewerRef}
-        images={[{ uri: user.avatar_url || '' }]}
-      />
+      {user.avatar_url && (
+        <ImageViewer ref={imageViewerRef} images={[user.avatar_url]} />
+      )}
     </>
   );
 });
