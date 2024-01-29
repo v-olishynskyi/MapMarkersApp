@@ -4,15 +4,9 @@
  * @subcategory
  *  */
 import React from 'react';
-import { Text, View } from 'react-native';
 import { AvatarProps } from './types';
-import useStyles from './styles';
 import RNUiLibAvatar from 'react-native-ui-lib/avatar';
-import Modal from 'react-native-modal';
-import { WINDOW_WIDTH } from '@gorhom/bottom-sheet';
-import { useStores } from '@store';
-import { FastImageProgress, Pressable } from '@components';
-import { Size } from '@common/types';
+import { ImageViewer } from '@components';
 
 /**
  * Avatar
@@ -31,28 +25,7 @@ const Avatar: React.FC<AvatarProps> = ({
   size = 64,
   ...rest
 }) => {
-  const {
-    uiStore: { isPortrait },
-  } = useStores();
-
-  const styles = useStyles();
-  const [showBigImage, setShowBigImage] = React.useState(false);
-
-  const openModal = () => setShowBigImage(true);
-  const closeModal = () => setShowBigImage(false);
-
-  const [imageSize, setImageSize] = React.useState<Size>({
-    width: 0,
-    height: 0,
-  });
-
-  React.useEffect(() => {
-    if (url) {
-      const width = WINDOW_WIDTH - 32;
-      const height = width * (isPortrait ? 16 / 9 : 9 / 16);
-      setImageSize({ height, width });
-    }
-  }, [url, isPortrait]);
+  const imageViewerRef = React.useRef<ImageViewer>(null);
 
   return (
     <>
@@ -65,33 +38,12 @@ const Avatar: React.FC<AvatarProps> = ({
           uri: url || undefined,
         }}
         size={size}
-        onPress={() => (url ? openModal() : null)}
+        onPress={() => {
+          return url ? imageViewerRef.current?.show() : null;
+        }}
         {...rest}
       />
-      {showBigImage && (
-        <Modal
-          onSwipeComplete={closeModal}
-          useNativeDriverForBackdrop
-          swipeDirection={['down']}
-          isVisible={showBigImage}
-          onDismiss={closeModal}
-          onBackdropPress={closeModal}>
-          <>
-            <View style={styles.actions}>
-              <Pressable onPress={closeModal}>
-                <Text style={styles.closeButton}>X</Text>
-              </Pressable>
-            </View>
-            <View style={styles.avatarModalContainer}>
-              <FastImageProgress
-                source={{ uri: url || '' }}
-                style={[{ ...imageSize }]}
-                resizeMode="contain"
-              />
-            </View>
-          </>
-        </Modal>
-      )}
+      {url && <ImageViewer ref={imageViewerRef} images={[url]} />}
     </>
   );
 };

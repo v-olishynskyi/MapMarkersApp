@@ -22,7 +22,7 @@ import { useSharedValue } from 'react-native-reanimated';
  *
  * @example
  * // How to use ImageViewer:
- *  <ImageViewerWrapper />
+ *  <ImageViewerWrapper ref={ref} images={['https://image-url.com]} />
  */
 const ImageViewer = React.forwardRef<ImageViewerRef, ImageViewerProps>(
   ({ images }, ref) => {
@@ -75,6 +75,7 @@ const ImageViewer = React.forwardRef<ImageViewerRef, ImageViewerProps>(
             width={SCREEN_WIDTH}
             style={styles.carousel}
             onScrollEnd={onScrollEnd}
+            enabled={images.length > 1}
           />
         </View>
       </Modal>
