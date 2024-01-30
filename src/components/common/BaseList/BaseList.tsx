@@ -6,7 +6,7 @@
 import React from 'react';
 import useStyles from './styles';
 import { BaseListProps } from './types';
-import { ActivityIndicator, FlatList, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { generalStyles } from '@styles';
 import { LoaderRefresh } from '@components';
 
@@ -52,6 +52,10 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
     <ActivityIndicator size={'large'} style={styles.loader} animating />
   );
 
+  const listEmptyComponent = (
+    <Text style={styles.emptyComponentLabel}>Дані відсутні</Text>
+  );
+
   return isLoading ? (
     loaderComponent
   ) : (
@@ -65,7 +69,11 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
       }}
       onEndReachedThreshold={0.8}
       refreshing={isRefreshing}
-      ListEmptyComponent={isLoading ? loaderComponent : rest.ListEmptyComponent}
+      ListEmptyComponent={
+        isLoading
+          ? loaderComponent
+          : rest.ListEmptyComponent || listEmptyComponent
+      }
       {...rest}
       ListFooterComponent={
         !isLoading && !isRefreshing && isFetchingNextPage ? <Footer /> : null

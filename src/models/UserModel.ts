@@ -1,5 +1,5 @@
 import { Group, Marker, User, UserSession } from '@common/types/entities';
-import { ListItems, UserSessionModel, GroupModel } from '@models';
+import { ListItems, UserSessionModel, GroupModel, MarkerModel } from '@models';
 import { UpdateUserData, UsersService } from '@services';
 
 export default class UserModel {
@@ -39,6 +39,10 @@ export default class UserModel {
 
     if (user?.own_groups?.length) {
       //   this.own_groups = new ListItems<Group>(GroupModel, user.own_groups);
+    }
+
+    if (user.markers?.length) {
+      this.markers = new ListItems<Marker>(MarkerModel, user.markers || []);
     }
 
     return this;

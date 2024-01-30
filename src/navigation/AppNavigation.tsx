@@ -9,6 +9,7 @@ import {
   ProfileView,
   Sessions,
   Settings,
+  UserMarkers,
 } from '@screens';
 import { IconButton } from '@components';
 import { observer } from 'mobx-react-lite';
@@ -40,11 +41,19 @@ const AppNavigation: React.FC = () => {
           }}
         />
         <Stack.Screen
-          name="sessions"
+          name="user-sessions"
           component={Sessions}
           options={{
             title: 'Пристрої',
-            headerBackTitle: 'Назад',
+            headerBackTitle: 'Налаштування',
+          }}
+        />
+        <Stack.Screen
+          name="user-markers"
+          component={UserMarkers}
+          options={{
+            title: 'Маркери',
+            headerBackTitle: 'Профіль',
           }}
         />
         <Stack.Screen
@@ -52,6 +61,7 @@ const AppNavigation: React.FC = () => {
           component={ProfileView}
           options={{
             title: 'Профіль',
+            headerBackTitle: 'Назад',
           }}
         />
         <Stack.Screen

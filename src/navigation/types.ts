@@ -21,7 +21,8 @@ export type AppStackParamsList = {
   support: undefined;
   'about-us': undefined;
   settings: undefined;
-  sessions: undefined;
+  'user-sessions': undefined;
+  'user-markers': { userId: string };
   'profile-view': { userId?: string } | undefined;
   'edit-profile': undefined;
   'marker-management': { mode: MarkerManagementModes };

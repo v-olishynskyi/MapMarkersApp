@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
-import { Avatar, ImageViewer, Pressable } from '@components';
+import { Avatar, ImageViewer, Menu, Pressable } from '@components';
 import { generalStyles } from '@styles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getTheme } from '@common/helpers';
@@ -63,6 +63,8 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
   const handlePressViewAvatar = () => imageViewerRef.current?.show();
   const handlePressAvatar = () =>
     isMe ? setShowActionSheet(true) : handlePressViewAvatar();
+  const navigateToUserMarkers = () =>
+    navigate('user-markers', { userId: user.id });
   const onDismissActionSheet = () => setShowActionSheet(false);
 
   const actionSheetOptions = [
@@ -120,33 +122,56 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
         ) : !user ? (
           noUserError
         ) : (
-          <View style={styles.profileContainer}>
-            <View style={styles.avatar_container}>
-              <Avatar
-                initials={user!.initials}
-                fullname={user!.fullname}
-                url={user.avatar_url}
-                size={110}
-                onPress={handlePressAvatar}
-              />
-            </View>
-            <Text style={styles.fullname}>{user?.fullname}</Text>
-            <Text style={styles.email}>{user?.email}</Text>
-            {user?.username ? (
-              <Text style={styles.email}>@{user.username}</Text>
-            ) : isMe ? (
-              <Pressable
-                style={generalStyles.rowBetween}
-                onPress={() => navigate('edit-profile')}>
-                <Text>Додати імʼя користувача</Text>
-                <Icon
-                  name="chevron-forward-outline"
-                  size={24}
-                  color={colors.gray}
+          <>
+            <View style={styles.profileContainer}>
+              <View style={styles.avatarContainer}>
+                <Avatar
+                  initials={user!.initials}
+                  fullname={user!.fullname}
+                  url={user.avatar_url}
+                  size={110}
+                  onPress={handlePressAvatar}
                 />
-              </Pressable>
-            ) : null}
-          </View>
+              </View>
+              <View style={[generalStyles.rowBetween]}>
+                <Text style={styles.label}>ПІБ</Text>
+                <Text style={styles.fullname}>{user?.fullname}</Text>
+              </View>
+              <View style={[generalStyles.rowBetween]}>
+                <Text style={styles.label}>E-mail</Text>
+                <Text style={styles.fullname}>{user?.email}</Text>
+              </View>
+              {user?.username ? (
+                <View style={[generalStyles.rowBetween]}>
+                  <Text style={styles.label}>Імʼя користувача</Text>
+                  <Text style={styles.fullname}>@{user.username}</Text>
+                </View>
+              ) : isMe ? (
+                <Pressable
+                  style={generalStyles.rowBetween}
+                  onPress={() => navigate('edit-profile')}>
+                  <Text style={styles.addUsernameButton}>
+                    Додати імʼя користувача
+                  </Text>
+                  <Icon
+                    name="chevron-forward-outline"
+                    size={24}
+                    color={colors.gray}
+                  />
+                </Pressable>
+              ) : null}
+            </View>
+            <Menu
+              style={styles.markers}
+              items={[
+                {
+                  label: 'Маркери',
+                  secondaryLabel: user.markers?.items?.length || 0,
+                  onPress: navigateToUserMarkers,
+                },
+              ]}
+            />
+          </>
         )}
       </ScrollView>
       {isMe && (

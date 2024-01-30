@@ -4,11 +4,11 @@ import useStyles from './styles';
 import { MenuProps } from './types';
 import { MenuItem } from '@components';
 
-const Menu: React.FC<MenuProps> = ({ items }) => {
+const Menu: React.FC<MenuProps> = ({ items, style }) => {
   const styles = useStyles();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {items.map((menuItemProps, index) => {
         const isLast = index === items.length - 1;
 

@@ -9,7 +9,7 @@ export type MenuItemProps = {
   icon?: React.ReactNode;
   iconColor?: ColorValue;
   label: string;
-  secondaryLabel?: string;
+  secondaryLabel?: string | number;
   disabled?: boolean;
   isLast?: boolean;
   containerStyle?: StyleProp<ViewStyle>;

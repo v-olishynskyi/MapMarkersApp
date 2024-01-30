@@ -12,6 +12,7 @@ export type User = {
   sessions?: UserSession[];
   groups: Group[];
   own_groups?: Group[];
+  markers: Marker[];
 
   created_at: string;
   updated_at: string;

@@ -49,7 +49,7 @@ const Settings: React.FC = () => {
                 color={colors.white}
               />
             ),
-            onPress: () => navigate('sessions'),
+            onPress: () => navigate('user-sessions'),
             iconColor: colors.orange,
             secondaryLabel: user.sessions.items.length.toString(),
           },

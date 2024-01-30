@@ -15,12 +15,16 @@ const useStyles = () => {
       paddingTop: spacingBase.s3,
       paddingBottom: spacingBase.s4,
       paddingHorizontal: spacingBase.s3,
-      justifyContent: 'space-between',
     },
     profileContainer: {},
-    avatar_container: {
+    avatarContainer: {
       alignItems: 'center',
       marginBottom: spacingBase.s4,
+    },
+
+    label: {
+      ...typography.regular.body,
+      color: colors.gray,
     },
 
     fullname: {
@@ -29,10 +33,13 @@ const useStyles = () => {
       color: colors.text,
       marginBottom: 4,
     },
-    email: {
+    addUsernameButton: {
       ...typography.regular.body,
-      color: colors.gray,
-      textAlign: 'center',
+      color: colors.primary,
+    },
+
+    markers: {
+      marginTop: spacingBase.s4,
     },
   });
 };

@@ -12,6 +12,8 @@ export default class MarkersStore {
   markers: ListItems<Marker>;
   editableMarker: MarkerModel | null = null;
 
+  markersByUser: ListItems<Marker>;
+
   isProcessing: boolean = false;
 
   constructor(rootStore: RootStore) {
@@ -95,8 +97,6 @@ export default class MarkersStore {
         is_draft: false,
         is_hidden: false,
       };
-
-      throw new Error('as');
 
       const marker = await MarkersService.create({ data, images });
       const markerModel = new MarkerModel(marker);

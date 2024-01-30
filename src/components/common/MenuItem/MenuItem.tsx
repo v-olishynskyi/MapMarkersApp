@@ -38,8 +38,12 @@ const MenuItem: React.FC<MenuItemProps> = ({
 
   const defaultActions = (
     <>
-      {secondaryLabel && (
-        <Text style={styles.secondaryLabel}>{secondaryLabel}</Text>
+      {!!secondaryLabel && (
+        <Text style={styles.secondaryLabel}>
+          {typeof secondaryLabel !== 'string'
+            ? secondaryLabel.toString()
+            : secondaryLabel}
+        </Text>
       )}
       {onPress && (
         <Icon name="chevron-forward" size={20} color={colors.gray2} />
