@@ -18,7 +18,7 @@
       "@layout/*": ["./layout/*"],
       "@styles": ["./styles"],
       "@env": ["./environments"],
-      "@api": ["./axios-config"],
+      "@api/*": ["./api/*"],
       "@models": ["./models"],
       "@models/*": ["./models/*"],
       "@modules": ["./modules"]

@@ -15,6 +15,7 @@ import { Navigation } from './types';
 import { MarkerModel } from '@models';
 import { autorun } from 'mobx';
 import { Map } from '@modules';
+import { useMarkers } from '@api/hooks/markers';
 
 /**
  * MapTab
@@ -32,8 +33,12 @@ const MapTab: React.FC = () => {
   const styles = useStyles();
   const {
     mapStore: { setActiveMarkerId, activeMarkerId, loadActiveMarker },
-    markersStore: { markers, createTemporaryMarker, loadMarkers },
+    markersStore: { createTemporaryMarker },
   } = useStores();
+
+  const { data: markers, isLoading, isFetching } = useMarkers();
+  console.log('isFetching:', isFetching);
+  console.log('isLoading:', isLoading);
 
   const mapViewRef = React.useRef<MapView>(null);
 
@@ -83,10 +88,6 @@ const MapTab: React.FC = () => {
     loadActiveMarker();
   });
 
-  React.useEffect(() => {
-    loadMarkers();
-  }, [loadMarkers]);
-
   React.useEffect(() => () => autorunDisposer(), [autorunDisposer]);
 
   return (
@@ -94,8 +95,9 @@ const MapTab: React.FC = () => {
       <Map
         ref={mapViewRef}
         onRegionChangeComplete={handleRegionChangeComplete}
-        onLongPress={onCreateTemporaryMarker}>
-        {markers.items.map(renderMarker)}
+        onLongPress={onCreateTemporaryMarker}
+        isLoadingMarkers={isLoading || isFetching}>
+        {markers.map(renderMarker)}
       </Map>
     </View>
   );

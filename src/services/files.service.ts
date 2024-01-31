@@ -1,4 +1,4 @@
-import api from '@api';
+import api from '@api/axios';
 
 import { PublicFile } from '@common/types/entities';
 

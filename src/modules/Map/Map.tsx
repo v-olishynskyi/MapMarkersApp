@@ -17,8 +17,10 @@ import { useLocationPermission } from '@common/hooks';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
 import { IconButton } from '@components';
-import { Alert } from 'react-native';
+import { Alert, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import * as Progress from 'react-native-progress';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 
 const KYIV_COORDINATES = {
   latitude: 50.430397616916096,
@@ -149,6 +151,15 @@ const Map = React.forwardRef<MapView, MapProps>((props, ref) => {
         icon={<Icon name={'remove-sharp'} size={32} color={colors.text} />}
         onPress={onPressMinus}
       />
+      {props.isLoadingMarkers && (
+        <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+          <Progress.Bar
+            indeterminate
+            width={SCREEN_WIDTH}
+            color={colors.primary}
+          />
+        </View>
+      )}
     </>
   );
 });

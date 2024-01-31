@@ -55,7 +55,7 @@ export class MapStore {
     } else {
       try {
         this.isLoadingMarker = true;
-        const marker = await MarkersService.getOne(this.activeMarkerId);
+        const marker = await MarkersService.one(this.activeMarkerId);
         const markerModel = new MarkerModel(marker);
 
         runInAction(() => {

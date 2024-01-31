@@ -26,7 +26,7 @@ export default class MarkersStore {
 
   async loadMarkers() {
     try {
-      const markersList = await MarkersService.getAll();
+      const markersList = await MarkersService.all();
 
       runInAction(() => {
         this.markers = new ListItems<Marker>(MarkerModel, markersList || []);

@@ -26,7 +26,7 @@ module.exports = {
           '@navigation': './src/navigation',
           '@components': './src/components',
           '@assets': './src/assets',
-          '@api': './src/axios-config',
+          '@api': './src/api',
           '@screens': './src/screens',
           '@services': './src/services',
           '@common': './src/common',

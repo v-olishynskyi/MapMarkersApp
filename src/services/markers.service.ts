@@ -1,15 +1,31 @@
-import api from '@api';
+import api from '@api/axios';
 import { CreateMarkerData, UpdateMarkerData } from './markers.model';
 import { Marker } from '@common/types/entities';
+import { PaginationResponse } from '@common/types';
+import { GetMarkersByUserParams } from 'services/auth.model';
 
 export class MarkersService {
-  public static async getAll() {
+  public static async paginatedMarkers({
+    limit,
+    page,
+    search,
+  }: GetMarkersByUserParams) {
+    const { data } = await api.get<PaginationResponse<Marker>>(
+      `markers/paginated?page=${page}&limit=${limit}${
+        search ? `&search=${search}` : ''
+      }`,
+    );
+
+    return data;
+  }
+
+  public static async all() {
     const { data } = await api.get<Marker[]>('markers/all');
 
     return data;
   }
 
-  public static async getOne(id: string) {
+  public static async one(id: string) {
     const { data } = await api.get<Marker>(`markers/${id}`);
 
     return data;

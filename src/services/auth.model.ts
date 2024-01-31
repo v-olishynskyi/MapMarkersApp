@@ -24,3 +24,9 @@ export type RegistrationData = {
 export type RefreshTokenResponse = {
   access_token: string;
 };
+
+export type GetMarkersByUserParams = {
+  page: number;
+  limit: number;
+  search?: string;
+};

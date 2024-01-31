@@ -7,4 +7,4 @@ import { MapViewProps } from 'react-native-maps';
 export type MapProps = Omit<
   MapViewProps,
   'tintColor' | 'showUserLocation' | 'followsUserLocation'
->;
+> & { isLoadingMarkers?: boolean };

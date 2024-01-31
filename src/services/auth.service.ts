@@ -1,4 +1,4 @@
-import { authApi } from '@api';
+import { authApi } from '@api/axios';
 import {
   LoginData,
   LoginResponse,

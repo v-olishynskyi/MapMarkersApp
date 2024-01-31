@@ -13,42 +13,51 @@ import { RootNavigation, navigationRef } from '@navigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DarkTheme, DefaultTheme } from '@styles';
 import { useStores } from '@store';
-import { Dimensions, StyleSheet, useColorScheme } from 'react-native';
-import { isPortrait } from '@common/helpers';
+import { AppStateStatus, Platform, StyleSheet } from 'react-native';
 import { RootLoading, StatusBar, Toast } from '@components';
 import { observer } from 'mobx-react-lite';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { Orientations } from '@common/types';
-import { useUserCoordinates } from '@common/hooks';
+import {
+  useAppState,
+  useChangeDimensions,
+  useOnlineManager,
+  useSystemTheme,
+  useUserCoordinates,
+} from '@common/hooks';
+import {
+  QueryClient,
+  QueryClientProvider,
+  focusManager,
+} from '@tanstack/react-query';
+
+// Create a client
+const queryClient = new QueryClient();
+
+function onAppStateChange(status: AppStateStatus) {
+  // React Query already supports in web browser refetch on window focus by default
+  if (Platform.OS !== 'web') {
+    focusManager.setFocused(status === 'active');
+  }
+}
 
 const App = observer(() => {
   const {
-    uiStore: { setOrientation, setIsDark, isDark },
+    uiStore: { isDark },
     appStore: { initApplication },
   } = useStores();
-  const colorScheme = useColorScheme();
 
   useUserCoordinates();
-
-  React.useEffect(() => {
-    Dimensions.addEventListener('change', () => {
-      isPortrait()
-        ? setOrientation(Orientations.PORTRAIT)
-        : setOrientation(Orientations.LANDSCAPE);
-    });
-  }, [setOrientation]);
-
-  React.useEffect(() => {
-    const isDarkTheme = colorScheme === 'dark';
-    setIsDark(isDarkTheme);
-  }, [colorScheme, setIsDark]);
+  useOnlineManager();
+  useAppState(onAppStateChange);
+  useChangeDimensions();
+  useSystemTheme();
 
   React.useEffect(() => {
     initApplication();
   }, [initApplication]);
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <StatusBar />
       <GestureHandlerRootView style={styles.container}>
         <SafeAreaProvider>
@@ -64,7 +73,7 @@ const App = observer(() => {
         </SafeAreaProvider>
       </GestureHandlerRootView>
       <Toast />
-    </>
+    </QueryClientProvider>
   );
 });
 

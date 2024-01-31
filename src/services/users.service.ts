@@ -1,4 +1,4 @@
-import api from '@api';
+import api from '@api/axios';
 import { PaginationResponse } from '@common/types';
 import { User } from '@common/types/entities';
 import { CommunityUser, UpdateUserData } from '@services';
