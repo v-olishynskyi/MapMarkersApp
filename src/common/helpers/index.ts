@@ -4,3 +4,4 @@ export * from './ui';
 export * from './utils';
 export * from './permissions';
 export * from './type-chekers';
+export * from './default-error-handler';

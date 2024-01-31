@@ -1,2 +1,3 @@
-export * from './usePaginatedMarkersByUser.query';
-export * from './useMarkers.query';
+export * from './queries/useMarkersByUser';
+export * from './queries/useMarkers';
+export * from './queries/useMarker';

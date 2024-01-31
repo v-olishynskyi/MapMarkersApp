@@ -1,6 +1,6 @@
 import { Group, Marker, User, UserSession } from '@common/types/entities';
 import { ListItems, UserSessionModel, GroupModel, MarkerModel } from '@models';
-import { UpdateUserData, UsersService } from '@services';
+import UsersService, { UpdateUserData } from '@services/users';
 
 export default class UserModel {
   id: User['id'];

@@ -2,7 +2,10 @@ import { showToast } from '@common/helpers';
 import { LatLng } from '@common/types';
 import { Marker } from '@common/types/entities';
 import { ListItems, MarkerModel } from '@models';
-import { CreateMarkerData, MarkersService, UpdateMarkerData } from '@services';
+import MarkersService, {
+  CreateMarkerData,
+  UpdateMarkerData,
+} from '@services/markers';
 import { RootStore } from '@store/root.store';
 import { makeAutoObservable, runInAction } from 'mobx';
 

@@ -1,13 +1,14 @@
 import { MarkerModel } from '@models';
-import { GetMarkersByUserParams, MarkersService } from '@services';
 import { QueryKey, useInfiniteQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import MarkersService, { GetMarkersByUserParams } from '@services/markers';
+import { CacheKey } from '@api/CacheKey';
 
 export const useMarkersByUser = (
   userId: string,
   params: GetMarkersByUserParams,
 ) => {
-  const queryKey: QueryKey = ['user-markers', userId, params];
+  const queryKey: QueryKey = [CacheKey.MarkersByUser, userId, params];
 
   return useInfiniteQuery({
     queryKey,

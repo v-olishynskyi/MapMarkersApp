@@ -1,6 +1,6 @@
 import { showToast } from '@common/helpers';
 import { MarkerModel } from '@models';
-import { MarkersService } from '@services';
+import MarkersService from '@services/markers';
 import { RootStore } from '@store/root.store';
 import { action, makeAutoObservable, observable, runInAction } from 'mobx';
 import { Camera } from 'react-native-maps';

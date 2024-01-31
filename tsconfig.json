@@ -10,7 +10,7 @@
       "@components/*": ["./components/*"],
       "@assets/*": ["./assets/*"],
       "@screens": ["./screens"],
-      "@services": ["./services"],
+      "@services/*": ["./services/*"],
       "@common/*": ["./common/*"],
       "@store": ["./store"],
       "@store/*": ["./store/*"],

@@ -1,6 +1,6 @@
 import React from 'react';
 import { UserModel } from '@models';
-import { UsersService } from '@services';
+import UsersService from '@services/users';
 import { useStores } from '@store';
 
 const useProfileViewUser = (

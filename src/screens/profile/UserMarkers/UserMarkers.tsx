@@ -9,7 +9,11 @@ const UserMarkers = () => {
   const { params } = useRoute<RouteProp<AppStackParamsList, 'user-markers'>>();
   console.log('UserMarkers - params:', params.userId);
 
-  const {} = useMarkersByUser(params.userId);
+  const { data } = useMarkersByUser(params.userId, {
+    page: 1,
+    limit: 20,
+  });
+  console.log('UserMarkers - data:', data);
 
   return (
     <BaseList

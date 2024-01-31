@@ -4,9 +4,9 @@ import {
   LoginResponse,
   RefreshTokenResponse,
   RegistrationData,
-} from './auth.model';
+} from './types';
 
-export class AuthService {
+export default class AuthService {
   public static async login(body: LoginData) {
     const { data } = await authApi.post<LoginResponse>('auth/sign-in', body);
 

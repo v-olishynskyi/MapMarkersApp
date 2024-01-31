@@ -37,8 +37,6 @@ const MapTab: React.FC = () => {
   } = useStores();
 
   const { data: markers, isLoading, isFetching } = useMarkers();
-  console.log('isFetching:', isFetching);
-  console.log('isLoading:', isLoading);
 
   const mapViewRef = React.useRef<MapView>(null);
 

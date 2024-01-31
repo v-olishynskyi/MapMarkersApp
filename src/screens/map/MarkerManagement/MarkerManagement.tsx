@@ -13,7 +13,7 @@ import { HeaderButton, Input, Pressable } from '@components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { MarkerImages } from './components';
-import { UpdateMarkerData } from '@services';
+import { UpdateMarkerData } from '@services/markers';
 import { Toast } from '@components';
 
 const MarkerManagement: React.FC = () => {

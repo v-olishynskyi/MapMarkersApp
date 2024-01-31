@@ -9,10 +9,10 @@ const RootLoading: React.FC<React.PropsWithChildren<any>> = observer(
     const styles = useStyles();
 
     const {
-      appStore: { isInitApp },
+      appStore: { isInitializingApp },
     } = useStores();
 
-    return isInitApp ? (
+    return isInitializingApp ? (
       <View style={styles.container}>
         <ActivityIndicator size={'large'} />
       </View>

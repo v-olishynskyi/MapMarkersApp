@@ -1,5 +1,8 @@
 import { Marker, PublicFile } from '@common/types/entities';
-import { CreateMarkerData, MarkersService, UpdateMarkerData } from '@services';
+import MarkersService, {
+  CreateMarkerData,
+  UpdateMarkerData,
+} from '@services/markers';
 import { makeAutoObservable } from 'mobx';
 import { ListItems, PublicFileModel, UserModel } from '@models';
 import { Image } from 'react-native-image-crop-picker';

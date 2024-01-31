@@ -1,5 +1,5 @@
 import { UserModel } from '@models';
-import { CommunityUser, UsersService } from '@services';
+import UsersService, { CommunityUser } from '@services/users';
 import { PaginationStore } from '@store/pagination.abstract-store';
 import { RootStore } from '@store/root.store';
 import { action, makeObservable, observable } from 'mobx';

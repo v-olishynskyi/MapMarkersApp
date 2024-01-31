@@ -16,6 +16,8 @@ import { useNavigation } from '@react-navigation/native';
 import { AppStackParamsList, ProfileStackParamsList } from '@navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useLogout } from '@api/hooks/auth';
+import * as Keychain from 'react-native-keychain';
 
 /**
  * ProfileTab
@@ -41,8 +43,26 @@ const ProfileTab: React.FC = () => {
     userStore: {
       user: { id, avatar_url, fullname, initials, email },
     },
-    authStore: { logout, isLoading },
   } = useStores();
+
+  const { mutate: logout, isPending } = useLogout();
+
+  const handleLogout = async () => {
+    let sessionId;
+
+    const sessionInternetCredentials = await Keychain.getInternetCredentials(
+      'session_id',
+    );
+    if (sessionInternetCredentials) {
+      const { sessionId: storedSessionId } = JSON.parse(
+        sessionInternetCredentials.password,
+      );
+
+      sessionId = storedSessionId;
+    }
+
+    logout(sessionId);
+  };
 
   const goToProfile = () => {
     navigate('profile-view', { userId: id });
@@ -119,10 +139,10 @@ const ProfileTab: React.FC = () => {
       <View style={styles.block}>
         <Pressable
           style={styles.pressable}
-          onPress={logout}
-          disabled={isLoading}>
+          onPress={handleLogout}
+          disabled={isPending}>
           <View style={styles.row}>
-            {isLoading ? (
+            {isPending ? (
               <ActivityIndicator size={'small'} style={styles.icon} />
             ) : (
               <Icon

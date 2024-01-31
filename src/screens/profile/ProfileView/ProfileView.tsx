@@ -50,6 +50,7 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
   const { isLoading, user, loadUser, isMe } = useProfileViewUser(
     params?.userId || '',
   );
+  // const {} = useUpdateProfileAvatar();
 
   const [showActionSheet, setShowActionSheet] = React.useState(false);
 
@@ -60,11 +61,13 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
       cropperCircleOverlay: true,
     }).then(changeAvatar);
   };
+
   const handlePressViewAvatar = () => imageViewerRef.current?.show();
   const handlePressAvatar = () =>
     isMe ? setShowActionSheet(true) : handlePressViewAvatar();
   const navigateToUserMarkers = () =>
     navigate('user-markers', { userId: user.id });
+
   const onDismissActionSheet = () => setShowActionSheet(false);
 
   const actionSheetOptions = [

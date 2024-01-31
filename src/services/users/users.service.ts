@@ -1,9 +1,9 @@
 import api from '@api/axios';
 import { PaginationResponse } from '@common/types';
 import { User } from '@common/types/entities';
-import { CommunityUser, UpdateUserData } from '@services';
+import { CommunityUser, UpdateProfileData } from '@services/users/types';
 
-export class UsersService {
+export default class UsersService {
   public static async loadProfile() {
     const { data } = await api.get<User>('users/profile');
 
@@ -16,7 +16,7 @@ export class UsersService {
     return data;
   }
 
-  public static async update(id: string, params: UpdateUserData | FormData) {
+  public static async update(id: string, params: UpdateProfileData | FormData) {
     const { data } = await api.put<User>(`users/${id}`, params);
 
     return data;

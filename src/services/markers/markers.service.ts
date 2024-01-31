@@ -1,10 +1,10 @@
 import api from '@api/axios';
-import { CreateMarkerData, UpdateMarkerData } from './markers.model';
+import { CreateMarkerData, UpdateMarkerData } from './types';
 import { Marker } from '@common/types/entities';
 import { PaginationResponse } from '@common/types';
-import { GetMarkersByUserParams } from 'services/auth.model';
+import { GetMarkersByUserParams } from './types';
 
-export class MarkersService {
+export default class MarkersService {
   public static async paginatedMarkers({
     limit,
     page,
@@ -34,7 +34,7 @@ export class MarkersService {
   public static async create(body: CreateMarkerData) {
     const formData = new FormData();
 
-    body?.images?.forEach(file => {
+    body.images?.forEach(file => {
       formData.append('images', {
         name: file.key || '',
         type: file.mime || 'image/jpg',
@@ -54,7 +54,23 @@ export class MarkersService {
   }
 
   public static async update(id: string, body: UpdateMarkerData) {
-    const { data } = await api.put<Marker>(`markers/${id}`, body);
+    const formData = new FormData();
+
+    body.images?.forEach(file => {
+      formData.append('images', {
+        name: file.key || '',
+        type: file.mime || 'image/jpg',
+        uri: file.url,
+      } as unknown as Blob);
+    });
+
+    formData.append('marker', JSON.stringify(body.data));
+
+    const { data } = await api.put<Marker>('markers', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
     return data;
   }

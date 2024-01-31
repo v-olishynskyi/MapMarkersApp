@@ -9,11 +9,12 @@ import { useStores } from '@store';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { HeaderButton, Input, Toast } from '@components';
 import { observer } from 'mobx-react-lite';
-import { getTheme } from '@common/helpers';
+import { getTheme, wait } from '@common/helpers';
 import { useFormik } from 'formik';
 import { FormState } from './types';
 import { useNavigation } from '@react-navigation/native';
 import schema from './schema';
+import { useUpdateProfile } from '@api/hooks/profile';
 
 /**
  * EditProfile
@@ -30,8 +31,17 @@ const EditProfile: React.FC = () => {
   const { colors } = getTheme();
 
   const {
-    userStore: { isSaving, user, updateProfile },
+    userStore: { user },
   } = useStores();
+
+  const { mutateAsync: updateProfile, isPending } = useUpdateProfile(user.id);
+
+  const onSubmit = async (values: FormState) => {
+    try {
+      await wait(2000);
+      await updateProfile(values);
+    } catch (error) {}
+  };
 
   const { values, setFieldValue, handleSubmit, errors, isValid } =
     useFormik<FormState>({
@@ -41,7 +51,7 @@ const EditProfile: React.FC = () => {
         middle_name: user.middle_name,
         username: user.middle_name,
       },
-      onSubmit: updateProfile,
+      onSubmit,
       validationSchema: schema,
       validateOnMount: true,
     });
@@ -63,13 +73,13 @@ const EditProfile: React.FC = () => {
         canGoBack={canGoBack}
         color={colors.primary}
         label={'Зберегти'}
-        loading={isSaving}
+        loading={isPending}
         onPress={handleSubmit}
         backRoute={'profile-view'}
         disabled={!isValid}
       />
     ),
-    [colors.primary, handleSubmit, isSaving, isValid],
+    [colors.primary, handleSubmit, isPending, isValid],
   );
 
   React.useEffect(() => {

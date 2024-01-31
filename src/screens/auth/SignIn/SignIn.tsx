@@ -5,18 +5,22 @@
  *  */
 import React from 'react';
 import View from 'react-native-ui-lib/view';
+import validationSchema from './schema';
+import useStyles from './styles';
+import DeviceInfo, { getUniqueId } from 'react-native-device-info';
 import { useFormik } from 'formik';
 import { FormState } from './types';
 import { KeyboardAvoidingView, TextInput } from 'react-native';
 import { Input, Button } from '@components';
-import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
-import validationSchema from './schema';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useNavigation } from '@react-navigation/native';
 import { AuthStackParamsList } from '@navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import useStyles from './styles';
+import { useLogin } from '@api/hooks/auth';
+import { LoginData } from '@services/auth';
+import { IS_IOS } from '@common/helpers';
+import { Device, Platforms } from '@common/types';
 
 const defaultState: FormState = {
   email: '',
@@ -42,13 +46,27 @@ const SignIn: React.FC = observer(() => {
   const emailInputRef = React.useRef<TextInput>(null);
   const passwordInputRef = React.useRef<TextInput>(null);
 
-  const {
-    authStore: { signIn, isLoading },
-  } = useStores();
+  const { mutateAsync: login, isPending } = useLogin();
 
   const onSubmit = async (values: FormState) => {
     try {
-      await signIn(values);
+      const name = IS_IOS
+        ? await DeviceInfo.getDeviceName()
+        : DeviceInfo.getSystemName();
+
+      const device: Device = {
+        id: await getUniqueId(),
+        name,
+        platform: IS_IOS ? Platforms.IOS : Platforms.ANDROID, // TODO: change if need support web
+      };
+
+      const loginData: LoginData = {
+        device,
+        email: values.email,
+        password: values.password,
+      };
+
+      await login(loginData);
       resetForm();
     } catch (error) {}
   };
@@ -114,7 +132,7 @@ const SignIn: React.FC = observer(() => {
       </View>
       <View>
         <View style={styles.submitButton}>
-          <Button label="Вхід" onPress={handleSubmit} loading={isLoading} />
+          <Button label="Вхід" onPress={handleSubmit} loading={isPending} />
         </View>
         <Button
           label="Ще не маєте аккаунту? Зареєструватись"

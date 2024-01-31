@@ -16,7 +16,7 @@ import { AuthStackParamsList } from '@navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import useStyles from './styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { RegistrationData } from '@services';
+import { RegistrationData } from '@services/auth';
 
 const initalState: FormState = {
   email: '',

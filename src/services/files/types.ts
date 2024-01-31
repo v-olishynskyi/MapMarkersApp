@@ -7,7 +7,7 @@ export enum FileTypeEnum {
   MARKER_IMAGE = 'marker_image',
 }
 
-export type UploadFileBody = {
+export type UploadFileData = {
   entity_type: FileTypeEnum;
   entity_id: string;
 };

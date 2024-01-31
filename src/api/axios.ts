@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import env from '@env';
 import * as Keychain from 'react-native-keychain';
-import { AuthService } from '@services';
+import AuthService from '@services/auth';
 import { rootStore } from '@store';
 import { showToast } from '@common/helpers';
 import { getVersion } from 'react-native-device-info';
