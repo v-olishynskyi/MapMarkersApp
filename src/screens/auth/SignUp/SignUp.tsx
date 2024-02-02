@@ -8,8 +8,6 @@ import View from 'react-native-ui-lib/view';
 import { useFormik } from 'formik';
 import { FormState } from './types';
 import { Button, Input } from '@components';
-import { useStores } from '@store';
-import { observer } from 'mobx-react-lite';
 import validationSchema from './schema';
 import { useNavigation } from '@react-navigation/native';
 import { AuthStackParamsList } from '@navigation';
@@ -17,6 +15,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import useStyles from './styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RegistrationData } from '@services/auth';
+import { useRegister } from '@api/hooks/auth';
 
 const initalState: FormState = {
   email: '',
@@ -43,9 +42,8 @@ const SignUp: React.FC = () => {
     useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
 
   const styles = useStyles();
-  const {
-    authStore: { isLoading, signUp },
-  } = useStores();
+
+  const { mutateAsync: signUp, isPending } = useRegister();
 
   const onSubmit = async ({
     email,
@@ -98,17 +96,19 @@ const SignUp: React.FC = () => {
         <View style={[styles.form]}>
           <Input
             value={values.email}
-            caption={'E-mail'}
+            caption={'E-mail *'}
             onChangeText={handleChangeInput('email')}
             onBlur={handleBlur('email')}
             style={styles.input}
             error={touched.email && errors.email}
             clearButtonMode="while-editing"
             placeholder="E-mail"
+            keyboardType="email-address"
+            textContentType="emailAddress"
           />
           <Input
             value={values.firstName}
-            caption={'Імʼя'}
+            caption={'Імʼя *'}
             onChangeText={handleChangeInput('firstName')}
             onBlur={handleBlur('firstName')}
             style={styles.input}
@@ -118,7 +118,7 @@ const SignUp: React.FC = () => {
           />
           <Input
             value={values.lastName}
-            caption={'Прізвище'}
+            caption={'Прізвище *'}
             onChangeText={handleChangeInput('lastName')}
             onBlur={handleBlur('lastName')}
             style={styles.input}
@@ -138,7 +138,7 @@ const SignUp: React.FC = () => {
           />
           <Input
             value={values.password}
-            caption={'Пароль'}
+            caption={'Пароль *'}
             onChangeText={handleChangeInput('password')}
             onBlur={handleBlur('password')}
             error={touched.password && errors.password}
@@ -148,7 +148,7 @@ const SignUp: React.FC = () => {
           />
           <Input
             value={values.confirmPassword}
-            caption={'Повторіть пароль'}
+            caption={'Повторіть пароль *'}
             onChangeText={handleChangeInput('confirmPassword')}
             onBlur={handleBlur('confirmPassword')}
             error={touched.confirmPassword && errors.confirmPassword}
@@ -163,7 +163,7 @@ const SignUp: React.FC = () => {
             label="Реєстрація"
             onPress={handleSubmit}
             style={styles.submitButton}
-            loading={isLoading}
+            loading={isPending}
           />
           <Button
             label="Вже маєте аккаунт? Увійти"
@@ -176,4 +176,4 @@ const SignUp: React.FC = () => {
   );
 };
 
-export default observer(SignUp);
+export default SignUp;

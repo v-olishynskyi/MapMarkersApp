@@ -81,7 +81,7 @@ const Onboarding: React.FC = () => {
   };
   const onPressSignUp = () => {
     globalStorage.set('is-visited-onboarding', true);
-    return navigate('sign-in');
+    return navigate('sign-up');
   };
 
   const renderStep = React.useCallback(

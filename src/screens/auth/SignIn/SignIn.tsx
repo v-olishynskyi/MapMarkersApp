@@ -14,7 +14,7 @@ import { KeyboardAvoidingView, TextInput } from 'react-native';
 import { Input, Button } from '@components';
 import { observer } from 'mobx-react-lite';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { AuthStackParamsList } from '@navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useLogin } from '@api/hooks/auth';
@@ -90,6 +90,19 @@ const SignIn: React.FC = observer(() => {
 
   const onPressForgotPassword = () => navigation.navigate('forgot-password');
   const onPressSignUp = () => navigation.navigate('sign-up');
+
+  const isFocused = useIsFocused();
+  const handleUnfocus = React.useCallback(() => {
+    emailInputRef.current?.blur();
+    passwordInputRef.current?.blur();
+    resetForm();
+  }, [resetForm]);
+
+  React.useEffect(() => {
+    if (!isFocused) {
+      handleUnfocus();
+    }
+  }, [isFocused, handleUnfocus]);
 
   return (
     <KeyboardAvoidingView
