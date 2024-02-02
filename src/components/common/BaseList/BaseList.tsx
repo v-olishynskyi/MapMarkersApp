@@ -56,9 +56,7 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
     <Text style={styles.emptyComponentLabel}>Дані відсутні</Text>
   );
 
-  return isLoading ? (
-    loaderComponent
-  ) : (
+  return (
     <FlatList
       ref={ref}
       data={data}

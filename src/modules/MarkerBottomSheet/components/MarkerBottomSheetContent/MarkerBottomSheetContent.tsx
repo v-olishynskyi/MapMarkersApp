@@ -16,6 +16,7 @@ import { AppStackParamsList, MarkerManagementModes } from '@navigation';
 import { MenuView, NativeActionEvent } from '@react-native-menu/menu';
 import { MenuActions } from './types';
 import { observer } from 'mobx-react-lite';
+import { useDeleteMarker } from '@api/hooks/markers';
 
 /**
  * MarkerBottomSheetContent
@@ -38,12 +39,19 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
       activeMarkerId,
       loadActiveMarker,
     },
-    markersStore: { setEditableMarker, removeMarker },
+    markersStore: { setEditableMarker },
     uiStore: { theme },
+    userStore: {
+      user: { id },
+    },
   } = useStores();
 
   const { navigate } =
     useNavigation<NativeStackNavigationProp<AppStackParamsList>>();
+
+  const { mutate: deleteMarker } = useDeleteMarker();
+
+  const isMineMarker = activeMarker?.author_id === id;
 
   // const handleShareMarker = React.useCallback(async () => {
   //   Share.shareSingle({
@@ -59,10 +67,17 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
   }, [navigate, activeMarker, setEditableMarker]);
 
   const handlePressMenuAction = async ({ nativeEvent }: NativeActionEvent) => {
-    if (nativeEvent.event === MenuActions.DELETE) {
-      await removeMarker(activeMarkerId);
-    } else if (nativeEvent.event === MenuActions.EDIT) {
-      editMarker();
+    switch (nativeEvent.event) {
+      case MenuActions.DELETE: {
+        deleteMarker(activeMarkerId);
+        break;
+      }
+      case MenuActions.EDIT: {
+        editMarker();
+        break;
+      }
+      default:
+        break;
     }
   };
 
@@ -73,7 +88,7 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
     </>
   );
 
-  const menuViewActions = [
+  const authorActions = [
     {
       id: MenuActions.DELETE,
       title: 'Видалити',
@@ -87,24 +102,26 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
     },
   ];
 
+  const menuViewActions = [...(isMineMarker ? authorActions : [])];
+
   const header = (
-    <>
-      <View style={styles.header}>
-        <Text style={styles.name}>{activeMarker?.name}</Text>
-        <View style={styles.headerActions}>
-          <View style={styles.markerActions}>
+    <View style={styles.header}>
+      <Text style={styles.name}>{activeMarker?.name}</Text>
+      <View style={styles.headerActions}>
+        <View style={styles.markerActions}>
+          {!!menuViewActions.length && (
             <MenuView
               actions={menuViewActions}
               themeVariant={theme}
               onPressAction={handlePressMenuAction}>
               <IconButton icon="ellipsis-horizontal-sharp" />
             </MenuView>
-            <IconButton icon="share-outline" onPress={() => {}} />
-          </View>
-          <IconButton icon="close" onPress={onClose} />
+          )}
+          <IconButton icon="share-outline" onPress={() => {}} />
         </View>
+        <IconButton icon="close" onPress={onClose} />
       </View>
-    </>
+    </View>
   );
 
   const images = React.useMemo(
@@ -117,14 +134,6 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
     <>
       <Text style={styles.description}>{activeMarker?.description}</Text>
       <AnimatedImageLibrary images={images.map(({ url }) => url)} />
-      {/* <BottomSheetFlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        data={data}
-        renderItem={renderMarkerImage}
-        style={styles.markerImageList}
-        contentContainerStyle={styles.markerImageListContent}
-      /> */}
     </>
   );
 

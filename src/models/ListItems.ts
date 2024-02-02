@@ -14,8 +14,18 @@ export default class ListItems<T extends Entities> {
     return this;
   }
 
+  set(list: EntityToModel<T>[]) {
+    this.items = list;
+  }
+
   push(item: EntityToModel<T>) {
     this.items.push(item);
+
+    return this;
+  }
+
+  unshift(item: EntityToModel<T>) {
+    this.items.unshift(item);
 
     return this;
   }
