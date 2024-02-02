@@ -1,20 +1,31 @@
-import { MarkerModel } from '@models';
-import { QueryKey, useInfiniteQuery } from '@tanstack/react-query';
+import { QueryKey, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import MarkersService, { GetMarkersByUserParams } from '@services/markers';
+import MarkersService from '@services/markers';
 import { CacheKey } from '@api/CacheKey';
+import { Marker } from '@common/types/entities';
+import { MarkerModel } from '@models';
 
-export const useMarkersByUser = (
-  userId: string,
-  params: GetMarkersByUserParams,
-) => {
-  const queryKey: QueryKey = [CacheKey.MarkersByUser, userId, params];
+export const useMarkersByUser = (userId: string) => {
+  const queryKey: QueryKey = [CacheKey.MarkersByUser, userId];
 
-  return useInfiniteQuery({
+  return useQuery<Marker[], AxiosError, MarkerModel[]>({
     queryKey,
-    queryFn: ({ pageParam = 1 }) =>
-      MarkersService.paginatedMarkers({ ...params, page: pageParam }),
-    initialPageParam: 1,
-    getNextPageParam: lastPage => lastPage.page,
+    queryFn: () => MarkersService.markersByUserId(userId),
+    initialData: [],
+    select: markers => markers.map(marker => new MarkerModel(marker)),
   });
+  // return useInfiniteQuery<PaginationResponse<Marker>, AxiosError>({
+  //   queryKey,
+  //   queryFn: ({ pageParam }) =>
+  //     MarkersService.paginatedMarkers({
+  //       ...params,
+  //       user_id: userId,
+  //       page: pageParam as number,
+  //     }),
+  //   initialPageParam: 1,
+  //   initialData: { pages: [], pageParams: [] },
+  //   getNextPageParam: lastPage => {
+  //     return lastPage?.meta?.next_page ?? undefined;
+  //   },
+  // });
 };

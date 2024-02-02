@@ -6,6 +6,9 @@ export type CreateMarkerData = {
     description: string;
     latitude: number;
     longitude: number;
+    author_id: string;
+    is_draft: boolean;
+    is_hidden: boolean;
   };
   images?: PublicFile[];
 };
@@ -16,6 +19,9 @@ export type UpdateMarkerData = {
     description: string;
     latitude: number;
     longitude: number;
+    author_id: string;
+    is_draft: boolean;
+    is_hidden: boolean;
   };
   images: PublicFile[];
 };

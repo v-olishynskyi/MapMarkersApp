@@ -37,7 +37,6 @@ export class AppStore {
         const token = JSON.parse(creds.password);
         if (token) {
           this.rootStore.authStore.setIsAuth(true);
-          await this.rootStore.markersStore.loadMarkers();
         }
       }
 

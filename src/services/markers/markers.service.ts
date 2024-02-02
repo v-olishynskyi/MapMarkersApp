@@ -11,10 +11,17 @@ export default class MarkersService {
     search,
   }: GetMarkersByUserParams) {
     const { data } = await api.get<PaginationResponse<Marker>>(
-      `markers/paginated?page=${page}&limit=${limit}${
-        search ? `&search=${search}` : ''
-      }`,
+      'markers/paginated',
+      { params: { limit, page, search } },
     );
+
+    return data;
+  }
+
+  public static async markersByUserId(user_id: string) {
+    const { data } = await api.get<Marker[]>('markers/markers-by-user', {
+      params: { user_id },
+    });
 
     return data;
   }
@@ -66,7 +73,7 @@ export default class MarkersService {
 
     formData.append('marker', JSON.stringify(body.data));
 
-    const { data } = await api.put<Marker>('markers', formData, {
+    const { data } = await api.put<Marker>(`markers/${id}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

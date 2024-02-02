@@ -1,4 +1,4 @@
-import { UserModel } from '@models';
+import { UserModel, UserSessionModel } from '@models';
 import { RootStore } from '@store/root.store';
 import { IS_IOS, showToast } from '@common/helpers';
 import { makeAutoObservable, runInAction } from 'mobx';
@@ -63,25 +63,7 @@ export class UserStore {
     this.userCoordinates = coordinates;
   }
 
-  // async terminateSession(sessionId: string) {
-  //   this.isTerminatingSession = true;
-
-  //   const sessions = this.user.sessions;
-
-  //   try {
-  //     await AuthService.logout(sessionId);
-  //     runInAction(() => {
-  //       const sessionIndex = sessions.items.findIndex(
-  //         ({ id }) => sessionId === id,
-  //       );
-  //       this.user.sessions.remove(sessionIndex);
-  //       this.isTerminatingSession = false;
-  //     });
-  //   } catch (error: any) {
-  //     showToast('error', error.message);
-
-  //     this.user.sessions = sessions;
-  //     this.isTerminatingSession = false;
-  //   }
-  // }
+  setSessions(newList: UserSessionModel[]) {
+    this.user.sessions.set(newList);
+  }
 }
