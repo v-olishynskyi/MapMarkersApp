@@ -9,13 +9,15 @@ import { SessionItemProps, SwipeableItemHandler } from './types';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { RectButton } from 'react-native-gesture-handler';
 import { Pressable } from '@components';
-import { generalStyles } from '@styles';
+import { generalStyles, spacingBase } from '@styles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Animated as RNAnimated, Text, View } from 'react-native';
 import { getTheme } from '@common/helpers';
 import Animated, {
+  Easing,
   useAnimatedStyle,
   useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
 import { PlatformIcon } from '../';
 import { useStores } from '@store';
@@ -59,7 +61,7 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
     }));
 
     const handleDelete = React.useCallback(
-      () => onDelete(session.id),
+      () => onDelete?.(session.id),
       [onDelete, session],
     );
 
@@ -99,23 +101,43 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
       }
     }, [isEditMode, isShowMinus]);
 
+    const minusIconLeftPosition = useSharedValue(-40);
+
     const minusIconStyle = useAnimatedStyle(() => {
-      return {};
+      minusIconLeftPosition.value = withTiming(isShowMinus.value ? 0 : -40, {
+        duration: 200,
+        easing: Easing.linear,
+      });
+
+      return {
+        left: minusIconLeftPosition.value,
+      };
     });
 
+    const paddingLeft = useSharedValue(0);
+
+    const swipingRowAnimatedStyle = useAnimatedStyle(() => {
+      paddingLeft.value = withTiming(isShowMinus.value ? spacingBase.s4 : 0, {
+        duration: 200,
+        easing: Easing.linear,
+      });
+
+      return { paddingLeft: paddingLeft.value };
+    }, []);
+
     return (
-      <Swipeable
-        ref={swipeableRef}
-        friction={2}
-        enableTrackpadTwoFingerGesture
-        leftThreshold={30}
-        rightThreshold={40}
-        renderRightActions={renderRightActions}
-        containerStyle={styles.container}
-        childrenContainerStyle={[generalStyles.row]}
-        enabled={enableSwipeable}>
-        <Pressable style={[generalStyles.row]} onPress={onPress}>
-          {isEditMode && (
+      <Animated.View style={[generalStyles.row, swipingRowAnimatedStyle]}>
+        <Swipeable
+          ref={swipeableRef}
+          friction={2}
+          enableTrackpadTwoFingerGesture
+          leftThreshold={30}
+          rightThreshold={40}
+          renderRightActions={renderRightActions}
+          containerStyle={styles.container}
+          childrenContainerStyle={[generalStyles.row]}
+          enabled={enableSwipeable}>
+          <Pressable style={[generalStyles.row]} onPress={onPress}>
             <Animated.View style={minusIconStyle}>
               <Pressable
                 style={styles.minusIconContainer}
@@ -128,25 +150,25 @@ const SessionItem = React.forwardRef<SwipeableItemHandler, SessionItemProps>(
                 />
               </Pressable>
             </Animated.View>
-          )}
-          <PlatformIcon
-            size="small"
-            platform={session.device.platform}
-            style={styles.iconContainer}
-          />
-          <View style={styles.info}>
-            <Text style={styles.device} numberOfLines={1}>
-              {session.device.name} {isCurrentSession && '(Цей пристрій)'}
-            </Text>
-            <Text style={styles.version} numberOfLines={1}>
-              Markers {session.device.platform} {session.app_version}
-            </Text>
-            {/* <Text style={styles.location} numberOfLines={1}>
-              Kamianets-Podilskyi, Ukraine
-            </Text> */}
-          </View>
-        </Pressable>
-      </Swipeable>
+            <PlatformIcon
+              size="small"
+              platform={session.device?.platform}
+              style={styles.iconContainer}
+            />
+            <View style={styles.info}>
+              <Text style={styles.device} numberOfLines={1}>
+                {session.device?.name} {isCurrentSession && '(Цей пристрій)'}
+              </Text>
+              <Text style={styles.version} numberOfLines={1}>
+                Markers {session.device?.platform} {session.app_version}
+              </Text>
+              {/* <Text style={styles.location} numberOfLines={1}>
+                Kamianets-Podilskyi, Ukraine
+              </Text> */}
+            </View>
+          </Pressable>
+        </Swipeable>
+      </Animated.View>
     );
   },
 );

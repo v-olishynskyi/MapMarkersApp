@@ -20,6 +20,7 @@ import { getTheme } from '@common/helpers';
 import terminateConfirmationRequest from '../../terminateConfirmationRequest';
 import { PlatformIcon } from '../';
 import { getVersion } from 'react-native-device-info';
+import { useTerminateSession } from '@api/hooks/profile';
 
 /**
  * SessionBottomSheet
@@ -36,11 +37,12 @@ const SessionBottomSheet: React.FC = () => {
 
   const {
     userSessionSheetStore: { session, setSession },
-    userStore: { terminateSession, isTerminatingSession },
     authStore: { currentSession },
   } = useStores();
 
   const sheetRef = React.useRef<BottomSheetModal>(null);
+
+  const { mutateAsync: terminateSession, isPending } = useTerminateSession();
 
   const snapPoints = React.useMemo(() => ['50%', '85%'], []);
 
@@ -87,7 +89,7 @@ const SessionBottomSheet: React.FC = () => {
               backgroundColor={colors.card}
               color={colors.red}
               style={styles.terminateSessionButton}
-              loading={isTerminatingSession}
+              loading={isPending}
               onPress={handleTerminateSession}
             />
           )}
@@ -95,7 +97,7 @@ const SessionBottomSheet: React.FC = () => {
       </>
     );
     // eslint-disable-next-line
-  }, [session, terminateSession, isTerminatingSession]);
+  }, [session, terminateSession, isPending]);
 
   const renderBackdrop = React.useCallback(
     (props: BottomSheetBackdropProps) => (

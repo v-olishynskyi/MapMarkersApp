@@ -8,12 +8,15 @@ import { ListRenderItem, Text } from 'react-native';
 import useStyles from './styles';
 import { useStores } from '@store';
 import { useNavigation } from '@react-navigation/native';
-import { BaseList, Pressable } from '@components';
+import { BaseList, Menu, Pressable } from '@components';
 import { SessionBottomSheet, SessionItem } from './components';
 import { SwipeableItemHandler } from './components/SessionItem/types';
 import { observer } from 'mobx-react-lite';
 import terminateConfirmationRequest from './terminateConfirmationRequest';
 import { UserSessionModel } from '@models';
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
+import { CacheKey } from '@api/CacheKey';
+import { useTerminateSession } from '@api/hooks/profile';
 
 /**
  * Sessions
@@ -30,9 +33,6 @@ const Sessions: React.FC = () => {
   const {
     userStore: {
       user: { sessions },
-      terminateSession,
-      loadProfile,
-      isLoading,
     },
     userSessionSheetStore: { setSession },
     authStore: { currentSession },
@@ -42,9 +42,26 @@ const Sessions: React.FC = () => {
 
   const refs = React.useRef<Array<SwipeableItemHandler>>([]);
 
+  const queryClient = useQueryClient();
+
+  const { mutate: terminateSession } = useTerminateSession();
+
+  const isFetching = useIsFetching({ queryKey: [CacheKey.UserProfile] });
+
+  const sortedSessions = React.useMemo(() => {
+    const currentSessionIndex = sessions.items.findIndex(
+      el => el.id === currentSession?.id,
+    );
+    const sessionsWithoutCurrentSessions = [
+      ...sessions.items.filter((_, index) => index !== currentSessionIndex),
+    ];
+
+    return [currentSession, ...sessionsWithoutCurrentSessions];
+  }, [sessions.items, currentSession]);
+
   const closeAllSwipers = React.useCallback(() => {
     for (const ref of refs.current) {
-      ref.close();
+      ref?.close();
     }
   }, [refs]);
 
@@ -105,13 +122,18 @@ const Sessions: React.FC = () => {
 
   return (
     <>
+      {/* <Menu headerText="Цей пристрій" style={styles.currentSessionMenu}>
+        <SessionItem session={currentSession!} isEditMode={false} />
+      </Menu> */}
       <BaseList
-        data={sessions.items}
+        data={sortedSessions}
         renderItem={renderSession}
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
-        onRefresh={loadProfile}
-        isLoading={isLoading}
+        onRefresh={() =>
+          queryClient.refetchQueries({ queryKey: [CacheKey.UserProfile] })
+        }
+        isLoading={isFetching > 0}
       />
       <SessionBottomSheet />
     </>

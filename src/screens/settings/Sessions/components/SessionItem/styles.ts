@@ -6,7 +6,7 @@ const useStyles = () => {
   const { colors, typography } = getTheme();
 
   return StyleSheet.create({
-    container: { paddingVertical: spacingBase.s1 },
+    container: { paddingVertical: spacingBase.s2 },
     iconContainer: {
       marginRight: spacingBase.s2,
       alignSelf: 'flex-start',
@@ -34,7 +34,7 @@ const useStyles = () => {
     minusIconContainer: {
       overflow: 'hidden',
       borderRadius: 50,
-      marginRight: spacingBase.s3,
+      width: 16,
     },
     minusIcon: {
       backgroundColor: colors.red,

@@ -21,6 +21,10 @@ export type RegistrationData = {
   password: string;
 };
 
+export type RegistrationResponse = {
+  message: string;
+};
+
 export type RefreshTokenResponse = {
   access_token: string;
 };

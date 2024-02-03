@@ -13,8 +13,9 @@ import { HeaderButton, Input, Pressable } from '@components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { MarkerImages } from './components';
-import { UpdateMarkerData } from '@services/markers';
+import { CreateMarkerData } from '@services/markers';
 import { Toast } from '@components';
+import { useCreateMarker, useUpdateMarker } from '@api/hooks/markers';
 
 const MarkerManagement: React.FC = () => {
   const { params } = useRoute<RouteType>();
@@ -22,24 +23,30 @@ const MarkerManagement: React.FC = () => {
     useNavigation<NavigationType>();
   const { colors } = getTheme();
   const styles = useStyles();
+
   const isCreateMode = params.mode === MarkerManagementModes.CREATE;
+  const headerTitle = isCreateMode ? 'Створення' : 'Редагування';
 
   const {
-    markersStore: {
-      editableMarker,
-      createMarker,
-      updateMarker,
-      isProcessing,
-      clearEditableMarker,
-      createDraftMarker,
+    userStore: {
+      user: { id },
     },
+    markersStore: { editableMarker, clearEditableMarker, createDraftMarker },
   } = useStores();
+
+  const { mutateAsync: createMarker, isPending: isCreatingMarker } =
+    useCreateMarker();
+  const { mutateAsync: updateMarker, isPending: isUpdatingMarker } =
+    useUpdateMarker(editableMarker?.id || '');
+
+  const isProcessing = isCreatingMarker || isUpdatingMarker;
 
   const shouldPreventGoBack = React.useRef<boolean>(true);
   const shouldPreventGoBackCauseError = React.useRef<boolean>(false);
 
   const onSubmit: (values: FormState) => Promise<void> = React.useCallback(
     async values => {
+      const { description, latitude, longitude, name } = values;
       try {
         shouldPreventGoBack.current = false;
         if (!editableMarker) {
@@ -52,18 +59,22 @@ const MarkerManagement: React.FC = () => {
           return;
         }
 
-        if (isCreateMode) {
-          await createMarker(editableMarker);
-        } else {
-          const images = editableMarker.images.items.map(({ id }) => id);
-          const data: UpdateMarkerData = {
-            ...editableMarker,
-            ...values,
-            id: editableMarker.id,
-            images,
-          };
+        const markerData: CreateMarkerData['data'] = {
+          name,
+          description,
+          latitude,
+          longitude,
+          author_id: id,
+          is_draft: false,
+          is_hidden: false,
+        };
 
-          await updateMarker(editableMarker.id, data);
+        const images = editableMarker.images.items;
+
+        if (isCreateMode) {
+          await createMarker({ data: markerData, images });
+        } else {
+          await updateMarker({ data: markerData, images });
         }
       } catch (error) {
         shouldPreventGoBackCauseError.current = true;
@@ -79,6 +90,7 @@ const MarkerManagement: React.FC = () => {
       updateMarker,
       isCreateMode,
       editableMarker,
+      id,
     ],
   );
 
@@ -151,8 +163,6 @@ const MarkerManagement: React.FC = () => {
     ),
     [colors.primary, isProcessing, onSubmit, isCreateMode, isValid, values],
   );
-
-  const headerTitle = isCreateMode ? 'Створення' : 'Редагування';
 
   const mapIcon = React.useMemo(
     () => (

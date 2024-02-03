@@ -6,6 +6,8 @@ import { StyleProp, ViewStyle } from 'react-native';
  * @typedef {Object} MenuProps
  */
 export type MenuProps = {
-  items: Array<MenuItemProps>;
+  items?: Array<MenuItemProps>;
   style?: StyleProp<ViewStyle>;
-};
+  headerText?: string;
+  footerText?: string;
+} & { children?: any };

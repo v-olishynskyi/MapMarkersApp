@@ -9,6 +9,9 @@ const useStyles = () => {
     container: {
       flex: 1,
     },
+    currentSessionMenu: {
+      margin: spacingBase.s3,
+    },
     contentContainer: {
       padding: spacingBase.s3,
     },

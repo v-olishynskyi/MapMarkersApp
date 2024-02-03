@@ -36,12 +36,13 @@ const useStyles = () => {
     },
     title: {
       ...typography.bold.title1,
+      color: colors.gray,
       textAlign: 'center',
       marginBottom: spacingBase.s3,
     },
     description: {
       ...typography.regular.callout,
-      color: colors.gray,
+      color: colors.gray2,
       textAlign: 'center',
     },
     stepper: {

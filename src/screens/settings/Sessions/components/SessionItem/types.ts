@@ -6,10 +6,10 @@ import { UserSessionModel } from '@models';
  */
 export type SessionItemProps = {
   session: UserSessionModel;
-  isEditMode: boolean;
-  onDelete: (sessionId: string) => Promise<void>;
-  onPress: VoidFunction;
-  onPressMinus: VoidFunction;
+  isEditMode?: boolean;
+  onDelete?: (sessionId: string) => Promise<void>;
+  onPress?: VoidFunction;
+  onPressMinus?: VoidFunction;
   enableSwipeable?: boolean;
 };
 
