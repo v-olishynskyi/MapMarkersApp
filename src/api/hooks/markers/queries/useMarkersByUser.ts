@@ -14,18 +14,4 @@ export const useMarkersByUser = (userId: string) => {
     initialData: [],
     select: markers => markers.map(marker => new MarkerModel(marker)),
   });
-  // return useInfiniteQuery<PaginationResponse<Marker>, AxiosError>({
-  //   queryKey,
-  //   queryFn: ({ pageParam }) =>
-  //     MarkersService.paginatedMarkers({
-  //       ...params,
-  //       user_id: userId,
-  //       page: pageParam as number,
-  //     }),
-  //   initialPageParam: 1,
-  //   initialData: { pages: [], pageParams: [] },
-  //   getNextPageParam: lastPage => {
-  //     return lastPage?.meta?.next_page ?? undefined;
-  //   },
-  // });
 };

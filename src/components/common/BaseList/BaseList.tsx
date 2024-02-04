@@ -36,10 +36,13 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
 
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
-  const Footer = () => (
-    <View style={[generalStyles.row, styles.footerContainer]}>
-      <ActivityIndicator size="small" />
-    </View>
+  const footer = React.useMemo(
+    () => (
+      <View style={[generalStyles.row, styles.footerContainer]}>
+        <ActivityIndicator size="small" />
+      </View>
+    ),
+    [styles.footerContainer],
   );
 
   React.useEffect(() => {
@@ -55,6 +58,17 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
   const listEmptyComponent = (
     <Text style={styles.emptyComponentLabel}>Дані відсутні</Text>
   );
+
+  const refreshControl = enableRefresh ? (
+    <LoaderRefresh
+      isRefreshing={isRefreshing}
+      onRefresh={async () => {
+        setIsRefreshing(true);
+        await onRefresh?.();
+        setIsRefreshing(false);
+      }}
+    />
+  ) : undefined;
 
   return (
     <FlatList
@@ -74,20 +88,9 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
       }
       {...rest}
       ListFooterComponent={
-        !isLoading && !isRefreshing && isFetchingNextPage ? <Footer /> : null
+        !isLoading && !isRefreshing && isFetchingNextPage ? footer : null
       }
-      refreshControl={
-        enableRefresh ? (
-          <LoaderRefresh
-            isRefreshing={isRefreshing}
-            onRefresh={async () => {
-              setIsRefreshing(true);
-              await onRefresh?.();
-              setIsRefreshing(false);
-            }}
-          />
-        ) : undefined
-      }
+      refreshControl={refreshControl}
     />
   );
 });

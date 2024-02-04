@@ -4,6 +4,8 @@ export enum MutationKey {
   DeleteMarker = 'delete-marker',
 
   UpdateProfile = 'update-profile',
-  ChangeAvatar = 'change-avatar',
   TerminateSession = 'terminate-session',
+
+  UploadFile = 'upload-file',
+  DeleteFile = 'delete-file',
 }

@@ -61,17 +61,6 @@ export default class UserModel {
     return response;
   }
 
-  async update(data: UpdateUserData | FormData) {
-    const newUserData = await UsersService.update(this.id, data);
-
-    this.handleData(newUserData);
-    return newUserData;
-  }
-
-  public static async update(id: string, data: UpdateUserData) {
-    return UsersService.update(id, data);
-  }
-
   get fullname() {
     return `${this.first_name} ${this.last_name}`;
   }

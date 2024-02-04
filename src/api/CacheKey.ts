@@ -4,4 +4,7 @@ export enum CacheKey {
   MarkersByUser = 'markers-by-user',
 
   UserProfile = 'user-profile',
+
+  User = 'user',
+  Users = 'users',
 }

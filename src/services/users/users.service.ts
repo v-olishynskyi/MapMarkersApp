@@ -1,7 +1,11 @@
 import api from '@api/axios';
 import { PaginationResponse } from '@common/types';
 import { User } from '@common/types/entities';
-import { CommunityUser, UpdateProfileData } from '@services/users/types';
+import {
+  CommunityUser,
+  GetUsersParams,
+  UpdateProfileData,
+} from '@services/users/types';
 
 export default class UsersService {
   public static async loadProfile() {
@@ -22,15 +26,10 @@ export default class UsersService {
     return data;
   }
 
-  public static async getCommunityUsers(
-    page: number,
-    limit: number,
-    search?: string,
-  ) {
+  public static async getCommunityUsers(params: GetUsersParams) {
     const { data } = await api.get<PaginationResponse<CommunityUser>>(
-      `users/paginated?page=${page}&limit=${limit}${
-        search ? `&search=${search}` : ''
-      }`,
+      'users/paginated',
+      { params },
     );
 
     return data;

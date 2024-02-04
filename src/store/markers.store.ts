@@ -6,7 +6,7 @@ import MarkersService, { CreateMarkerData } from '@services/markers';
 import { RootStore } from '@store/root.store';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-export default class MarkersStore {
+export class MarkersStore {
   rootStore: RootStore;
 
   editableMarker: MarkerModel | null = null;
