@@ -1,49 +1,47 @@
-import React from 'react';
 import { UserModel } from '@models';
-import UsersService from '@services/users';
 import { useStores } from '@store';
+import { useProfile } from '@api/hooks/profile';
+import { useUser } from '@api/hooks/users';
+import React from 'react';
 
-const useProfileViewUser = (
-  userId: string,
-): {
+type Response = {
   user: UserModel;
   isLoading: boolean;
-  loadUser: VoidFunction;
+  refetch: VoidFunction;
   isMe: boolean;
-} => {
+};
+
+const useProfileViewUser = (userId: string): Response => {
   const {
-    userStore: { user: currentUser, loadProfile, isLoading },
+    userStore: {
+      user: { id: currentUserId },
+      setUser,
+    },
   } = useStores();
-  const [isLoadindUser, setIsLoadindUser] = React.useState(false);
-  const [user, setUser] = React.useState<UserModel>({} as UserModel);
 
-  const isMe = userId === currentUser.id;
+  const isMe = userId === currentUserId;
 
-  const loadUser = React.useCallback(async () => {
-    try {
-      setIsLoadindUser(true);
-      const loadedUser = await UsersService.get(userId);
-
-      const userModel = new UserModel(loadedUser);
-      setUser(userModel);
-    } catch (error) {
-    } finally {
-      setIsLoadindUser(false);
-    }
-  }, [userId]);
+  const {
+    data: profile,
+    isLoading: isLoadingProfile,
+    refetch: refetchProfile,
+  } = useProfile({ enabled: isMe });
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    refetch: refetchUser,
+  } = useUser(userId, { enabled: !isMe });
 
   React.useEffect(() => {
-    if (isMe) {
-      return setUser(currentUser);
+    if (isMe && profile) {
+      setUser(profile);
     }
-
-    loadUser();
-  }, [userId, currentUser, loadUser, isMe]);
+  }, [isMe, profile, setUser]);
 
   return {
-    user,
-    isLoading: isMe ? isLoading : isLoadindUser,
-    loadUser: isMe ? loadProfile : loadUser,
+    user: isMe ? new UserModel(profile!) : user!,
+    isLoading: isMe ? isLoadingProfile : isLoadingUser,
+    refetch: isMe ? refetchProfile : refetchUser,
     isMe,
   };
 };

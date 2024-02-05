@@ -1,6 +1,6 @@
 import { CacheKey } from '@api/CacheKey';
 import { User } from '@common/types/entities';
-import UsersService from '@services/users';
+import ProfileService from '@services/profile';
 import { UndefinedInitialDataOptions, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
@@ -15,7 +15,7 @@ export const useProfile = (
   return useQuery<User, AxiosError>({
     ...options,
     queryKey,
-    queryFn: UsersService.loadProfile,
+    queryFn: ProfileService.loadProfile,
     refetchInterval: 1000 * 60,
   });
 };

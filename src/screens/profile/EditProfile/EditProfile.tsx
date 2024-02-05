@@ -9,7 +9,7 @@ import { useStores } from '@store';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { HeaderButton, Input, Toast } from '@components';
 import { observer } from 'mobx-react-lite';
-import { getTheme, wait } from '@common/helpers';
+import { getTheme } from '@common/helpers';
 import { useFormik } from 'formik';
 import { FormState } from './types';
 import { useNavigation } from '@react-navigation/native';
@@ -34,11 +34,10 @@ const EditProfile: React.FC = () => {
     userStore: { user },
   } = useStores();
 
-  const { mutateAsync: updateProfile, isPending } = useUpdateProfile(user.id);
+  const { mutateAsync: updateProfile, isPending } = useUpdateProfile();
 
   const onSubmit = async (values: FormState) => {
     try {
-      await wait(2000);
       await updateProfile(values);
     } catch (error) {}
   };

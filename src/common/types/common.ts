@@ -39,4 +39,8 @@ export type File = {
   updated_at: string;
 };
 
+export enum FileTypes {
+  Avatar = 'avatar',
+}
+
 export type BaseImage = Pick<File, 'id' | 'url'>;

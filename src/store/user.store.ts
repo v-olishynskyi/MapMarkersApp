@@ -16,10 +16,10 @@ export class UserStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  setUser(user: User | UserModel) {
-    if (user instanceof UserModel) {
-      return (this.user = user);
-    }
+  setUser(user: User) {
+    // if (user instanceof UserModel) {
+    //   return (this.user = user);
+    // }
 
     return (this.user = new UserModel(user));
   }

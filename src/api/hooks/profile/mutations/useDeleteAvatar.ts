@@ -6,20 +6,20 @@ import { useStores } from '@store';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-export const useChangeAvatar = () => {
-  const mutationKey = [MutationKey.ChangeAvatar];
+export const useDeleteAvatar = () => {
+  const mutationKey = [MutationKey.DeleteAvatar];
 
   const {
     userStore: { setUser },
   } = useStores();
 
-  return useMutation<User, AxiosError, FormData>({
+  return useMutation<User, AxiosError, void>({
     mutationKey,
-    mutationFn: ProfileService.uploadAvatar,
+    mutationFn: ProfileService.deleteAvatar,
+    onError: defaultErrorHandler,
     onSuccess: user => {
-      showToast('success', 'Аватар успішно змінено');
+      showToast('success', 'Аватар успішно видалено');
       setUser(user);
     },
-    onError: defaultErrorHandler,
   });
 };

@@ -13,16 +13,17 @@ import {
   Text,
   View,
 } from 'react-native';
-import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
 import { Avatar, ImageViewer, Menu, Pressable } from '@components';
 import { generalStyles } from '@styles';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { getTheme } from '@common/helpers';
+import { collectFileFormData, getTheme } from '@common/helpers';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionSheet from 'react-native-ui-lib/actionSheet';
 import { openPicker } from 'react-native-image-crop-picker';
 import useProfileViewUser from './hooks/useProfileViewUser';
+import { FileTypes } from '@common/types';
+import { useChangeAvatar, useDeleteAvatar } from '@api/hooks/profile';
 
 /**
  * ProfileView
@@ -35,22 +36,22 @@ import useProfileViewUser from './hooks/useProfileViewUser';
  * // How to use ProfileView:
  *  <ProfileView />
  */
-const ProfileView: React.FC<ProfileViewProps> = observer(() => {
+const ProfileView: React.FC<ProfileViewProps> = () => {
   const { colors } = getTheme();
   const styles = useStyles();
   const { navigate, setOptions } = useNavigation<NavigationType>();
   const { params } = useRoute<RouteType>();
 
-  const {
-    userStore: { changeAvatar, removeAvatar },
-  } = useStores();
-
   const imageViewerRef = React.useRef<ImageViewer>(null);
 
-  const { isLoading, user, loadUser, isMe } = useProfileViewUser(
+  const { isLoading, user, refetch, isMe } = useProfileViewUser(
     params?.userId || '',
   );
-  // const {} = useUpdateProfileAvatar();
+
+  console.log(JSON.stringify(user, null, 2));
+
+  const { mutate: uploadAvatar } = useChangeAvatar();
+  const { mutate: deleteAvatar } = useDeleteAvatar();
 
   const [showActionSheet, setShowActionSheet] = React.useState(false);
 
@@ -59,7 +60,11 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
       cropping: true,
       mediaType: 'photo',
       cropperCircleOverlay: true,
-    }).then(changeAvatar);
+    }).then(async image => {
+      const formData = collectFileFormData(image, FileTypes.Avatar);
+
+      await uploadAvatar(formData);
+    });
   };
 
   const handlePressViewAvatar = () => imageViewerRef.current?.show();
@@ -67,22 +72,31 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
     isMe ? setShowActionSheet(true) : handlePressViewAvatar();
   const navigateToUserMarkers = () =>
     navigate('user-markers', { userId: user.id });
+  const handleRemoveAvatar = deleteAvatar;
 
   const onDismissActionSheet = () => setShowActionSheet(false);
 
-  const actionSheetOptions = [
+  const viewAvatarOption = [
     {
       label: 'Перегляд',
       onPress: handlePressViewAvatar,
     },
+  ];
+
+  const deleteAvatarOption = [
+    {
+      label: 'Видалити',
+      onPress: handleRemoveAvatar,
+    },
+  ];
+
+  const actionSheetOptions = [
+    ...(user?.avatar ? viewAvatarOption : []),
     {
       label: 'Змінити',
       onPress: handlePressEditAvatar,
     },
-    {
-      label: 'Видалити',
-      onPress: removeAvatar,
-    },
+    ...(user?.avatar ? deleteAvatarOption : []),
     { label: 'Закрити' },
   ];
 
@@ -106,7 +120,7 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
       <View>
         <Text>Щось пішло не так. Спробуйте ще раз</Text>
       </View>
-      <Pressable onPress={loadUser}>
+      <Pressable onPress={refetch}>
         <Text>Повторити</Text>
       </Pressable>
     </>
@@ -118,7 +132,7 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
         style={styles.container}
         contentContainerStyle={styles.scrollContent}
         refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={loadUser} />
+          <RefreshControl refreshing={isLoading} onRefresh={refetch} />
         }>
         {isLoading ? (
           <ActivityIndicator />
@@ -187,11 +201,11 @@ const ProfileView: React.FC<ProfileViewProps> = observer(() => {
           onDismiss={onDismissActionSheet}
         />
       )}
-      {user.avatar_url && (
+      {user?.avatar_url && (
         <ImageViewer ref={imageViewerRef} images={[user.avatar_url]} />
       )}
     </>
   );
-});
+};
 
-export default ProfileView;
+export default observer(ProfileView);
