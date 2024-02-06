@@ -1,4 +1,4 @@
-import { AvatarProps as RNUiLibAvatarProps } from 'react-native-ui-lib';
+import { StyleProp, ViewStyle } from 'react-native';
 
 /**
  * @memberof Avatar
@@ -9,4 +9,6 @@ export type AvatarProps = {
   fullname: string;
   initials: string;
   size?: number;
-} & Omit<RNUiLibAvatarProps, 'size'>;
+  onPress?: VoidFunction;
+  containerStyle?: StyleProp<ViewStyle>;
+};

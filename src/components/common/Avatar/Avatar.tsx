@@ -6,7 +6,8 @@
 import React from 'react';
 import { AvatarProps } from './types';
 import RNUiLibAvatar from 'react-native-ui-lib/avatar';
-import { ImageViewer } from '@components';
+import { FastImageProgress, ImageViewer, Pressable } from '@components';
+import useStyles from './styles';
 
 /**
  * Avatar
@@ -23,27 +24,37 @@ const Avatar: React.FC<AvatarProps> = ({
   fullname,
   initials,
   size = 64,
-  ...rest
+  onPress,
+  containerStyle,
 }) => {
+  const styles = useStyles();
   const imageViewerRef = React.useRef<ImageViewer>(null);
 
   return (
     <>
-      <RNUiLibAvatar
-        animate
-        label={initials}
-        useAutoColors
-        name={fullname}
-        source={{
-          uri: url || undefined,
-        }}
-        size={size}
-        onPress={() => {
-          return url ? imageViewerRef.current?.show() : null;
-        }}
-        {...rest}
-      />
-      {url && <ImageViewer ref={imageViewerRef} images={[url]} />}
+      {!url ? (
+        <RNUiLibAvatar
+          animate
+          label={initials}
+          useAutoColors
+          name={fullname}
+          size={size}
+          containerStyle={containerStyle}
+          onPress={onPress}
+        />
+      ) : (
+        <>
+          <Pressable onPress={onPress}>
+            {/* @ts-ignore */}
+            <FastImageProgress
+              source={{ uri: url }}
+              style={[containerStyle, { width: size, height: size }]}
+              imageStyle={[styles.image]}
+            />
+          </Pressable>
+          {url && <ImageViewer ref={imageViewerRef} images={[url]} />}
+        </>
+      )}
     </>
   );
 };

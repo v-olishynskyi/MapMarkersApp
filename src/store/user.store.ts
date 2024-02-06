@@ -1,7 +1,7 @@
-import { UserModel, UserSessionModel } from '@models';
+import { PublicFileModel, UserModel, UserSessionModel } from '@models';
 import { RootStore } from '@store/root.store';
 import { makeAutoObservable } from 'mobx';
-import { User } from '@common/types/entities';
+import { PublicFile, User } from '@common/types/entities';
 import { Coordinates } from '@common/types';
 
 export class UserStore {
@@ -30,5 +30,12 @@ export class UserStore {
 
   setSessions(newList: UserSessionModel[]) {
     this.user.sessions.set(newList);
+  }
+
+  setAvatar(file: PublicFile | null) {
+    if (!file) {
+      return (this.user.avatar = null);
+    }
+    this.user.avatar = new PublicFileModel(file);
   }
 }

@@ -10,16 +10,16 @@ export const useDeleteAvatar = () => {
   const mutationKey = [MutationKey.DeleteAvatar];
 
   const {
-    userStore: { setUser },
+    userStore: { setAvatar },
   } = useStores();
 
   return useMutation<User, AxiosError, void>({
     mutationKey,
     mutationFn: ProfileService.deleteAvatar,
-    onError: defaultErrorHandler,
-    onSuccess: user => {
+    onSuccess: () => {
       showToast('success', 'Аватар успішно видалено');
-      setUser(user);
+      setAvatar(null);
     },
+    onError: defaultErrorHandler,
   });
 };

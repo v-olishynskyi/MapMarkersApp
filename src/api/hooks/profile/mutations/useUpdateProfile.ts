@@ -10,15 +10,12 @@ import { AxiosError } from 'axios';
 export const useUpdateProfile = () => {
   const mutationKey = [MutationKey.UpdateProfile];
   const {
-    userStore: { setUser, user },
+    userStore: { setUser },
   } = useStores();
 
   return useMutation<User, AxiosError, UpdateProfileData>({
     mutationKey,
     mutationFn: data => ProfileService.updateProfile(data),
-    onMutate: data => {
-      setUser({ ...user });
-    },
     onSuccess: user => {
       return setUser(user);
     },

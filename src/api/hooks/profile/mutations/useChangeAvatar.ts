@@ -10,7 +10,7 @@ export const useChangeAvatar = () => {
   const mutationKey = [MutationKey.ChangeAvatar];
 
   const {
-    userStore: { setUser },
+    userStore: { setAvatar },
   } = useStores();
 
   return useMutation<User, AxiosError, FormData>({
@@ -18,7 +18,7 @@ export const useChangeAvatar = () => {
     mutationFn: ProfileService.uploadAvatar,
     onSuccess: user => {
       showToast('success', 'Аватар успішно змінено');
-      setUser(user);
+      setAvatar(user.avatar!);
     },
     onError: defaultErrorHandler,
   });

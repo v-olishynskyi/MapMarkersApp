@@ -48,10 +48,8 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
     params?.userId || '',
   );
 
-  console.log(JSON.stringify(user, null, 2));
-
-  const { mutate: uploadAvatar } = useChangeAvatar();
-  const { mutate: deleteAvatar } = useDeleteAvatar();
+  const { mutateAsync: uploadAvatar } = useChangeAvatar();
+  const { mutateAsync: deleteAvatar } = useDeleteAvatar();
 
   const [showActionSheet, setShowActionSheet] = React.useState(false);
 
@@ -64,15 +62,27 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
       const formData = collectFileFormData(image, FileTypes.Avatar);
 
       await uploadAvatar(formData);
+      refetch();
     });
   };
 
   const handlePressViewAvatar = () => imageViewerRef.current?.show();
+
   const handlePressAvatar = () =>
     isMe ? setShowActionSheet(true) : handlePressViewAvatar();
+
   const navigateToUserMarkers = () =>
     navigate('user-markers', { userId: user.id });
-  const handleRemoveAvatar = deleteAvatar;
+
+  const navigateToEditProfile = React.useCallback(
+    () => navigate('user-markers', { userId: user.id }),
+    [navigate, user?.id],
+  );
+
+  const handleRemoveAvatar = async () => {
+    await deleteAvatar();
+    refetch();
+  };
 
   const onDismissActionSheet = () => setShowActionSheet(false);
 
@@ -102,11 +112,11 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
 
   const profileHeaderRight = React.useCallback(() => {
     return (
-      <Pressable onPress={() => navigate('edit-profile' as any)}>
+      <Pressable onPress={navigateToEditProfile}>
         <Icon name="md-pencil" size={24} color={colors.primary} />
       </Pressable>
     );
-  }, [colors.primary, navigate]);
+  }, [colors.primary, navigateToEditProfile]);
 
   React.useEffect(() => {
     isMe &&
@@ -143,8 +153,8 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
             <View style={styles.profileContainer}>
               <View style={styles.avatarContainer}>
                 <Avatar
-                  initials={user!.initials}
-                  fullname={user!.fullname}
+                  initials={user.initials}
+                  fullname={user.fullname}
                   url={user.avatar_url}
                   size={110}
                   onPress={handlePressAvatar}
@@ -166,7 +176,7 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
               ) : isMe ? (
                 <Pressable
                   style={generalStyles.rowBetween}
-                  onPress={() => navigate('edit-profile')}>
+                  onPress={navigateToEditProfile}>
                   <Text style={styles.addUsernameButton}>
                     Додати імʼя користувача
                   </Text>
