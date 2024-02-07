@@ -1,6 +1,7 @@
 import { CacheKey } from '@api/CacheKey';
 import { MutationKey } from '@api/MutationKey';
 import { defaultErrorHandler } from '@common/helpers';
+import { MessageResponse } from '@common/types';
 import MarkersService from '@services/markers';
 import { useStores } from '@store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -15,7 +16,7 @@ export const useDeleteMarker = () => {
   } = useStores();
   const queryClient = useQueryClient();
 
-  return useMutation<{ message: string }, AxiosError, string>({
+  return useMutation<MessageResponse, AxiosError, string>({
     mutationKey,
     mutationFn: MarkersService.delete,
     onSuccess: () => {

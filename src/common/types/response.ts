@@ -11,3 +11,7 @@ export type PaginationResponse<TData> = {
   data: TData[];
   meta: PaginationMeta;
 };
+
+export type MessageResponse = {
+  message: string;
+};

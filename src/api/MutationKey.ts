@@ -11,4 +11,7 @@ export enum MutationKey {
 
   UploadFile = 'upload-file',
   DeleteFile = 'delete-file',
+
+  JoinGroup = 'join-group',
+  LeaveGroup = 'leave-group',
 }

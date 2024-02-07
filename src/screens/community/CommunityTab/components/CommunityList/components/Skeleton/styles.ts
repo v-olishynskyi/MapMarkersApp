@@ -4,7 +4,6 @@ import { spacingBase } from '@styles';
 const useStyles = () => {
   return StyleSheet.create({
     container: {
-      paddingHorizontal: spacingBase.s3,
       marginBottom: spacingBase.s1,
       width: '100%',
     },

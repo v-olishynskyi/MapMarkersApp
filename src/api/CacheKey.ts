@@ -7,4 +7,7 @@ export enum CacheKey {
 
   User = 'user',
   Users = 'users',
+
+  Groups = 'groups',
+  Group = 'group',
 }

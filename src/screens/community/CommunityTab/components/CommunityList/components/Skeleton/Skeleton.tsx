@@ -5,7 +5,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import useStyles from './styles';
 import { getTheme } from '@common/helpers';
 
-const UserSkeleton: React.FC = () => {
+const Skeleton: React.FC = () => {
   const styles = useStyles();
   const { colors } = getTheme();
 
@@ -27,4 +27,4 @@ const UserSkeleton: React.FC = () => {
   );
 };
 
-export default UserSkeleton;
+export default Skeleton;

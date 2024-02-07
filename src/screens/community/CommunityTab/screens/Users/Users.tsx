@@ -1,30 +1,17 @@
 /**
  * @namespace Users
- * @category
- * @subcategory
+ * @category Community tab
+ * @subcategory tab screen
  *  */
 import React from 'react';
-import useStyles from './styles';
 import { NavigationType } from './types';
-import { getTheme } from '@common/helpers';
 import { useNavigation } from '@react-navigation/native';
 import { UserModel } from '@models';
-import { ListRenderItem, View } from 'react-native';
-import { UserItem, UserSkeleton } from './components';
-import { BaseList, Input } from '@components';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { ListRenderItem } from 'react-native';
+import { UserItem } from './components';
 import { useUsers } from '@api/hooks/users';
 import { CommunityUser } from '@services/users';
-
-const skeleton = (
-  <>
-    {Array(20)
-      .fill(undefined)
-      .map((_, index) => (
-        <UserSkeleton key={index} />
-      ))}
-  </>
-);
+import { CommunityList } from '../../components';
 
 /**
  * Users
@@ -37,8 +24,6 @@ const skeleton = (
  *  <Users />
  */
 const Users: React.FC = () => {
-  const { colors } = getTheme();
-  const styles = useStyles();
   const navigation = useNavigation<NavigationType>();
 
   const [search, setSearch] = React.useState('');
@@ -73,28 +58,17 @@ const Users: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <Input
-          placeholder="Пошук"
-          value={search}
-          onChangeText={setSearch}
-          leftIcon={<Icon name="search" size={16} color={colors.gray} />}
-          clearButtonMode="while-editing"
-        />
-      </View>
-      <BaseList
-        data={users}
-        isLoading={isLoading}
-        isFetchingNextPage={isFetchingNextPage}
-        onRefresh={refetch}
-        onEndReached={() => hasNextPage && fetchNextPage()}
-        style={styles.listContainer}
-        contentContainerStyle={styles.contentContainer}
-        renderItem={renderItem}
-        loader={skeleton}
-      />
-    </View>
+    <CommunityList<UserModel>
+      data={users || []}
+      search={search}
+      setSearch={setSearch}
+      isLoading={isLoading}
+      isFetchingNextPage={isFetchingNextPage}
+      fetchNextPage={fetchNextPage}
+      hasNextPage={hasNextPage}
+      refetch={refetch}
+      renderItem={renderItem}
+    />
   );
 };
 

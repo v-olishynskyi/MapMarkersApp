@@ -61,7 +61,9 @@ export type Group = {
   name: string;
   owner_id: string;
   owner: User;
+  avatar: PublicFile | null;
   members: User[];
+  is_member: boolean;
 
   created_at: string;
   updated_at: string;

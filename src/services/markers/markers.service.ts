@@ -1,7 +1,7 @@
 import api from '@api/axios';
 import { CreateMarkerData, UpdateMarkerData } from './types';
 import { Marker } from '@common/types/entities';
-import { PaginationResponse } from '@common/types';
+import { MessageResponse, PaginationResponse } from '@common/types';
 import { GetMarkersByUserParams } from './types';
 
 export default class MarkersService {
@@ -83,7 +83,7 @@ export default class MarkersService {
   }
 
   public static async delete(id: string) {
-    const { data } = await api.delete<{ message: string }>(`markers/${id}`);
+    const { data } = await api.delete<MessageResponse>(`markers/${id}`);
 
     return data;
   }

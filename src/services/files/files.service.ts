@@ -1,4 +1,5 @@
 import api from '@api/axios';
+import { MessageResponse } from '@common/types';
 import { PublicFile } from '@common/types/entities';
 
 export default class FilesService {
@@ -13,7 +14,7 @@ export default class FilesService {
   }
 
   public static async delete(id: string) {
-    const { data } = await api.delete<{ message: string }>(`files/${id}`);
+    const { data } = await api.delete<MessageResponse>(`files/${id}`);
 
     return data;
   }
