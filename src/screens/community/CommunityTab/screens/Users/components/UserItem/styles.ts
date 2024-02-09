@@ -13,7 +13,7 @@ const useStyles = () => {
       color: colors.text,
     },
     email: {
-      ...typography.regular.callout,
+      ...typography.regular.footnote,
       color: colors.gray,
     },
   });

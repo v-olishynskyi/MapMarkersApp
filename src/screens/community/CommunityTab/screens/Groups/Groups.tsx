@@ -4,7 +4,7 @@
  * @subcategory tab screen
  *  */
 import React from 'react';
-import { useGroups, useJoinGroup, useLeaveGroup } from '@api/hooks/groups';
+import { useGroups } from '@api/hooks/groups';
 import { Group } from '@common/types/entities';
 import { GroupModel } from '@models';
 import { CommunityList } from '../../components';

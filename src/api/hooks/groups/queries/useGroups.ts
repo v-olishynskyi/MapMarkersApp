@@ -13,6 +13,6 @@ export const useGroups = (params: GetGroupsParams = {}) => {
     queryFn: ({ pageParam }) =>
       GroupsService.paginatedGroups({ ...params, page: pageParam as any }),
     initialPageParam: 0,
-    getNextPageParam: lastPage => lastPage?.meta?.last_page || undefined,
+    getNextPageParam: lastPage => lastPage?.meta?.next_page || undefined,
   });
 };

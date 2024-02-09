@@ -12,6 +12,8 @@ import { Text, View } from 'react-native';
 import { getTheme } from '@common/helpers';
 import { ButtonProps } from '@components/common/Button/types';
 import { useJoinGroup, useLeaveGroup } from '@api/hooks/groups';
+import { useStores } from '@store';
+import { observer } from 'mobx-react-lite';
 
 /**
  * GroupItem
@@ -28,19 +30,25 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, onPress }) => {
   const styles = useStyles();
   const { colors } = getTheme();
 
-  const { mutate: join, isPending: isJoining } = useJoinGroup();
-  const { mutate: leave, isPending: isLeaving } = useLeaveGroup();
+  const {
+    userStore: { user },
+  } = useStores();
+
+  const { mutate: join, isPending: isJoining } = useJoinGroup(group.id);
+  const { mutate: leave, isPending: isLeaving } = useLeaveGroup(group.id);
+
+  const params = { group_id: group.id, user_id: user.id };
 
   const buttonProps: ButtonProps = group.is_member
     ? {
         label: 'Вийти',
         backgroundColor: colors.red,
-        onPress: () => leave(group.id),
+        onPress: () => leave(params),
       }
     : {
         label: 'Приєднатися',
         backgroundColor: colors.green,
-        onPress: () => join(group.id),
+        onPress: () => join(params),
       };
 
   return (
@@ -77,4 +85,4 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, onPress }) => {
   );
 };
 
-export default React.memo(GroupItem);
+export default React.memo(observer(GroupItem));

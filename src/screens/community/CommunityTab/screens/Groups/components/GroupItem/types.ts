@@ -7,6 +7,4 @@ import { GroupModel } from '@models';
 export type GroupItemProps = {
   group: GroupModel;
   onPress: VoidFunction;
-  onPressButton: VoidFunction;
-  isProcessing: boolean;
 };

@@ -1,20 +1,19 @@
 import api from '@api/axios';
 import { MessageResponse, PaginationResponse } from '@common/types';
 import { Group } from '@common/types/entities';
-import { GetGroupsParams } from '@services/groups/types';
+import { GetGroupsParams, JoinLeaveGroupParams } from '@services/groups/types';
 
 export default class GroupsService {
   public static async paginatedGroups(params: GetGroupsParams) {
-    const { data } = await api.get<PaginationResponse<Group>>(
-      'groups/paginated',
-      { params },
-    );
+    const { data } = await api.get<PaginationResponse<Group>>('groups', {
+      params,
+    });
 
     return data;
   }
 
-  public static async all(params: GetGroupsParams) {
-    const { data } = await api.get<Group[]>('groups/all', { params });
+  public static async all(params: Omit<GetGroupsParams, 'page' | 'limit'>) {
+    const { data } = await api.get<Group[]>('groups/get-all', { params });
 
     return data;
   }
@@ -25,8 +24,20 @@ export default class GroupsService {
     return data;
   }
 
-  public static async join(group_id: string) {
-    const { data } = await api.post<MessageResponse>(`groups/${group_id}/join`);
+  public static async join({ group_id, user_id }: JoinLeaveGroupParams) {
+    const { data } = await api.post<MessageResponse>(
+      `groups/${group_id}/join`,
+      { user_id },
+    );
+
+    return data;
+  }
+
+  public static async leave({ group_id, user_id }: JoinLeaveGroupParams) {
+    const { data } = await api.post<MessageResponse>(
+      `groups/${group_id}/leave`,
+      { user_id },
+    );
 
     return data;
   }

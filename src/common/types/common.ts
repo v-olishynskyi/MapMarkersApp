@@ -44,3 +44,8 @@ export enum FileTypes {
 }
 
 export type BaseImage = Pick<File, 'id' | 'url'>;
+
+export type PaginationParams = {
+  page: number;
+  limit: number;
+};

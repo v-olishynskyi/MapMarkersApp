@@ -7,6 +7,7 @@ import { Coordinates } from '@common/types';
 export class UserStore {
   rootStore: RootStore;
 
+  userEntity: User = {} as User;
   user: UserModel = {} as UserModel;
   userCoordinates: Coordinates | null = null;
 
@@ -17,9 +18,7 @@ export class UserStore {
   }
 
   setUser(user: User) {
-    // if (user instanceof UserModel) {
-    //   return (this.user = user);
-    // }
+    this.userEntity = user;
 
     return (this.user = new UserModel(user));
   }

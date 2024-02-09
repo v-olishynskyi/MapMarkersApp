@@ -1,8 +1,10 @@
 import { CacheKey } from '@api/CacheKey';
 import { MutationKey } from '@api/MutationKey';
-import { defaultErrorHandler, wait } from '@common/helpers';
+import { defaultErrorHandler, showToast } from '@common/helpers';
 import { MessageResponse, PaginationResponse } from '@common/types';
 import { Group } from '@common/types/entities';
+import GroupsService, { JoinLeaveGroupParams } from '@services/groups';
+import { useStores } from '@store';
 import {
   InfiniteData,
   useMutation,
@@ -10,21 +12,22 @@ import {
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-export const useJoinGroup = () => {
-  const mutationKey = [MutationKey.JoinGroup];
+export const useJoinGroup = (groupId: string) => {
+  const {
+    userStore: { userEntity },
+  } = useStores();
+
+  const mutationKey = [MutationKey.JoinGroup, groupId];
 
   const queryClient = useQueryClient();
 
-  return useMutation<MessageResponse, AxiosError, string>({
+  return useMutation<MessageResponse, AxiosError, JoinLeaveGroupParams>({
     mutationKey,
-    mutationFn: async (id: string) => {
-      await wait(2000);
-      return Promise.resolve(true);
-    },
-    onError: (error, group_id) => {
-      defaultErrorHandler(error);
-    },
-    onSuccess: (_, group_id) => {
+    mutationFn: GroupsService.join,
+    onError: defaultErrorHandler,
+    onSuccess: ({ message }, { group_id }) => {
+      showToast('success', message, null);
+
       queryClient.setQueriesData<InfiniteData<PaginationResponse<Group>>>(
         {
           queryKey: [CacheKey.Groups],
@@ -36,10 +39,16 @@ export const useJoinGroup = () => {
             pages: pages?.pages.map(page => ({
               ...page,
               data: page.data.map(group =>
-                group.id === group_id ? { ...group, is_member: true } : group,
+                group.id === group_id
+                  ? {
+                      ...group,
+                      is_member: true,
+                      members: [...group.members, userEntity],
+                    }
+                  : group,
               ),
             })),
-          };
+          } as any;
         },
       );
     },
