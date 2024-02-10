@@ -3,7 +3,7 @@ import { getTheme } from '@common/helpers';
 import { StyleSheet } from 'react-native';
 
 const useStyles = () => {
-  const { colors, typography } = getTheme();
+  const { colors } = getTheme();
 
   return StyleSheet.create({
     container: {
@@ -20,22 +20,6 @@ const useStyles = () => {
     avatarContainer: {
       alignItems: 'center',
       marginBottom: spacingBase.s4,
-    },
-
-    label: {
-      ...typography.regular.body,
-      color: colors.gray,
-    },
-
-    fullname: {
-      ...typography.bold.body,
-      textAlign: 'center',
-      color: colors.text,
-      marginBottom: 4,
-    },
-    addUsernameButton: {
-      ...typography.regular.body,
-      color: colors.primary,
     },
 
     markers: {

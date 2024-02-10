@@ -23,6 +23,7 @@ export type AppStackParamsList = {
   settings: undefined;
   'user-sessions': undefined;
   'user-markers': { userId: string };
+  'user-groups': { userId: string };
   'profile-view': { userId?: string } | undefined;
   'edit-profile': undefined;
   'marker-management': { mode: MarkerManagementModes };

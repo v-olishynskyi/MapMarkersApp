@@ -10,6 +10,7 @@ import {
   Sessions,
   Settings,
   UserMarkers,
+  UserGroups,
 } from '@screens';
 import { IconButton } from '@components';
 import { observer } from 'mobx-react-lite';
@@ -53,6 +54,14 @@ const AppNavigation: React.FC = () => {
           component={UserMarkers}
           options={{
             title: 'Маркери',
+            headerBackTitle: 'Профіль',
+          }}
+        />
+        <Stack.Screen
+          name="user-groups"
+          component={UserGroups}
+          options={{
+            title: 'Групи',
             headerBackTitle: 'Профіль',
           }}
         />

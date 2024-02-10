@@ -3,11 +3,13 @@ export type GetGroupsParams = {
   page?: number;
   limit?: number;
   filter_by?: GroupsFilterBy;
+  user_id?: string;
 };
 
 export enum GroupsFilterBy {
   All = 'all',
   My_Groups = 'my_groups',
+  By_User = 'by_user',
   Public = 'public',
 }
 

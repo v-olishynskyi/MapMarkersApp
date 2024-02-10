@@ -15,7 +15,6 @@ import {
 } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { Avatar, ImageViewer, Menu, Pressable } from '@components';
-import { generalStyles } from '@styles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { collectFileFormData, getTheme } from '@common/helpers';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -24,6 +23,7 @@ import { openPicker } from 'react-native-image-crop-picker';
 import useProfileViewUser from './hooks/useProfileViewUser';
 import { FileTypes } from '@common/types';
 import { useChangeAvatar, useDeleteAvatar } from '@api/hooks/profile';
+import { ProfileInfo } from './components';
 
 /**
  * ProfileView
@@ -73,6 +73,8 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
 
   const navigateToUserMarkers = () =>
     navigate('user-markers', { userId: user.id });
+  const navigateToUserGroups = () =>
+    navigate('user-groups', { userId: user.id });
 
   const navigateToEditProfile = React.useCallback(
     () => navigate('user-markers', { userId: user.id }),
@@ -160,33 +162,7 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
                   onPress={handlePressAvatar}
                 />
               </View>
-              <View style={[generalStyles.rowBetween]}>
-                <Text style={styles.label}>ПІБ</Text>
-                <Text style={styles.fullname}>{user?.fullname}</Text>
-              </View>
-              <View style={[generalStyles.rowBetween]}>
-                <Text style={styles.label}>E-mail</Text>
-                <Text style={styles.fullname}>{user?.email}</Text>
-              </View>
-              {user?.username ? (
-                <View style={[generalStyles.rowBetween]}>
-                  <Text style={styles.label}>Імʼя користувача</Text>
-                  <Text style={styles.fullname}>@{user.username}</Text>
-                </View>
-              ) : isMe ? (
-                <Pressable
-                  style={generalStyles.rowBetween}
-                  onPress={navigateToEditProfile}>
-                  <Text style={styles.addUsernameButton}>
-                    Додати імʼя користувача
-                  </Text>
-                  <Icon
-                    name="chevron-forward-outline"
-                    size={24}
-                    color={colors.gray}
-                  />
-                </Pressable>
-              ) : null}
+              <ProfileInfo user={user} />
             </View>
             <Menu
               style={styles.markers}
@@ -195,6 +171,11 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
                   label: 'Маркери',
                   secondaryLabel: user.markers?.items?.length || 0,
                   onPress: navigateToUserMarkers,
+                },
+                {
+                  label: 'Групи',
+                  secondaryLabel: user.groups?.items?.length || 0,
+                  onPress: navigateToUserGroups,
                 },
               ]}
             />
