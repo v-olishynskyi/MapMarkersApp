@@ -8,7 +8,7 @@ import { NavigationType } from './types';
 import { useNavigation } from '@react-navigation/native';
 import { UserModel } from '@models';
 import { ListRenderItem } from 'react-native';
-import { UserItem } from './components';
+import { UserItem } from '@components';
 import { useUsers } from '@api/hooks/users';
 import { CommunityUser } from '@services/users';
 import { CommunityList } from '../../components';

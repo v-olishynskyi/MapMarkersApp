@@ -18,7 +18,6 @@ export const useLeaveGroup = (groupId: string) => {
   } = useStores();
 
   const mutationKey = [MutationKey.LeaveGroup, groupId];
-
   const queryClient = useQueryClient();
 
   return useMutation<MessageResponse, AxiosError, JoinLeaveGroupParams>({
@@ -27,6 +26,16 @@ export const useLeaveGroup = (groupId: string) => {
     onError: defaultErrorHandler,
     onSuccess: ({ message }, { group_id }) => {
       showToast('success', message);
+
+      queryClient.refetchQueries({
+        exact: false,
+        queryKey: [CacheKey.UserProfile],
+      });
+
+      queryClient.refetchQueries({
+        exact: false,
+        queryKey: [CacheKey.AllGroups],
+      });
 
       queryClient.setQueriesData<InfiniteData<PaginationResponse<Group>>>(
         {

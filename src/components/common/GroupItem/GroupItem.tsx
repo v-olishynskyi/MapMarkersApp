@@ -34,6 +34,8 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, onPress }) => {
     userStore: { user },
   } = useStores();
 
+  const isOwner = group.owner_id === user.id;
+
   const { mutate: join, isPending: isJoining } = useJoinGroup(group.id);
   const { mutate: leave, isPending: isLeaving } = useLeaveGroup(group.id);
 
@@ -75,11 +77,13 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, onPress }) => {
             </Text>
           </View>
         </View>
-        <Button
-          {...buttonProps}
-          loading={isJoining || isLeaving}
-          size="xSmall"
-        />
+        {!isOwner && (
+          <Button
+            {...buttonProps}
+            loading={isJoining || isLeaving}
+            size="xSmall"
+          />
+        )}
       </View>
     </Pressable>
   );

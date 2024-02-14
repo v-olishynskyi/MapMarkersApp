@@ -1,20 +1,16 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import NetInfo from '@react-native-community/netinfo';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { onlineManager } from '@tanstack/react-query';
+import { useStores } from '@store';
 
 const useOnlineManager = () => {
-  React.useEffect(() => {
-    if (Platform.OS !== 'web') {
-      return NetInfo.addEventListener(state => {
-        onlineManager.setOnline(
-          state.isConnected !== null &&
-            state.isConnected &&
-            !!state.isInternetReachable,
-        );
-      });
-    }
-  }, []);
+  const {
+    appStore: { setIsOnline },
+  } = useStores();
+
+  const { isConnected } = useNetInfo({});
+
+  setIsOnline(!!isConnected);
+  onlineManager.setOnline(!!isConnected);
 };
 
 export default useOnlineManager;

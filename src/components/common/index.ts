@@ -12,3 +12,5 @@ export { default as HeaderButton } from './HeaderButton/HeaderButton';
 export { default as ImageViewer } from './ImageViewer/ImageViewer';
 export { default as AnimatedImageLibrary } from './AnimatedImageLibrary/AnimatedImageLibrary';
 export { default as FastImageProgress } from './FastImageProgress/FastImageProgress';
+export { default as GroupItem } from './GroupItem/GroupItem';
+export { default as UserItem } from './UserItem/UserItem';

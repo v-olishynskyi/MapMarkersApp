@@ -9,7 +9,7 @@ import { Group } from '@common/types/entities';
 import { GroupModel } from '@models';
 import { CommunityList } from '../../components';
 import { ListRenderItem } from 'react-native';
-import { GroupItem } from './components';
+import { GroupItem } from '@components';
 
 /**
  * Groups

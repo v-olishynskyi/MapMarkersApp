@@ -3,7 +3,7 @@ import AuthNavigation from './AuthNavigation';
 import AppNavigation from './AppNavigation';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
-import { useProfile } from '@api/hooks/profile/queries/useProfile';
+import { useProfile } from '@api/hooks/profile';
 
 const RootNavigation = observer(() => {
   const {

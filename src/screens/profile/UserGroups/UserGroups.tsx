@@ -1,17 +1,16 @@
 import React from 'react';
-import { BaseList } from '@components';
+import { LoaderRefresh } from '@components';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { AppStackParamsList } from '@navigation';
-import { ListRenderItem, Text, View } from 'react-native';
-import { generalStyles } from '@styles';
-import { useGroups } from '@api/hooks/groups';
+import { ScrollView } from 'react-native';
+import { useAllGroups } from '@api/hooks/groups';
 import { useStores } from '@store';
-import { GroupModel } from '@models';
-import { Group } from '@common/types/entities';
-import GroupItem from '../../community/CommunityTab/screens/Groups/components/GroupItem/GroupItem';
 import { GroupsFilterBy } from '@services/groups';
+import useStyles from './styles';
+import { GroupsListSection } from './components';
 
 const UserGroups = () => {
+  const styles = useStyles();
   const { params } = useRoute<RouteProp<AppStackParamsList, 'user-groups'>>();
   const {
     userStore: { user },
@@ -20,37 +19,36 @@ const UserGroups = () => {
   const isMe = params.userId === user.id;
 
   const {
-    data,
+    data: groups,
     isLoading,
     refetch,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  } = useGroups({
-    limit: 20,
+  } = useAllGroups({
     filter_by: isMe ? GroupsFilterBy.My_Groups : GroupsFilterBy.By_User,
     user_id: isMe ? undefined : params.userId,
   });
 
-  const groups = React.useMemo(
-    () =>
-      data?.pages
-        .reduce((arr, page) => [...arr, ...page.data], [] as Group[])
-        .map(group => new GroupModel(group)),
-    [data?.pages],
-  );
-
-  const renderItem: ListRenderItem<GroupModel> = ({ item: group }) => {
-    return <GroupItem group={group} onPress={() => {}} />;
-  };
+  const ownGroups = groups?.filter(group => group.owner_id === user.id) || [];
+  const memberGroups =
+    groups?.filter(group => group.owner_id !== user.id) || [];
 
   return (
-    <BaseList
-      data={groups}
-      renderItem={renderItem}
-      isLoading={isLoading}
-      onRefresh={refetch}
-    />
+    <ScrollView
+      refreshControl={
+        <LoaderRefresh onRefresh={refetch} isRefreshing={isLoading} />
+      }
+      style={styles.listContainer}
+      contentContainerStyle={styles.contentContainer}>
+      <GroupsListSection
+        groups={ownGroups}
+        title="Групи, якими ви керуєте"
+        listEmptyComponents={<></>}
+      />
+      <GroupsListSection
+        groups={memberGroups}
+        title="Групи, у яких ви учасник"
+        listEmptyComponents={<></>}
+      />
+    </ScrollView>
   );
 };
 

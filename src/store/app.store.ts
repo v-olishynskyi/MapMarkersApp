@@ -13,6 +13,7 @@ export class AppStore {
   isGrantedLocationPermission: boolean = false;
   deviceCoordinates: LatLng | null = null;
   isInitializingApp: boolean = true;
+  isOnline: boolean = true;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -26,6 +27,10 @@ export class AppStore {
 
   setDeviceCoordinates(coordinates: LatLng) {
     this.deviceCoordinates = coordinates;
+  }
+
+  setIsOnline(value: boolean) {
+    this.isOnline = value;
   }
 
   async initApplication() {

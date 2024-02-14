@@ -107,8 +107,8 @@ const SignIn: React.FC = observer(() => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior="height"
-      keyboardVerticalOffset={height + 64}>
+      behavior={IS_IOS ? 'padding' : 'height'}
+      keyboardVerticalOffset={height}>
       <View style={[styles.form]}>
         <Input
           ref={emailInputRef}
