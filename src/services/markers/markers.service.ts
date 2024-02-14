@@ -27,7 +27,7 @@ export default class MarkersService {
   }
 
   public static async all() {
-    const { data } = await api.get<Marker[]>('markers/all');
+    const { data } = await api.get<Marker[]>('markers/get-all');
 
     return data;
   }

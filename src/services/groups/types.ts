@@ -1,3 +1,9 @@
+export type GetAllGroupsParams = {
+  search?: string;
+  filter_by?: GroupsFilterBy;
+  user_id?: string;
+};
+
 export type GetGroupsParams = {
   search?: string;
   page?: number;
