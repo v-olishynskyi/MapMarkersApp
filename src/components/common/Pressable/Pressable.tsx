@@ -32,4 +32,4 @@ const Pressable: React.FC<PressableProps> = ({ children, style, ...rest }) => {
   );
 };
 
-export default Pressable;
+export default React.memo(Pressable);

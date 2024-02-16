@@ -56,7 +56,7 @@ const BaseList = React.forwardRef<FlatList, BaseListProps>((props, ref) => {
   );
 
   const listEmptyComponent = (
-    <Text style={styles.emptyComponentLabel}>Дані відсутні</Text>
+    <Text style={styles.emptyComponentLabel}>Список порожній</Text>
   );
 
   const refreshControl = enableRefresh ? (

@@ -7,9 +7,9 @@ const useStyles = () => {
 
   return StyleSheet.create({
     title: {
-      ...typography.bold.title2,
+      ...typography.bold.title3,
       color: colors.text,
-      marginBottom: spacingBase.s3,
+      marginBottom: spacingBase.s1,
     },
   });
 };

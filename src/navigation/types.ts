@@ -1,3 +1,5 @@
+import { NavigatorScreenParams } from '@react-navigation/native';
+
 export type AuthStackParamsList = {
   onboarding: undefined;
   'sign-in': undefined;
@@ -7,7 +9,7 @@ export type AuthStackParamsList = {
 
 export type TabsStackParamsList = {
   'map-tab': undefined;
-  'community-tab': undefined;
+  'community-tab': { tab: 'users' | 'groups' };
   'profile-tab': undefined;
 };
 
@@ -17,7 +19,7 @@ export type ProfileStackParamsList = {
 };
 
 export type AppStackParamsList = {
-  tabs: undefined;
+  tabs: NavigatorScreenParams<TabsStackParamsList>;
   support: undefined;
   'about-us': undefined;
   settings: undefined;

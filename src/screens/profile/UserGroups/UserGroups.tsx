@@ -1,17 +1,22 @@
 import React from 'react';
-import { LoaderRefresh } from '@components';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { Button, LoaderRefresh } from '@components';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { AppStackParamsList } from '@navigation';
-import { ScrollView } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { useAllGroups } from '@api/hooks/groups';
 import { useStores } from '@store';
 import { GroupsFilterBy } from '@services/groups';
 import useStyles from './styles';
 import { GroupsListSection } from './components';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const UserGroups = () => {
   const styles = useStyles();
   const { params } = useRoute<RouteProp<AppStackParamsList, 'user-groups'>>();
+  const { navigate } =
+    useNavigation<
+      NativeStackNavigationProp<AppStackParamsList, 'tabs', 'tabs-navigator"'>
+    >();
   const {
     userStore: { user },
   } = useStores();
@@ -27,9 +32,52 @@ const UserGroups = () => {
     user_id: isMe ? undefined : params.userId,
   });
 
+  const navigateToGroups = React.useCallback(
+    () =>
+      navigate('tabs', { screen: 'community-tab', params: { tab: 'groups' } }),
+    [navigate],
+  );
+
   const ownGroups = groups?.filter(group => group.owner_id === user.id) || [];
   const memberGroups =
     groups?.filter(group => group.owner_id !== user.id) || [];
+
+  const emptyOwnGroupsListComponent = React.useMemo(
+    () => (
+      <View style={styles.listEmptyComponentContainer}>
+        <Text style={styles.listEmptyComponentTitle}>
+          Ви можете створити власну групу
+        </Text>
+        <Button
+          label="Створити групу"
+          size="medium"
+          style={styles.listEmptyComponentButton}
+        />
+      </View>
+    ),
+    [styles],
+  );
+
+  const emptyUserGroupsListComponent = React.useMemo(
+    () => (
+      <View style={styles.listEmptyComponentContainer}>
+        <Text style={styles.listEmptyComponentTitle}>
+          {isMe
+            ? 'Тут будуть відображатися групи до яких Ви приєдналися як учасник'
+            : 'Тут будуть відображатися групи до яких користувач приєднався як учасник'}
+        </Text>
+        {isMe && (
+          <Button
+            label="Переглянути усі групи"
+            size="medium"
+            style={styles.listEmptyComponentButton}
+            onPress={navigateToGroups}
+          />
+        )}
+      </View>
+    ),
+    [styles, isMe, navigateToGroups],
+  );
 
   return (
     <ScrollView
@@ -38,15 +86,17 @@ const UserGroups = () => {
       }
       style={styles.listContainer}
       contentContainerStyle={styles.contentContainer}>
-      <GroupsListSection
-        groups={ownGroups}
-        title="Групи, якими ви керуєте"
-        listEmptyComponents={<></>}
-      />
+      {isMe && (
+        <GroupsListSection
+          groups={ownGroups}
+          title="Групи, якими ви керуєте"
+          listEmptyComponents={emptyOwnGroupsListComponent}
+        />
+      )}
       <GroupsListSection
         groups={memberGroups}
-        title="Групи, у яких ви учасник"
-        listEmptyComponents={<></>}
+        title={isMe ? 'Групи, до яких ви приєдналися' : ''}
+        listEmptyComponents={emptyUserGroupsListComponent}
       />
     </ScrollView>
   );

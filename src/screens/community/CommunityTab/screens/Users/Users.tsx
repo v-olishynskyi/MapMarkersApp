@@ -35,7 +35,7 @@ const Users: React.FC = () => {
     refetch,
     hasNextPage,
     fetchNextPage,
-  } = useUsers({ limit: 20, page: 1 });
+  } = useUsers({ limit: 20, page: 1, search });
 
   const users = React.useMemo(
     () =>

@@ -35,7 +35,7 @@ const GroupsListSection: React.FC<GroupsListSectionProps> = ({
   return (
     <View>
       <View style={[generalStyles.rowBetween]}>
-        <Text style={styles.title}>{title}</Text>
+        {title && <Text style={styles.title}>{title}</Text>}
       </View>
       {!groups.length ? listEmptyComponents : groups?.map(renderItem)}
     </View>

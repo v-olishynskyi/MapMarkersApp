@@ -38,6 +38,7 @@ const TabNavigation: React.FC = () => {
 
   return (
     <Tab.Navigator
+      id="tabs-navigator"
       initialRouteName="profile-tab"
       screenOptions={{
         headerShown: false,
