@@ -24,7 +24,7 @@ import { MarkerBottomSheetContent } from './components';
 const MarkerBottomSheet: React.FC = () => {
   const styles = useStyles();
   const {
-    mapStore: { clearActiveMarker, activeMarkerId },
+    markersStore: { clearActiveMarker, activeMarkerId },
   } = useStores();
 
   const sheetRef = React.useRef<BottomSheetModal>(null);

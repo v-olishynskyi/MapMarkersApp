@@ -9,7 +9,7 @@ import { MarkerBottomSheetContentProps } from './types';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useStores } from '@store';
 import { View, Text } from 'react-native';
-import { AnimatedImageLibrary, Button, IconButton, Loader } from '@components';
+import { AnimatedImageLibrary, Button, IconButton } from '@components';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStackParamsList, MarkerManagementModes } from '@navigation';
@@ -17,6 +17,9 @@ import { MenuView, NativeActionEvent } from '@react-native-menu/menu';
 import { MenuActions } from './types';
 import { observer } from 'mobx-react-lite';
 import { useDeleteMarker } from '@api/hooks/markers';
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
+import { CacheKey } from '@api/CacheKey';
+import { Skeleton } from './components';
 
 /**
  * MarkerBottomSheetContent
@@ -33,25 +36,27 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
 }) => {
   const styles = useStyles();
   const {
-    mapStore: {
-      isLoadingMarker,
-      activeMarker,
-      activeMarkerId,
-      loadActiveMarker,
-    },
-    markersStore: { setEditableMarker },
+    markersStore: { setEditableMarker, activeMarker, activeMarkerId },
     uiStore: { theme },
     userStore: {
       user: { id },
     },
   } = useStores();
 
+  const queryKey = [CacheKey.Marker, activeMarkerId];
+
+  const isFetchingMarker =
+    useIsFetching({
+      queryKey,
+    }) > 0;
+  const queryClient = useQueryClient();
+
   const { navigate } =
     useNavigation<NativeStackNavigationProp<AppStackParamsList>>();
 
   const { mutate: deleteMarker } = useDeleteMarker();
 
-  const isMineMarker = activeMarker?.author_id === id;
+  const isMyMarker = activeMarker?.author_id === id;
 
   // const handleShareMarker = React.useCallback(async () => {
   //   Share.shareSingle({
@@ -84,7 +89,10 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
   const loadMarkerError = (
     <>
       <Text style={styles.errorLabel}>Щось пішло не так. Спробуйте ще раз</Text>
-      <Button label="Повторити" onPress={loadActiveMarker} />
+      <Button
+        label="Повторити"
+        onPress={() => queryClient.refetchQueries({ queryKey })}
+      />
     </>
   );
 
@@ -102,14 +110,14 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
     },
   ];
 
-  const menuViewActions = [...(isMineMarker ? authorActions : [])];
+  const menuViewActions = [...(isMyMarker ? authorActions : [])];
 
   const header = (
     <View style={styles.header}>
       <Text style={styles.name}>{activeMarker?.name}</Text>
       <View style={styles.headerActions}>
         <View style={styles.markerActions}>
-          {!!menuViewActions.length && (
+          {Boolean(menuViewActions.length) && (
             <MenuView
               actions={menuViewActions}
               themeVariant={theme}
@@ -139,11 +147,11 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
 
   return (
     <>
-      {activeMarker && header}
+      {activeMarker && !isFetchingMarker && header}
       <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
-        {activeMarkerId && isLoadingMarker ? (
-          <Loader size={'large'} />
-        ) : activeMarkerId && !isLoadingMarker && !activeMarker ? (
+        {activeMarkerId && isFetchingMarker ? (
+          <Skeleton />
+        ) : activeMarkerId && !isFetchingMarker && !activeMarker ? (
           loadMarkerError
         ) : (
           markerInfo

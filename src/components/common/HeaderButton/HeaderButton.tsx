@@ -30,7 +30,7 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({
   backRoute,
   disabled,
 }) => {
-  const styles = useStyles(!!loading || !!disabled, color);
+  const styles = useStyles(Boolean(loading) || Boolean(disabled), color);
 
   const onPressCancel = async () => {
     try {

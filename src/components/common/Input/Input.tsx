@@ -63,7 +63,7 @@ const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
   const { colors } = getTheme();
 
   const [isFocused, setIsFocused] = React.useState(false);
-  const styles = useStyles(!!error, isFocused);
+  const styles = useStyles(Boolean(error), isFocused);
 
   const [showPassword, setShowPassword] = React.useState(password);
 
@@ -137,7 +137,7 @@ const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
           </View>
         )}
       </View>
-      {!!error && typeof error === 'string' && errorComponent}
+      {Boolean(error) && typeof error === 'string' && errorComponent}
     </View>
   );
 });

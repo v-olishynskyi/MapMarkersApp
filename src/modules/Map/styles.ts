@@ -33,6 +33,7 @@ const useStyles = () => {
       right: spacingBase.s2,
       bottom: bottom + 140,
     },
+    loaderContainer: { position: 'absolute', bottom: 0, width: '100%' },
   });
 };
 

@@ -40,16 +40,19 @@ const AnimatedImageLibrary: React.FC<AnimatedImageLibraryProps> = ({
 }) => {
   const { colors } = getTheme();
   const {
-    mapStore: { activeMarker },
+    markersStore: { activeMarker },
   } = useStores();
   const styles = useStyles();
 
   const [isShowModal, setIsShowModal] = React.useState(false);
 
+  const imageViewerRef = React.useRef<ImageViewer>(null);
+
   const showModal = () => setIsShowModal(true);
   const closeModal = () => setIsShowModal(false);
 
-  const imageViewerRef = React.useRef<ImageViewer>(null);
+  const handlePressStack = () =>
+    images.length > 1 ? showModal() : imageViewerRef.current?.show();
 
   const scrollOffset = useSharedValue(0);
 
@@ -100,23 +103,27 @@ const AnimatedImageLibrary: React.FC<AnimatedImageLibraryProps> = ({
       <ImageStack
         containerStyle={containerStyle}
         images={images}
-        onPress={showModal}
+        onPress={handlePressStack}
       />
-      <Modal visible={isShowModal} transparent animationType={'fade'}>
-        <Animated.View style={[styles.modalContainer]}>
-          {modalHeader}
-          <Animated.FlatList
-            columnWrapperStyle={styles.flatListCol}
-            onScroll={scrollHandler}
-            style={styles.flatList}
-            contentContainerStyle={styles.flatListContent}
-            numColumns={2}
-            data={images}
-            renderItem={renderImage}
-          />
-        </Animated.View>
+      {images.length > 1 ? (
+        <Modal visible={isShowModal} transparent animationType={'fade'}>
+          <Animated.View style={[styles.modalContainer]}>
+            {modalHeader}
+            <Animated.FlatList
+              columnWrapperStyle={styles.flatListCol}
+              onScroll={scrollHandler}
+              style={styles.flatList}
+              contentContainerStyle={styles.flatListContent}
+              numColumns={2}
+              data={images}
+              renderItem={renderImage}
+            />
+          </Animated.View>
+          <ImageViewer ref={imageViewerRef} images={images} />
+        </Modal>
+      ) : (
         <ImageViewer ref={imageViewerRef} images={images} />
-      </Modal>
+      )}
     </>
   );
 };

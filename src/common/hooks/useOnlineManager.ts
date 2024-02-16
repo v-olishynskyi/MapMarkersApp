@@ -9,8 +9,8 @@ const useOnlineManager = () => {
 
   const { isConnected } = useNetInfo({});
 
-  setIsOnline(!!isConnected);
-  onlineManager.setOnline(!!isConnected);
+  setIsOnline(Boolean(isConnected));
+  onlineManager.setOnline(Boolean(isConnected));
 };
 
 export default useOnlineManager;

@@ -15,7 +15,9 @@ const Menu: React.FC<MenuProps> = ({
 
   return (
     <View style={style}>
-      {!!headerText && <Text style={styles.headerText}>{headerText}</Text>}
+      {Boolean(headerText) && (
+        <Text style={styles.headerText}>{headerText}</Text>
+      )}
       <View style={[styles.container]}>
         {items.map((menuItemProps, index) => {
           const isLast = index === items.length - 1;
@@ -24,7 +26,9 @@ const Menu: React.FC<MenuProps> = ({
         })}
         {children}
       </View>
-      {!!footerText && <Text style={styles.footerText}>{footerText}</Text>}
+      {Boolean(footerText) && (
+        <Text style={styles.footerText}>{footerText}</Text>
+      )}
     </View>
   );
 };

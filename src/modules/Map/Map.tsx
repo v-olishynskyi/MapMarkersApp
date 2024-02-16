@@ -152,7 +152,7 @@ const Map = React.forwardRef<MapView, MapProps>((props, ref) => {
         onPress={onPressMinus}
       />
       {props.isLoadingMarkers && (
-        <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+        <View style={styles.loaderContainer}>
           <Progress.Bar
             indeterminate
             width={SCREEN_WIDTH}

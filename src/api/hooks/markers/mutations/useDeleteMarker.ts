@@ -11,8 +11,7 @@ export const useDeleteMarker = () => {
   const mutationKey = [MutationKey.DeleteMarker];
 
   const {
-    markersStore: { clearEditableMarker },
-    mapStore: { clearActiveMarker },
+    markersStore: { clearEditableMarker, clearActiveMarker },
   } = useStores();
   const queryClient = useQueryClient();
 

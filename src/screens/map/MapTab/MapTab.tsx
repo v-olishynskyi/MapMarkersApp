@@ -13,9 +13,8 @@ import { useNavigation } from '@react-navigation/native';
 import { MarkerManagementModes } from '@navigation';
 import { Navigation } from './types';
 import { MarkerModel } from '@models';
-import { autorun } from 'mobx';
 import { Map } from '@modules';
-import { useMarkers } from '@api/hooks/markers';
+import { useMarker, useMarkers } from '@api/hooks/markers';
 
 /**
  * MapTab
@@ -32,11 +31,18 @@ const MapTab: React.FC = () => {
   const { navigate } = useNavigation<Navigation>();
   const styles = useStyles();
   const {
-    mapStore: { setActiveMarkerId, activeMarkerId, loadActiveMarker },
-    markersStore: { createTemporaryMarker },
+    markersStore: {
+      createNewMarker,
+      setActiveMarkerId,
+      activeMarkerId,
+      setActiveMarker,
+    },
   } = useStores();
 
   const { data: markers, isLoading, isFetching } = useMarkers();
+  const { data: marker } = useMarker(activeMarkerId, {
+    enabled: Boolean(activeMarkerId),
+  });
 
   const mapViewRef = React.useRef<MapView>(null);
 
@@ -51,24 +57,26 @@ const MapTab: React.FC = () => {
   };
 
   const onCreateTemporaryMarker = (event: LongPressEvent) => {
-    createTemporaryMarker({
+    const coordinates = {
       latitude: event.nativeEvent.coordinate.latitude,
       longitude: event.nativeEvent.coordinate.longitude,
-    });
+    };
+
+    createNewMarker(coordinates);
     navigate('marker-management', { mode: MarkerManagementModes.CREATE });
   };
 
   const renderMarker = React.useCallback(
-    (marker: MarkerModel) => {
+    (markerItem: MarkerModel) => {
       const markerComponent = (
         <Marker
-          key={marker.id}
+          key={markerItem.id}
           coordinate={{
-            latitude: marker.latitude,
-            longitude: marker.longitude,
+            latitude: markerItem.latitude,
+            longitude: markerItem.longitude,
           }}
           onPress={() => {
-            setActiveMarkerId(marker.id);
+            setActiveMarkerId(markerItem.id);
           }}
         />
       );
@@ -78,15 +86,11 @@ const MapTab: React.FC = () => {
     [setActiveMarkerId],
   );
 
-  const autorunDisposer = autorun(() => {
-    if (!activeMarkerId) {
-      return;
+  React.useEffect(() => {
+    if (marker) {
+      setActiveMarker(marker);
     }
-
-    loadActiveMarker();
-  });
-
-  React.useEffect(() => () => autorunDisposer(), [autorunDisposer]);
+  }, [marker, setActiveMarker]);
 
   return (
     <View style={styles.container}>

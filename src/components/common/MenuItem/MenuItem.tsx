@@ -34,7 +34,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
 }) => {
   const { colors } = getTheme();
 
-  const styles = useStyles(!!disabled, iconColor, icon);
+  const styles = useStyles(Boolean(disabled), iconColor, icon);
 
   const defaultActions = (
     <>
