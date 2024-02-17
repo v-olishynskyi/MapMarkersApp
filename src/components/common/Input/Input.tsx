@@ -23,6 +23,7 @@ import Animated, {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Pressable } from '@components';
 import { getTheme } from '@common/helpers';
+import { spacingBase } from '@styles';
 
 /**
  *
@@ -67,16 +68,25 @@ const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
 
   const [showPassword, setShowPassword] = React.useState(password);
 
-  const errorHeight = useSharedValue(0);
-  const minHeight = useAnimatedStyle(() => ({
-    maxHeight: withTiming(errorHeight.value, {
+  const isShowErrorShared = useSharedValue(Boolean(error));
+  const errorStyle = useAnimatedStyle(() => {
+    const maxHeight = withTiming(isShowErrorShared.value ? 13.3 : 0, {
       duration: 100,
       easing: Easing.linear,
-    }),
-  }));
+    });
+    const marginTop = withTiming(isShowErrorShared.value ? spacingBase.s2 : 0, {
+      duration: 100,
+      easing: Easing.linear,
+    });
+
+    return {
+      maxHeight,
+      marginTop,
+    };
+  });
 
   const errorComponent = (
-    <Animated.Text style={[styles.error, minHeight]}>{error}</Animated.Text>
+    <Animated.Text style={[styles.error, errorStyle]}>{error}</Animated.Text>
   );
 
   const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -108,8 +118,8 @@ const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
   };
 
   React.useEffect(() => {
-    errorHeight.value = error ? 13.3 : 0;
-  }, [error, errorHeight]);
+    isShowErrorShared.value = Boolean(error);
+  }, [error, isShowErrorShared]);
 
   return (
     <View style={containerStyle}>
@@ -137,7 +147,7 @@ const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
           </View>
         )}
       </View>
-      {Boolean(error) && typeof error === 'string' && errorComponent}
+      {errorComponent}
     </View>
   );
 });

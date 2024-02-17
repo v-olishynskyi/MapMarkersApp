@@ -49,7 +49,6 @@ const useStyles = (error: boolean, focused: boolean) => {
     },
     error: {
       ...typography.regular.caption2,
-      marginTop: spacingBase.s2,
       color: colors.red,
     },
   });
