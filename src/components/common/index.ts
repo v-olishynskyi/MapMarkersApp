@@ -13,3 +13,4 @@ export { default as AnimatedImageLibrary } from './AnimatedImageLibrary/Animated
 export { default as FastImageProgress } from './FastImageProgress/FastImageProgress';
 export { default as GroupItem } from './GroupItem/GroupItem';
 export { default as UserItem } from './UserItem/UserItem';
+export { default as Switch } from './Switch/Switch';
