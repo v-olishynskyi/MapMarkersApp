@@ -14,4 +14,5 @@ export type InputProps = {
   caption?: string;
   password?: boolean;
   inputStyle?: StyleProp<TextStyle>;
+  showLength?: boolean;
 } & Partial<Omit<TextInputProps, 'value' | 'onChangeText' | 'style'>>;

@@ -37,7 +37,7 @@ const useStyles = (error: boolean, focused: boolean) => {
       paddingVertical: spacingBase.s2,
       ...(IS_ANDROID
         ? {
-            paddingVertical: 8,
+            paddingVertical: spacingBase.s1,
           }
         : {}),
     },
@@ -50,6 +50,13 @@ const useStyles = (error: boolean, focused: boolean) => {
     error: {
       ...typography.regular.caption2,
       color: colors.red,
+    },
+    length: {
+      ...typography.regular.caption2,
+      color: colors.gray,
+      position: 'absolute',
+      right: 0,
+      bottom: -22,
     },
   });
 };

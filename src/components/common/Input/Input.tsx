@@ -23,7 +23,7 @@ import Animated, {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Pressable } from '@components';
 import { getTheme } from '@common/helpers';
-import { spacingBase } from '@styles';
+import { generalStyles, spacingBase } from '@styles';
 
 /**
  *
@@ -74,13 +74,21 @@ const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
       duration: 100,
       easing: Easing.linear,
     });
-    const marginTop = withTiming(isShowErrorShared.value ? spacingBase.s2 : 0, {
-      duration: 100,
-      easing: Easing.linear,
-    });
 
     return {
-      maxHeight,
+      height: maxHeight,
+    };
+  });
+
+  const footerStyle = useAnimatedStyle(() => {
+    const marginTop = rest.showLength
+      ? spacingBase.s1
+      : withTiming(isShowErrorShared.value ? spacingBase.s1 : 0, {
+          duration: 100,
+          easing: Easing.linear,
+        });
+
+    return {
       marginTop,
     };
   });
@@ -110,6 +118,10 @@ const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
         color={colors.gray}
       />
     </Pressable>
+  );
+
+  const lengthComponent = (
+    <Text style={styles.length}>Довжина: {value.length}</Text>
   );
 
   const passwordProps = {
@@ -146,8 +158,11 @@ const Input = React.forwardRef<TextInput, InputProps>((props, ref) => {
             {password ? passwordIcon : rightIcon}
           </View>
         )}
+        {rest.showLength && lengthComponent}
       </View>
-      {errorComponent}
+      <Animated.View style={[generalStyles.rowBetween, footerStyle]}>
+        {errorComponent}
+      </Animated.View>
     </View>
   );
 });
