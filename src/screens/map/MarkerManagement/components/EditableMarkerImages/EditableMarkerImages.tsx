@@ -1,5 +1,5 @@
 /**
- * @namespace MarkerImages
+ * @namespace EditableMarkerImages
  * @category
  * @subcategory
  *  */
@@ -10,30 +10,25 @@ import {
   ActivityIndicator,
   FlatList,
   ListRenderItemInfo,
-  Modal,
   View,
 } from 'react-native';
-import { Pressable } from '@components';
+import { ImageViewer, Pressable } from '@components';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { openPicker } from 'react-native-image-crop-picker';
 import { getTheme } from '@common/helpers';
 import { useStores } from '@store';
 import { PublicFileModel } from '@models';
 import Image from 'react-native-image-progress';
-import Carousel from 'react-native-ui-lib/carousel';
 import ActionSheet from 'react-native-ui-lib/actionSheet';
-import { IImageInfo } from 'react-native-image-zoom-viewer/built/image-viewer.type';
-import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
-import { ImageZoomComponent } from '../';
 
 /**
- * MarkerImages
+ * EditableMarkerImages
  *
  * @example
- * // How to use MarkerImages:
- *  <MarkerImages />
+ * // How to use EditableMarkerImages:
+ *  <EditableMarkerImages />
  */
-const MarkerImages: React.FC = () => {
+const EditableMarkerImages: React.FC = () => {
   const styles = useStyles();
   const { colors } = getTheme();
 
@@ -44,15 +39,12 @@ const MarkerImages: React.FC = () => {
   const [selectedImageIndex, setSelectedImageIndex] = React.useState<
     number | null
   >(null);
-  const [showImageViewer, setShowImageViewer] = React.useState<boolean>(false);
-  const [imageViewerIndex, setImageViewerIndex] = React.useState<number | null>(
-    null,
-  );
+
+  const imageViewerRef = React.useRef<ImageViewer>(null);
 
   const images = marker?.images.items || [];
-  console.log('images:', images);
 
-  const imageUrls = images.map<IImageInfo>(img => ({ url: img.url }), []);
+  const imageUrls = images.map(img => img.url, []);
 
   const handleAddImage = React.useCallback(async () => {
     const file = await openPicker({ mediaType: 'photo' });
@@ -64,11 +56,6 @@ const MarkerImages: React.FC = () => {
     marker?.images.remove(index);
   };
   const onDismissActionSheet = () => setSelectedImageIndex(null);
-
-  const handlePressViewImage = () => {
-    setImageViewerIndex(selectedImageIndex);
-    setShowImageViewer(true);
-  };
 
   const renderItem = React.useCallback(
     ({ item: { id, url }, index }: ListRenderItemInfo<PublicFileModel>) => {
@@ -116,7 +103,7 @@ const MarkerImages: React.FC = () => {
   const actionSheetOptions = [
     {
       label: 'Перегляд',
-      onPress: handlePressViewImage,
+      onPress: () => imageViewerRef.current?.show(selectedImageIndex!),
     },
     {
       label: 'Видалити',
@@ -138,48 +125,18 @@ const MarkerImages: React.FC = () => {
         keyExtractor={image => image.id}
       />
       <ActionSheet
-        visible={!!selectedImageIndex}
+        visible={selectedImageIndex !== null}
         cancelButtonIndex={2}
         destructiveButtonIndex={1}
         useNativeIOS
         options={actionSheetOptions}
         onDismiss={onDismissActionSheet}
       />
-      <Modal visible={showImageViewer} transparent animationType="slide">
-        <Carousel
-          onChangePage={() => console.log('page changed')}
-          horizontal
-          initialPage={imageViewerIndex || 0}
-          pageHeight={SCREEN_HEIGHT}
-          containerStyle={{ flex: 1 }}>
-          {images.map(img => {
-            return (
-              // <Image
-              //   source={{ uri: img.url }}
-              //   style={{ width: '80%', height: '80%' }}
-              // />
-              <ImageZoomComponent key={img.url} uri={img.url} />
-              // <ImageZoom
-              //   key={img.id}
-              //   uri={img.url}
-              //   minScale={0.5}
-              //   style={{ overflow: 'hidden' }}
-              //   maxScale={3}
-              //   onInteractionStart={() => console.log('Interaction started')}
-              //   onInteractionEnd={() => console.log('Interaction ended')}
-              //   onPinchStart={() => console.log('Pinch gesture started')}
-              //   onPinchEnd={() => console.log('Pinch gesture ended')}
-              //   onPanStart={() => console.log('Pan gesture started')}
-              //   onPanEnd={() => console.log('Pan gesture ended')}
-              //   // renderLoader={() => <ActivityIndicator />}
-              //   // resizeMode="cover"
-              // />
-            );
-          })}
-        </Carousel>
-      </Modal>
+      {Boolean(imageUrls.length) && (
+        <ImageViewer images={imageUrls} ref={imageViewerRef} />
+      )}
     </>
   );
 };
 
-export default observer(MarkerImages);
+export default observer(EditableMarkerImages);

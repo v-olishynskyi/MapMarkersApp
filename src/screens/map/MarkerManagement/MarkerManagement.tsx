@@ -9,13 +9,14 @@ import { getTheme } from '@common/helpers';
 import { observer } from 'mobx-react-lite';
 import { useFormik } from 'formik';
 import { MarkerManagementModes } from '@navigation';
-import { HeaderButton, Input, Pressable } from '@components';
+import { HeaderButton, Input, Pressable, Switch } from '@components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { MarkerImages } from './components';
+import { EditableMarkerImages } from './components';
 import { CreateMarkerData } from '@services/markers';
 import { Toast } from '@components';
 import { useCreateMarker, useUpdateMarker } from '@api/hooks/markers';
+import { generalStyles, spacingBase } from '@styles';
 
 const MarkerManagement: React.FC = () => {
   const { params } = useRoute<RouteType>();
@@ -41,58 +42,9 @@ const MarkerManagement: React.FC = () => {
 
   const isProcessing = isCreatingMarker || isUpdatingMarker;
 
-  const shouldPreventGoBack = React.useRef<boolean>(true);
-  const shouldPreventGoBackCauseError = React.useRef<boolean>(false);
-
-  const onSubmit: (values: FormState) => Promise<void> = React.useCallback(
-    async values => {
-      const { description, latitude, longitude, name } = values;
-      try {
-        shouldPreventGoBack.current = false;
-        if (!editableMarker) {
-          return;
-        }
-
-        const validationErrors = await validateForm(values);
-        if (Object.keys(validationErrors).length) {
-          setErrors(validationErrors);
-          return;
-        }
-
-        const markerData: CreateMarkerData['data'] = {
-          name,
-          description,
-          latitude,
-          longitude,
-          author_id: id,
-          is_draft: false,
-          is_hidden: false,
-        };
-
-        const images = editableMarker.images.items;
-
-        if (isCreateMode) {
-          await createMarker({ data: markerData, images });
-        } else {
-          await updateMarker({ data: markerData, images });
-        }
-      } catch (error) {
-        shouldPreventGoBackCauseError.current = true;
-        shouldPreventGoBack.current = true;
-      }
-    },
-    [
-      //@ts-ignore
-      setErrors,
-      //@ts-ignore
-      validateForm,
-      createMarker,
-      updateMarker,
-      isCreateMode,
-      editableMarker,
-      id,
-    ],
-  );
+  const shouldPreventGoBackRef = React.useRef<boolean>(true);
+  const shouldPreventGoBackCauseErrorRef = React.useRef<boolean>(false);
+  const hasSomeChangesRef = React.useRef<boolean>(false);
 
   const {
     values,
@@ -103,14 +55,17 @@ const MarkerManagement: React.FC = () => {
     setFieldTouched,
     setErrors,
     isValid,
+    dirty,
+    touched,
   } = useFormik<FormState>({
     initialValues: {
       name: editableMarker?.name || '',
       description: editableMarker?.description || '',
       latitude: editableMarker?.latitude || 0,
       longitude: editableMarker?.longitude || 0,
+      is_hidden: editableMarker?.is_hidden || false,
     },
-    onSubmit,
+    onSubmit: formValues => onSubmit(formValues),
     validationSchema,
     isInitialValid: isCreateMode ? false : true,
   });
@@ -135,8 +90,63 @@ const MarkerManagement: React.FC = () => {
         editableMarker?.setDescription(value);
         break;
       }
+      case 'is_hidden': {
+        editableMarker?.setIsHidden(value);
+        break;
+      }
+      default: {
+      }
     }
   };
+
+  const onSubmit: (values: FormState) => Promise<void> = React.useCallback(
+    async v => {
+      const { description, latitude, longitude, name, is_hidden } = v;
+
+      try {
+        shouldPreventGoBackRef.current = false;
+        if (!editableMarker) {
+          return;
+        }
+
+        const validationErrors = await validateForm(v);
+        if (Object.keys(validationErrors).length) {
+          setErrors(validationErrors);
+          return;
+        }
+
+        const markerData: CreateMarkerData['data'] = {
+          name,
+          description,
+          latitude,
+          longitude,
+          author_id: id,
+          is_draft: false,
+          is_hidden,
+        };
+
+        const images = editableMarker.images.items;
+
+        if (isCreateMode) {
+          await createMarker({ data: markerData, images });
+        } else {
+          await updateMarker({ data: markerData, images });
+        }
+      } catch (error) {
+        shouldPreventGoBackCauseErrorRef.current = true;
+        shouldPreventGoBackRef.current = true;
+      }
+    },
+    [
+      createMarker,
+      editableMarker,
+      id,
+      isCreateMode,
+      updateMarker,
+      setErrors,
+      validateForm,
+    ],
+  );
 
   const headerLeftButton = React.useCallback(
     ({ canGoBack }: { canGoBack: boolean }) => (
@@ -190,6 +200,10 @@ const MarkerManagement: React.FC = () => {
     });
   }, [setOptions, headerLeftButton, headerRightButton, headerTitle]);
 
+  React.useEffect(() => {
+    hasSomeChangesRef.current = dirty;
+  }, [dirty]);
+
   React.useEffect(
     () => {
       const listener = addListener('beforeRemove', async e => {
@@ -198,29 +212,33 @@ const MarkerManagement: React.FC = () => {
           dispatch(e.data.action);
         };
 
-        const onCreateDraftAndGoBack = async () => {
+        const createDraftAndGoBack = async () => {
           await createDraftMarker(values);
           return onGoBack();
         };
 
-        if (shouldPreventGoBackCauseError.current) {
-          shouldPreventGoBackCauseError.current = false;
+        if (!hasSomeChangesRef.current) {
+          return onGoBack();
+        }
+
+        if (shouldPreventGoBackCauseErrorRef.current) {
+          shouldPreventGoBackCauseErrorRef.current = false;
           return e.preventDefault();
         }
 
-        if (shouldPreventGoBack.current) {
+        if (shouldPreventGoBackRef.current) {
           e.preventDefault();
 
           return Alert.alert(
             '',
             `Ви впевнені, що хочете перервати ${headerTitle.toLowerCase()}?`,
             [
-              { text: 'Продовжити' },
+              { text: `Продовжити ${headerTitle.toLowerCase()}` },
               {
                 text: 'Зберегти як чернетку',
                 style: 'destructive',
                 isPreferred: true,
-                onPress: onCreateDraftAndGoBack,
+                onPress: createDraftAndGoBack,
               },
               {
                 text: 'Вийти',
@@ -251,7 +269,7 @@ const MarkerManagement: React.FC = () => {
             onFocus={() => setFieldTouched('name')}
             editable={!isProcessing}
             onBlur={handleBlur('name')}
-            error={errors.name}
+            error={touched.name && errors.name}
           />
           <Input
             value={values.description}
@@ -261,12 +279,14 @@ const MarkerManagement: React.FC = () => {
             onFocus={() => setFieldTouched('description')}
             editable={!isProcessing}
             onBlur={handleBlur('description')}
-            error={errors.description}
+            error={touched.description && errors.description}
             multiline
             inputStyle={styles.descriptionInput}
+            maxLength={255}
+            showLength
           />
 
-          <MarkerImages />
+          <EditableMarkerImages />
           <Input
             value={editableMarker?.latitude.toString() || ''}
             caption="Широта"
@@ -277,6 +297,14 @@ const MarkerManagement: React.FC = () => {
             caption="Довгота"
             rightIcon={mapIcon}
           />
+          <View
+            style={[generalStyles.rowBetween, { marginTop: spacingBase.s2 }]}>
+            <Switch
+              label="Прихований"
+              value={values.is_hidden}
+              onValueChange={handleChangeInput('is_hidden')}
+            />
+          </View>
         </View>
       </KeyboardAwareScrollView>
       <Toast />

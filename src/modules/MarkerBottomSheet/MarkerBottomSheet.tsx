@@ -12,7 +12,7 @@ import {
 } from '@gorhom/bottom-sheet';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
-import { MarkerBottomSheetContent } from './components';
+import { MarkerContent } from './components';
 
 /**
  * MarkerBottomSheet
@@ -61,7 +61,7 @@ const MarkerBottomSheet: React.FC = () => {
       backdropComponent={renderBackdrop}
       backgroundStyle={styles.background}
       handleIndicatorStyle={styles.handleIndicator}>
-      <MarkerBottomSheetContent onClose={closeModal} />
+      <MarkerContent onClose={closeModal} />
     </BottomSheetModal>
   );
 };

@@ -1,1 +1,1 @@
-export { default as MarkerBottomSheetContent } from './MarkerBottomSheetContent/MarkerBottomSheetContent';
+export { default as MarkerContent } from './MarkerContent/MarkerContent';

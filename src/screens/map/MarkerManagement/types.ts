@@ -8,6 +8,7 @@ export type FormState = {
   description: string;
   latitude: LatLng['latitude'];
   longitude: LatLng['longitude'];
+  is_hidden: boolean;
 };
 
 export type RouteType = RouteProp<AppStackParamsList, 'marker-management'>;

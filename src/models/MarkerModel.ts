@@ -66,6 +66,10 @@ export default class MarkerModel {
     this.longitude = value;
   }
 
+  setIsHidden(value: boolean) {
+    this.is_hidden = value;
+  }
+
   addTemporaryImage(index: string, file: Image) {
     const temporaryImage = new PublicFileModel({
       id: index,

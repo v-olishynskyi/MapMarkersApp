@@ -1,11 +1,11 @@
 /**
- * @namespace MarkerBottomSheetContent
+ * @namespace MarkerContent
  * @category
  * @subcategory
  *  */
 import React from 'react';
 import useStyles from './styles';
-import { MarkerBottomSheetContentProps } from './types';
+import { MarkerContentProps } from './types';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useStores } from '@store';
 import { View, Text } from 'react-native';
@@ -22,18 +22,16 @@ import { CacheKey } from '@api/CacheKey';
 import { Skeleton } from './components';
 
 /**
- * MarkerBottomSheetContent
+ * MarkerContent
  *
  * @memberof
- * @param {MarkerBottomSheetContentProps} params
+ * @param {MarkerContentProps} params
  *
  * @example
- * // How to use MarkerBottomSheetContent:
- *  <MarkerBottomSheetContent onClose={closeModal} />
+ * // How to use MarkerContent:
+ *  <MarkerContent onClose={closeModal} />
  */
-const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
-  onClose,
-}) => {
+const MarkerContent: React.FC<MarkerContentProps> = ({ onClose }) => {
   const styles = useStyles();
   const {
     markersStore: { setEditableMarker, activeMarker, activeMarkerId },
@@ -161,4 +159,4 @@ const MarkerBottomSheetContent: React.FC<MarkerBottomSheetContentProps> = ({
   );
 };
 
-export default observer(MarkerBottomSheetContent);
+export default observer(MarkerContent);
