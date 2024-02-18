@@ -26,6 +26,7 @@ const useStyles = () => {
       color: colors.text,
       flexGrow: 1,
       textAlign: 'center',
+      flex: 0.99,
     },
     flatList: { flex: 1 },
     flatListContent: {

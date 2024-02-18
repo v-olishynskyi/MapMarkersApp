@@ -74,7 +74,9 @@ const AnimatedImageLibrary: React.FC<AnimatedImageLibraryProps> = ({
   const modalHeader = (
     <Animated.View
       style={[styles.modalHeaderContainer, modalHeaderAnimatedStyle]}>
-      <Text style={styles.modalHeaderTitle}>{activeMarker?.name}</Text>
+      <Text style={styles.modalHeaderTitle} numberOfLines={1}>
+        {activeMarker?.name}
+      </Text>
       <IconButton icon="close" onPress={closeModal} />
     </Animated.View>
   );

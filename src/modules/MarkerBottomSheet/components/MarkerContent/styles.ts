@@ -38,7 +38,7 @@ const useStyles = () => {
     description: {
       ...typography.regular.body,
       color: colors.gray,
-      marginBottom: spacingBase.s1,
+      marginBottom: spacingBase.s3,
     },
     markerImageList: {
       marginHorizontal: -spacingBase.s2,
