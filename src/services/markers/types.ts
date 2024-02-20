@@ -22,6 +22,7 @@ export type UpdateMarkerData = {
     author_id: string;
     is_draft: boolean;
     is_hidden: boolean;
+    images: string[];
   };
   images: PublicFile[];
 };

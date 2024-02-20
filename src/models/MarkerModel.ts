@@ -79,6 +79,7 @@ export default class MarkerModel {
       created_at: new Date().toString(),
       updated_at: new Date().toString(),
     });
+    temporaryImage._setIsNew(true);
 
     this.images.push(temporaryImage);
   }

@@ -8,7 +8,6 @@ const LostConnectionScreen: React.FC = () => {
   const {
     appStore: { isOnline, isInitializingApp },
   } = useStores();
-  console.log('isOnline:', isOnline);
 
   return (
     <Modal

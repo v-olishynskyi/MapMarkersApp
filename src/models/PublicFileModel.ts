@@ -8,6 +8,8 @@ export default class PublicFileModel {
   created_at: string;
   updated_at: string;
 
+  _is_new?: boolean;
+
   constructor(file: PublicFile) {
     this.id = file.id;
 
@@ -21,5 +23,9 @@ export default class PublicFileModel {
     keys.forEach(key => (this[key] = file[key]));
 
     return this;
+  }
+
+  _setIsNew(value: boolean) {
+    this._is_new = value;
   }
 }

@@ -130,7 +130,14 @@ const MarkerManagement: React.FC = () => {
         if (isCreateMode) {
           await createMarker({ data: markerData, images });
         } else {
-          await updateMarker({ data: markerData, images });
+          const newImagesId = images
+            .filter(({ _is_new }) => _is_new)
+            .map(({ id: imgId }) => imgId);
+
+          await updateMarker({
+            data: { ...markerData, images: newImagesId },
+            images,
+          });
         }
       } catch (error) {
         shouldPreventGoBackCauseErrorRef.current = true;
@@ -282,11 +289,9 @@ const MarkerManagement: React.FC = () => {
             error={touched.description && errors.description}
             multiline
             inputStyle={styles.descriptionInput}
-            maxLength={255}
             showLength
           />
 
-          <EditableMarkerImages />
           <Input
             value={editableMarker?.latitude.toString() || ''}
             caption="Широта"
@@ -306,6 +311,7 @@ const MarkerManagement: React.FC = () => {
             />
           </View>
         </View>
+        <EditableMarkerImages />
       </KeyboardAwareScrollView>
       <Toast />
     </>

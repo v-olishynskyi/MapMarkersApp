@@ -43,8 +43,7 @@ const EditableMarkerImages: React.FC = () => {
   const imageViewerRef = React.useRef<ImageViewer>(null);
 
   const images = marker?.images.items || [];
-
-  const imageUrls = images.map(img => img.url, []);
+  const imagesUrl = images.map(img => img.url, []);
 
   const handleAddImage = React.useCallback(async () => {
     const file = await openPicker({ mediaType: 'photo' });
@@ -132,8 +131,8 @@ const EditableMarkerImages: React.FC = () => {
         options={actionSheetOptions}
         onDismiss={onDismissActionSheet}
       />
-      {Boolean(imageUrls.length) && (
-        <ImageViewer images={imageUrls} ref={imageViewerRef} />
+      {Boolean(imagesUrl.length) && (
+        <ImageViewer images={imagesUrl} ref={imageViewerRef} />
       )}
     </>
   );

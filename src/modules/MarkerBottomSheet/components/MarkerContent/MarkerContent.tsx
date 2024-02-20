@@ -96,15 +96,15 @@ const MarkerContent: React.FC<MarkerContentProps> = ({ onClose }) => {
 
   const authorActions = [
     {
+      id: MenuActions.EDIT,
+      title: 'Редагувати',
+      image: 'pencil',
+    },
+    {
       id: MenuActions.DELETE,
       title: 'Видалити',
       attributes: { destructive: true },
       image: 'trash',
-    },
-    {
-      id: MenuActions.EDIT,
-      title: 'Редагувати',
-      image: 'pencil',
     },
   ];
 
