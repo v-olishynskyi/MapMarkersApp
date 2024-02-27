@@ -14,3 +14,4 @@ export { default as FastImageProgress } from './FastImageProgress/FastImageProgr
 export { default as GroupItem } from './GroupItem/GroupItem';
 export { default as UserItem } from './UserItem/UserItem';
 export { default as Switch } from './Switch/Switch';
+export { default as SortModal } from './SortModal/SortModal';

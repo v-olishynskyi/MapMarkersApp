@@ -49,3 +49,14 @@ export type PaginationParams = {
   page: number;
   limit: number;
 };
+
+export enum SortByDirections {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+export type SortOption = {
+  sort_by: any;
+  direction: SortByDirections;
+  label?: string;
+};

@@ -1,3 +1,4 @@
+import { SortByDirections } from '@common/types';
 import { PublicFile } from '@common/types/entities';
 
 export type CreateMarkerData = {
@@ -27,8 +28,19 @@ export type UpdateMarkerData = {
   images: PublicFile[];
 };
 
-export type GetMarkersByUserParams = {
+export enum MarkersSortBy {
+  Name = 'name',
+  UpdatedAt = 'updated_at',
+  CreatedAt = 'created_at',
+}
+
+export type GetPaginatedMarkersParams = {
   page: number;
   limit: number;
   search?: string;
+};
+
+export type GetMarkersByUserParams = {
+  sort_by: MarkersSortBy;
+  direction: SortByDirections;
 };

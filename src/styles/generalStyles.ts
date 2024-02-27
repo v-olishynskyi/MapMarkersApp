@@ -4,6 +4,7 @@ type GeneralStyles = {
   row: ViewStyle;
   rowBetween: ViewStyle;
   flex1: ViewStyle;
+  rowEnd: ViewStyle;
 };
 
 export const generalStyles: GeneralStyles = {
@@ -17,4 +18,9 @@ export const generalStyles: GeneralStyles = {
     justifyContent: 'space-between',
   },
   flex1: { flex: 1 },
+  rowEnd: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
 };
