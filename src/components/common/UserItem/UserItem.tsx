@@ -21,13 +21,20 @@ import { Text, View } from 'react-native';
  * // How to use UserItem:
  *  <UserItem user={user} onPress={() => {}} />
  */
-const UserItem: React.FC<UserItemProps> = ({ user, onPress }) => {
-  const styles = useStyles();
+const UserItem: React.FC<UserItemProps> = ({
+  user,
+  onPress,
+  size = 'normal',
+  style,
+}) => {
+  const styles = useStyles(size);
 
-  return (
-    <Pressable style={[generalStyles.row, styles.container]} onPress={onPress}>
+  const isSmall = size === 'small';
+
+  const userData = (
+    <>
       <Avatar
-        size={40}
+        size={isSmall ? 32 : 40}
         fullname={user.fullname}
         initials={user.initials}
         url={user.avatar_url}
@@ -37,7 +44,17 @@ const UserItem: React.FC<UserItemProps> = ({ user, onPress }) => {
         <Text style={styles.fullname}>{user.fullname}</Text>
         <Text style={styles.email}>{user.email}</Text>
       </View>
+    </>
+  );
+
+  return onPress ? (
+    <Pressable
+      style={[generalStyles.row, styles.container, style]}
+      onPress={onPress}>
+      {userData}
     </Pressable>
+  ) : (
+    <View style={[generalStyles.row, styles.container, style]}>{userData}</View>
   );
 };
 

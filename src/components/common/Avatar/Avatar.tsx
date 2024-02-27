@@ -30,6 +30,15 @@ const Avatar: React.FC<AvatarProps> = ({
   const styles = useStyles();
   const imageViewerRef = React.useRef<ImageViewer>(null);
 
+  const avatar = (
+    <FastImageProgress
+      // @ts-ignore
+      source={{ uri: url }}
+      style={[containerStyle, { width: size, height: size }]}
+      imageStyle={[styles.image]}
+    />
+  );
+
   return (
     <>
       {!url ? (
@@ -44,14 +53,7 @@ const Avatar: React.FC<AvatarProps> = ({
         />
       ) : (
         <>
-          <Pressable onPress={onPress}>
-            {/* @ts-ignore */}
-            <FastImageProgress
-              source={{ uri: url }}
-              style={[containerStyle, { width: size, height: size }]}
-              imageStyle={[styles.image]}
-            />
-          </Pressable>
+          {onPress ? <Pressable onPress={onPress}>{avatar}</Pressable> : avatar}
           {url && <ImageViewer ref={imageViewerRef} images={[url]} />}
         </>
       )}

@@ -12,6 +12,7 @@ import { UserItem } from '@components';
 import { useUsers } from '@api/hooks/users';
 import { CommunityUser } from '@services/users';
 import { CommunityList } from '../../components';
+import useStyles from './styles';
 
 /**
  * Users
@@ -24,6 +25,7 @@ import { CommunityList } from '../../components';
  *  <Users />
  */
 const Users: React.FC = () => {
+  const styles = useStyles();
   const navigation = useNavigation<NavigationType>();
 
   const [search, setSearch] = React.useState('');
@@ -53,8 +55,14 @@ const Users: React.FC = () => {
   );
 
   const renderItem: ListRenderItem<UserModel> = React.useCallback(
-    ({ item: user }) => <UserItem user={user} onPress={() => onPress(user)} />,
-    [onPress],
+    ({ item: user }) => (
+      <UserItem
+        user={user}
+        onPress={() => onPress(user)}
+        style={styles.userContainer}
+      />
+    ),
+    [onPress, styles.userContainer],
   );
 
   return (

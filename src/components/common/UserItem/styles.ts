@@ -2,14 +2,16 @@ import { StyleSheet } from 'react-native';
 import { spacingBase } from '@styles';
 import { getTheme } from '@common/helpers';
 
-const useStyles = () => {
+const useStyles = (size: 'small' | 'normal') => {
   const { typography, colors } = getTheme();
 
+  const isSmall = size === 'small';
+
   return StyleSheet.create({
-    container: { marginBottom: spacingBase.s3 },
-    avatar: { marginRight: spacingBase.s2 },
+    container: {},
+    avatar: { marginRight: isSmall ? spacingBase.s1 : spacingBase.s2 },
     fullname: {
-      ...typography.regular.body,
+      ...(isSmall ? typography.regular.subhead : typography.regular.body),
       color: colors.text,
     },
     email: {

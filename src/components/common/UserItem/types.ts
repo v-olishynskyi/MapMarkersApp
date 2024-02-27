@@ -1,4 +1,5 @@
 import { UserModel } from '@models';
+import { StyleProp, ViewStyle } from 'react-native';
 
 /**
  * @memberof UserItem
@@ -6,5 +7,7 @@ import { UserModel } from '@models';
  */
 export type UserItemProps = {
   user: UserModel;
-  onPress: VoidFunction;
+  onPress?: VoidFunction;
+  size?: 'small' | 'normal';
+  style?: StyleProp<ViewStyle>;
 };
