@@ -13,9 +13,9 @@ export const useProfile = (
   const queryKey = [CacheKey.UserProfile];
 
   return useQuery<User, AxiosError>({
-    ...options,
     queryKey,
     queryFn: ProfileService.loadProfile,
     refetchInterval: 1000 * 60,
+    ...options,
   });
 };

@@ -6,7 +6,7 @@ const useStyles = () => {
 
   return StyleSheet.create({
     background: {
-      backgroundColor: colors.background,
+      backgroundColor: colors.card,
     },
     handleIndicator: {
       backgroundColor: colors.gray,

@@ -3,6 +3,7 @@ import { useStores } from '@store';
 import { useProfile } from '@api/hooks/profile';
 import { useUser } from '@api/hooks/users';
 import React from 'react';
+import { showToast } from '@common/helpers';
 
 type Response = {
   user: UserModel;
@@ -26,10 +27,12 @@ const useProfileViewUser = (userId: string): Response => {
     isLoading: isLoadingProfile,
     refetch: refetchProfile,
   } = useProfile({ enabled: isMe });
+
   const {
     data: user,
     isLoading: isLoadingUser,
     refetch: refetchUser,
+    error,
   } = useUser(userId, { enabled: !isMe });
 
   React.useEffect(() => {
@@ -37,6 +40,14 @@ const useProfileViewUser = (userId: string): Response => {
       setUser(profile);
     }
   }, [isMe, profile, setUser]);
+
+  React.useEffect(() => {
+    if (error) {
+      console.log(error);
+
+      showToast('error', JSON.stringify(error));
+    }
+  }, [error]);
 
   return {
     user: isMe ? new UserModel(profile!) : user!,

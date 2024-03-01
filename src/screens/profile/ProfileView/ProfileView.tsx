@@ -77,8 +77,8 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
     navigate('user-groups', { userId: user.id });
 
   const navigateToEditProfile = React.useCallback(
-    () => navigate('user-markers', { userId: user.id }),
-    [navigate, user?.id],
+    () => navigate('edit-profile'),
+    [navigate],
   );
 
   const handleRemoveAvatar = async () => {
