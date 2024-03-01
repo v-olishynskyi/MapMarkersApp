@@ -77,7 +77,10 @@ export class MarkersStore {
     this.activeMarkerId = id;
   }
 
-  setActiveMarker(marker: Marker) {
+  setActiveMarker(marker: Marker | MarkerModel) {
+    if (marker instanceof MarkerModel) {
+      return (this.activeMarker = marker);
+    }
     this.activeMarker = new MarkerModel(marker);
   }
 

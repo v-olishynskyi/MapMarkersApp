@@ -2,14 +2,14 @@ import api from '@api/axios';
 import { CreateMarkerData, UpdateMarkerData } from './types';
 import { Marker } from '@common/types/entities';
 import { MessageResponse, PaginationResponse } from '@common/types';
-import { GetMarkersByUserParams } from './types';
+import { GetMarkersByUserParams, GetPaginatedMarkersParams } from './types';
 
 export default class MarkersService {
   public static async paginatedMarkers({
     limit,
     page,
     search,
-  }: GetMarkersByUserParams) {
+  }: GetPaginatedMarkersParams) {
     const { data } = await api.get<PaginationResponse<Marker>>(
       'markers/paginated',
       { params: { limit, page, search } },
@@ -18,9 +18,12 @@ export default class MarkersService {
     return data;
   }
 
-  public static async markersByUserId(user_id: string) {
+  public static async markersByUserId(
+    user_id: string,
+    params: GetMarkersByUserParams,
+  ) {
     const { data } = await api.get<Marker[]>('markers/markers-by-user', {
-      params: { user_id },
+      params: { user_id, ...params },
     });
 
     return data;

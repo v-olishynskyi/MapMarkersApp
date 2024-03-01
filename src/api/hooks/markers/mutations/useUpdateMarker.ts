@@ -27,6 +27,19 @@ export const useUpdateMarker = (id: string) => {
         queryKey: [CacheKey.UserProfile],
       });
       setActiveMarker(updatedMarker);
+
+      const hasFetchedMarkersByUser =
+        queryClient.getQueriesData({
+          queryKey: [CacheKey.MarkersByUser],
+          exact: false,
+        }).length > 0;
+
+      if (hasFetchedMarkersByUser) {
+        queryClient.refetchQueries({
+          queryKey: [CacheKey.MarkersByUser],
+          exact: false,
+        });
+      }
     },
     onError: defaultErrorHandler,
   });

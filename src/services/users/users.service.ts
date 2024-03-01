@@ -6,8 +6,8 @@ import { CommunityUser, GetUsersParams } from '@services/users';
 
 export default class UsersService {
   public static async get(id: string) {
-    const response = await api.get<User>(`users/${id}`);
-    const { data } = response;
+    const { data } = await api.get<User>(`users/${id}`);
+
     return data;
   }
 

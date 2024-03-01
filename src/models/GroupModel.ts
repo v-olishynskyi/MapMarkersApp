@@ -25,11 +25,15 @@ class GroupModel {
     // @ts-ignore
     keys.forEach(key => (this[key] = group[key]));
 
-    this.owner = new UserModel(group.owner);
+    if (group.owner) {
+      this.owner = new UserModel(group.owner);
+    }
     if (group.avatar) {
       this.avatar = new PublicFileModel(group.avatar);
     }
-    this.members = new ListItems<User>(UserModel, group.members);
+    if (group.members?.length) {
+      this.members = new ListItems<User>(UserModel, group.members);
+    }
 
     return this;
   }
