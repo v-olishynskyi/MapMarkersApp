@@ -6,14 +6,12 @@
 import React from 'react';
 import useStyles from './styles';
 import { GroupItemProps } from './types';
-import { Avatar, Button, Pressable } from '@components';
+import { Avatar, Pressable } from '@components';
 import { generalStyles } from '@styles';
 import { Text, View } from 'react-native';
-import { getTheme } from '@common/helpers';
-import { ButtonProps } from '@components/common/Button/types';
-import { useJoinGroup, useLeaveGroup } from '@api/hooks/groups';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
+import { GroupActionButton } from './components';
 
 /**
  * GroupItem
@@ -28,30 +26,12 @@ import { observer } from 'mobx-react-lite';
  */
 const GroupItem: React.FC<GroupItemProps> = ({ group, onPress }) => {
   const styles = useStyles();
-  const { colors } = getTheme();
 
   const {
     userStore: { user },
   } = useStores();
 
   const isOwner = group.owner_id === user.id;
-
-  const { mutate: join, isPending: isJoining } = useJoinGroup(group.id);
-  const { mutate: leave, isPending: isLeaving } = useLeaveGroup(group.id);
-
-  const params = { group_id: group.id, user_id: user.id };
-
-  const buttonProps: ButtonProps = group.is_member
-    ? {
-        label: 'Вийти',
-        backgroundColor: colors.red,
-        onPress: () => leave(params),
-      }
-    : {
-        label: 'Приєднатися',
-        backgroundColor: colors.green,
-        onPress: () => join(params),
-      };
 
   return (
     <Pressable style={[generalStyles.row, styles.container]} onPress={onPress}>
@@ -67,7 +47,7 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, onPress }) => {
           <Text style={styles.groupName}>{group.name}</Text>
           <View style={styles.groupInfo}>
             <Text style={styles.createdBy}>
-              Created by{' '}
+              Адміністратор:{' '}
               <Text style={[styles.createdBy, styles.author]}>
                 {group.owner.fullname}
               </Text>
@@ -77,13 +57,7 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, onPress }) => {
             </Text>
           </View>
         </View>
-        {!isOwner && (
-          <Button
-            {...buttonProps}
-            loading={isJoining || isLeaving}
-            size="xSmall"
-          />
-        )}
+        <GroupActionButton group={group} isOwner={isOwner} />
       </View>
     </Pressable>
   );
