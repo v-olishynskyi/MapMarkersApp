@@ -5,3 +5,4 @@ export * from './profile';
 export * from './onboarding';
 export * from './settings';
 export * from './app';
+export * from './groups';

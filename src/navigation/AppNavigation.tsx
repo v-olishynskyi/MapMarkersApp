@@ -11,6 +11,7 @@ import {
   Settings,
   UserMarkers,
   UserGroups,
+  EditGroup,
 } from '@screens';
 import { IconButton } from '@components';
 import { observer } from 'mobx-react-lite';
@@ -79,6 +80,15 @@ const AppNavigation: React.FC = () => {
           options={{
             presentation: 'formSheet',
             title: 'Редагування профілю',
+            headerBackVisible: true,
+          }}
+        />
+        <Stack.Screen
+          name="edit-group"
+          component={EditGroup}
+          options={{
+            presentation: 'formSheet',
+            title: 'Редагування групи',
             headerBackVisible: true,
           }}
         />
