@@ -1,4 +1,4 @@
-import { Device } from '@common/types';
+import { Device, GroupPrivacyCodes } from '@common/types';
 import { UserModel } from '@models';
 
 export type User = {
@@ -64,6 +64,7 @@ export type Group = {
   avatar: PublicFile | null;
   members: User[];
   is_member: boolean;
+  privacy_code: GroupPrivacyCodes;
 
   created_at: string;
   updated_at: string;

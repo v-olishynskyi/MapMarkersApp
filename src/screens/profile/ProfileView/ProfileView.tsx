@@ -6,15 +6,15 @@
 import React from 'react';
 import useStyles from './styles';
 import { NavigationType, ProfileViewProps, RouteType } from './types';
-import {
-  ActivityIndicator,
-  RefreshControl,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import { observer } from 'mobx-react-lite';
-import { Avatar, ImageViewer, Menu, Pressable } from '@components';
+import {
+  Avatar,
+  ImageViewer,
+  LoaderRefresh,
+  Menu,
+  Pressable,
+} from '@components';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { collectFileFormData, getTheme } from '@common/helpers';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -144,7 +144,7 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
         style={styles.container}
         contentContainerStyle={styles.scrollContent}
         refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+          <LoaderRefresh isRefreshing={isLoading} onRefresh={refetch} />
         }>
         {isLoading ? (
           <ActivityIndicator />

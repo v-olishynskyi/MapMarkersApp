@@ -12,6 +12,9 @@ import { Text, View } from 'react-native';
 import { useStores } from '@store';
 import { observer } from 'mobx-react-lite';
 import { GroupActionButton } from './components';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AppStackParamsList } from '@navigation';
 
 /**
  * GroupItem
@@ -24,8 +27,10 @@ import { GroupActionButton } from './components';
  * // How to use GroupItem:
  *  <GroupItem group={group} onPress={() => {}} />
  */
-const GroupItem: React.FC<GroupItemProps> = ({ group, onPress }) => {
+const GroupItem: React.FC<GroupItemProps> = ({ group }) => {
   const styles = useStyles();
+  const { navigate } =
+    useNavigation<NativeStackNavigationProp<AppStackParamsList, 'groups'>>();
 
   const {
     userStore: { user },
@@ -33,8 +38,19 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, onPress }) => {
 
   const isOwner = group.owner_id === user.id;
 
+  const goToGroupView = React.useCallback(
+    () =>
+      navigate('groups', {
+        screen: 'group-view',
+        params: { groupId: group.id },
+      }),
+    [navigate, group.id],
+  );
+
   return (
-    <Pressable style={[generalStyles.row, styles.container]} onPress={onPress}>
+    <Pressable
+      style={[generalStyles.row, styles.container]}
+      onPress={goToGroupView}>
       <Avatar
         size={50}
         fullname={group.name}

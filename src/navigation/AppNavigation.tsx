@@ -12,6 +12,7 @@ import {
   UserMarkers,
   UserGroups,
   EditGroup,
+  GroupsStack,
 } from '@screens';
 import { IconButton } from '@components';
 import { observer } from 'mobx-react-lite';
@@ -114,6 +115,11 @@ const AppNavigation: React.FC = () => {
             title: 'Вибір локації',
             headerLeft: locationHeaderLeft,
           }}
+        />
+        <Stack.Screen
+          name="groups"
+          component={GroupsStack}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
       <MarkerBottomSheet />

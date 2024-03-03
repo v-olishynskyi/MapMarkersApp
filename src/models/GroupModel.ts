@@ -1,7 +1,13 @@
+import { GroupPrivacyCodes } from '@common/types';
 import { Group, User } from '@common/types/entities';
 import ListItems from '@models/ListItems';
 import PublicFileModel from '@models/PublicFileModel';
 import UserModel from '@models/UserModel';
+
+const groupPrivacyCodeLabels: Record<GroupPrivacyCodes, string> = {
+  [GroupPrivacyCodes.PRIVATE]: 'Приватна',
+  [GroupPrivacyCodes.PUBLIC]: 'Публічна',
+};
 
 class GroupModel {
   id: Group['id'];
@@ -11,6 +17,7 @@ class GroupModel {
   avatar: PublicFileModel | null;
   members: ListItems<User>;
   is_member: boolean;
+  privacy_code: Group['privacy_code'];
 
   created_at: string;
   updated_at: string;
@@ -36,6 +43,10 @@ class GroupModel {
     }
 
     return this;
+  }
+
+  get privacyCodeLabel() {
+    return groupPrivacyCodeLabels[this.privacy_code];
   }
 }
 

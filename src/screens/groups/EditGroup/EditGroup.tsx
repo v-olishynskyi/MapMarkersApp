@@ -2,9 +2,10 @@ import React from 'react';
 import { AppStackParamsList } from '@navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { HeaderButton } from '@components';
+import { HeaderButton, Loader } from '@components';
 import { getTheme } from '@common/helpers';
 import { useGroup } from '@api/hooks/groups';
+import { Text } from 'react-native';
 
 const EditGroup: React.FC = () => {
   const { colors } = getTheme();
@@ -49,7 +50,11 @@ const EditGroup: React.FC = () => {
     });
   }, [setOptions, headerLeftButton, headerRightButton]);
 
-  return null;
+  if (isFetching) {
+    return <Loader />;
+  }
+
+  return <Text style={{ color: 'white' }}>{JSON.stringify(group)}</Text>;
 };
 
 export default EditGroup;

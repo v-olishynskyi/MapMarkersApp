@@ -43,8 +43,6 @@ export enum FileTypes {
   Avatar = 'avatar',
 }
 
-export type BaseImage = Pick<File, 'id' | 'url'>;
-
 export type PaginationParams = {
   page: number;
   limit: number;
@@ -60,3 +58,8 @@ export type SortOption = {
   direction: SortByDirections;
   label?: string;
 };
+
+export enum GroupPrivacyCodes {
+  PUBLIC = 'public',
+  PRIVATE = 'private',
+}

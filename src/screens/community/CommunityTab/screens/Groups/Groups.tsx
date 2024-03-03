@@ -41,7 +41,7 @@ const Groups: React.FC = () => {
   );
 
   const renderItem: ListRenderItem<GroupModel> = ({ item: group }) => {
-    return <GroupItem group={group} onPress={() => {}} />;
+    return <GroupItem group={group} />;
   };
 
   return (

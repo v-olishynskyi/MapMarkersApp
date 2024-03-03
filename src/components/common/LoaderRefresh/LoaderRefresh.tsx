@@ -26,6 +26,7 @@ import { getTheme } from '@common/helpers';
 const LoaderRefresh: React.FC<LoaderRefreshProps> = ({
   isRefreshing,
   onRefresh,
+  ...rest
 }) => {
   const { colors } = getTheme();
 
@@ -36,6 +37,7 @@ const LoaderRefresh: React.FC<LoaderRefreshProps> = ({
       title={!isRefreshing ? 'Потягніть для оновлення' : ''}
       tintColor={colors.text} // Change color by THEME
       titleColor={colors.text} // Change color by THEME
+      {...rest}
     />
   );
 };

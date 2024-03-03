@@ -29,7 +29,7 @@ const GroupsListSection: React.FC<GroupsListSectionProps> = ({
   const styles = useStyles();
 
   const renderItem = (group: GroupModel) => {
-    return <GroupItem key={group.id} group={group} onPress={() => {}} />;
+    return <GroupItem key={group.id} group={group} />;
   };
 
   return (
