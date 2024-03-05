@@ -10,13 +10,13 @@ import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import {
   Avatar,
+  HeaderButton,
   ImageViewer,
   LoaderRefresh,
   Menu,
   Pressable,
 } from '@components';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { collectFileFormData, getTheme } from '@common/helpers';
+import { collectFileFormData } from '@common/helpers';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionSheet from 'react-native-ui-lib/actionSheet';
 import { openPicker } from 'react-native-image-crop-picker';
@@ -37,7 +37,6 @@ import { ProfileInfo } from './components';
  *  <ProfileView />
  */
 const ProfileView: React.FC<ProfileViewProps> = () => {
-  const { colors } = getTheme();
   const styles = useStyles();
   const { navigate, setOptions } = useNavigation<NavigationType>();
   const { params } = useRoute<RouteType>();
@@ -114,11 +113,13 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
 
   const profileHeaderRight = React.useCallback(() => {
     return (
-      <Pressable onPress={navigateToEditProfile}>
-        <Icon name="md-pencil" size={24} color={colors.primary} />
-      </Pressable>
+      <HeaderButton
+        onPress={navigateToEditProfile}
+        icon="md-pencil"
+        shouldGoBack={false}
+      />
     );
-  }, [colors.primary, navigateToEditProfile]);
+  }, [navigateToEditProfile]);
 
   React.useEffect(() => {
     isMe &&

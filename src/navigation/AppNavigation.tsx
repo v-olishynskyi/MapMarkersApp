@@ -11,7 +11,6 @@ import {
   Settings,
   UserMarkers,
   UserGroups,
-  EditGroup,
   GroupsStack,
 } from '@screens';
 import { IconButton } from '@components';
@@ -81,15 +80,6 @@ const AppNavigation: React.FC = () => {
           options={{
             presentation: 'formSheet',
             title: 'Редагування профілю',
-            headerBackVisible: true,
-          }}
-        />
-        <Stack.Screen
-          name="edit-group"
-          component={EditGroup}
-          options={{
-            presentation: 'formSheet',
-            title: 'Редагування групи',
             headerBackVisible: true,
           }}
         />

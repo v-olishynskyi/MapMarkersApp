@@ -1,9 +1,16 @@
-import { useGroup } from '@api/hooks/groups';
-import { FastImageProgress, Loader, LoaderRefresh } from '@components';
+import { useGroup, useJoinGroup, useLeaveGroup } from '@api/hooks/groups';
+import {
+  Button,
+  FastImageProgress,
+  HeaderButton,
+  Loader,
+  LoaderRefresh,
+} from '@components';
 import { GroupsStackParamsList } from '@navigation';
 import {
   HeaderBackButton,
   HeaderBackButtonProps,
+  HeaderButtonProps,
 } from '@react-navigation/elements';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -11,15 +18,21 @@ import React from 'react';
 import { ScrollView, Text } from 'react-native';
 import useStyles from './styles';
 import { GroupMembers } from './components';
+import { getTheme } from '@common/helpers';
+import { useStores } from '@store';
 
 const defaultGroupImage = require('../../../assets/images/group.jpeg');
 
 const GroupView: React.FC = () => {
+  const { colors } = getTheme();
   const styles = useStyles();
-  const { setOptions, goBack } =
-    useNavigation<
-      NativeStackNavigationProp<GroupsStackParamsList, 'edit-group'>
-    >();
+  const {
+    userStore: {
+      user: { id: userId },
+    },
+  } = useStores();
+  const { setOptions, goBack, navigate } =
+    useNavigation<NativeStackNavigationProp<GroupsStackParamsList>>();
   const { params } = useRoute<RouteProp<GroupsStackParamsList, 'group-view'>>();
 
   const {
@@ -29,6 +42,14 @@ const GroupView: React.FC = () => {
     isLoading,
   } = useGroup(params.groupId);
 
+  const { mutate: join, isPending: isJoining } = useJoinGroup(params.groupId);
+  const { mutate: leave, isPending: isLeaving } = useLeaveGroup(params.groupId);
+
+  const goToEditGroup = React.useCallback(
+    () => navigate('edit-group', { groupId: params.groupId }),
+    [navigate, params.groupId],
+  );
+
   const headerLeftButton = React.useCallback(
     (props: HeaderBackButtonProps) => (
       <HeaderBackButton {...props} onPress={goBack} />
@@ -36,25 +57,40 @@ const GroupView: React.FC = () => {
     [goBack],
   );
 
-  const test = [
-    'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg',
-    'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8fDA%3D',
-    'https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRim43FOsSU9F-TXSSABOeBOKxC2UPRthwJRA&usqp=CAU',
-    'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg',
-    'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8fDA%3D',
-  ];
+  const headerRightButton = React.useCallback(
+    ({ canGoBack }: HeaderButtonProps) => (
+      <HeaderButton
+        canGoBack={canGoBack}
+        onPress={goToEditGroup}
+        icon="md-pencil"
+        shouldGoBack={false}
+      />
+    ),
+    [goToEditGroup],
+  );
 
   React.useLayoutEffect(() => {
+    const rightButton = group?.is_owner ? headerRightButton : () => null;
+
     setOptions({
       headerTitle: group?.name || '',
       headerLeft: headerLeftButton,
+      headerRight: rightButton,
     });
-  }, [setOptions, group, headerLeftButton]);
+  }, [setOptions, group, headerLeftButton, headerRightButton]);
 
   const groupMembersAvatars = React.useMemo(
     () => group?.members.items.map(member => member.avatar_url) || [],
     [group],
+  );
+
+  const groupNotLoadedCorrectly = (
+    <>
+      <Text style={styles.groupNotLoadedText}>
+        Щось пішло не так, спробуйте ще раз
+      </Text>
+      <Button label="Повторити" onPress={refetch} />
+    </>
   );
 
   return (
@@ -70,21 +106,37 @@ const GroupView: React.FC = () => {
       }>
       {isLoading ? (
         <Loader size={'large'} />
+      ) : !group ? (
+        groupNotLoadedCorrectly
       ) : (
         <>
           <FastImageProgress
             source={
-              group?.avatar?.url ? { uri: group.avatar.url } : defaultGroupImage
+              group.avatar?.url ? { uri: group.avatar.url } : defaultGroupImage
             }
             style={styles.image}
           />
           <Text style={styles.groupPrivacyType}>
-            {group?.privacyCodeLabel} група
+            {group.privacyCodeLabel} група
           </Text>
           <GroupMembers
-            membersCount={group?.members.items.length as number}
+            membersCount={group.members.items.length}
             avatars={groupMembersAvatars}
+            isJoined={Boolean(group.is_member)}
           />
+          {!group.is_owner && (
+            <Button
+              label={group.is_member ? 'Вийти' : 'Приєднатися'}
+              style={styles.joinButton}
+              backgroundColor={group.is_member ? colors.red : colors.primary}
+              loading={isJoining || isLeaving}
+              onPress={() =>
+                group.is_member
+                  ? leave({ group_id: group.id, user_id: userId })
+                  : join({ group_id: group.id, user_id: userId })
+              }
+            />
+          )}
         </>
       )}
     </ScrollView>

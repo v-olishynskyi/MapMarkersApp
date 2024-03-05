@@ -17,6 +17,7 @@ class GroupModel {
   avatar: PublicFileModel | null;
   members: ListItems<User>;
   is_member: boolean;
+  is_owner: boolean;
   privacy_code: Group['privacy_code'];
 
   created_at: string;

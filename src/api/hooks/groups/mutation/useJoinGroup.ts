@@ -51,6 +51,22 @@ export const useJoinGroup = (groupId: string) => {
           } as any;
         },
       );
+
+      const hasLoadedGroup =
+        queryClient.getQueriesData({
+          queryKey: [CacheKey.Group, group_id],
+          exact: true,
+        }).length > 0;
+
+      hasLoadedGroup &&
+        queryClient.setQueryData<Group>(
+          [CacheKey.Group, group_id],
+          (oldGroupData): any => ({
+            ...oldGroupData,
+            members: [...oldGroupData!.members, userEntity],
+            is_member: true,
+          }),
+        );
     },
   });
 };

@@ -15,6 +15,13 @@ const useStyles = () => {
       paddingHorizontal: spacingBase.s3,
     },
 
+    groupNotLoadedText: {
+      ...typography.regular.title2,
+      color: colors.gray,
+      marginBottom: spacingBase.s3,
+      textAlign: 'center',
+    },
+
     image: {
       width: 100,
       height: 100,
@@ -28,6 +35,10 @@ const useStyles = () => {
       color: colors.gray2,
       alignSelf: 'center',
       marginBottom: spacingBase.s4,
+    },
+
+    joinButton: {
+      marginTop: spacingBase.s3,
     },
   });
 };

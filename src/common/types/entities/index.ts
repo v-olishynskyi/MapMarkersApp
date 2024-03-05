@@ -64,6 +64,7 @@ export type Group = {
   avatar: PublicFile | null;
   members: User[];
   is_member: boolean;
+  is_owner: boolean;
   privacy_code: GroupPrivacyCodes;
 
   created_at: string;

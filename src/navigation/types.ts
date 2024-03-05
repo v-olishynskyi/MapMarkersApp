@@ -34,7 +34,6 @@ export type AppStackParamsList = {
   'user-groups': { userId: string };
   'profile-view': { userId?: string } | undefined;
   'edit-profile': undefined;
-  'edit-group': { groupId: string };
   'marker-management': { mode: MarkerManagementModes };
   location: undefined;
   groups: NavigatorScreenParams<GroupsStackParamsList>;

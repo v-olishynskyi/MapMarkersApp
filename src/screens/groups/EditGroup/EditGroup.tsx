@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppStackParamsList } from '@navigation';
+import { AppStackParamsList, GroupsStackParamsList } from '@navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { HeaderButton, Loader } from '@components';
@@ -10,10 +10,8 @@ import { Text } from 'react-native';
 const EditGroup: React.FC = () => {
   const { colors } = getTheme();
   const { setOptions } =
-    useNavigation<
-      NativeStackNavigationProp<AppStackParamsList, 'edit-group'>
-    >();
-  const { params } = useRoute<RouteProp<AppStackParamsList, 'edit-group'>>();
+    useNavigation<NativeStackNavigationProp<AppStackParamsList>>();
+  const { params } = useRoute<RouteProp<GroupsStackParamsList, 'edit-group'>>();
 
   const { data: group, isFetching } = useGroup(params.groupId);
 
@@ -23,7 +21,6 @@ const EditGroup: React.FC = () => {
         canGoBack={canGoBack}
         color={colors.red}
         label={'Відмінити'}
-        backRoute={''}
       />
     ),
     [colors.red],

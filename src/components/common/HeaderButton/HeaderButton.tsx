@@ -10,6 +10,8 @@ import { navigationRef } from '@navigation';
 import { Pressable } from '@components';
 import { generalStyles } from '@styles';
 import { ActivityIndicator, Text } from 'react-native';
+import { getTheme } from '@common/helpers';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 /**
  * HeaderButton
@@ -27,26 +29,36 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({
   color,
   loading,
   onPress,
-  backRoute,
+  backRoute = '',
   disabled,
+  icon = '',
+  shouldGoBack = true,
 }) => {
+  const { colors } = getTheme();
   const styles = useStyles(Boolean(loading) || Boolean(disabled), color);
 
-  const onPressCancel = async () => {
+  const handlePress = async () => {
     try {
       onPress && (await onPress());
 
-      canGoBack ? navigationRef.goBack() : navigationRef.navigate(backRoute);
+      shouldGoBack
+        ? canGoBack
+          ? navigationRef.goBack()
+          : navigationRef.navigate(backRoute)
+        : null;
     } catch (error) {}
   };
 
   return (
     <Pressable
-      onPress={onPressCancel}
+      onPress={handlePress}
       style={[generalStyles.row]}
       disabled={disabled || loading}>
       {loading && <ActivityIndicator size={'small'} style={styles.loader} />}
-      <Text style={styles.label}>{label}</Text>
+      {Boolean(label) && <Text style={styles.label}>{label}</Text>}
+      {Boolean(icon) && !loading && (
+        <Icon name={icon} size={24} color={colors.primary} />
+      )}
     </Pressable>
   );
 };

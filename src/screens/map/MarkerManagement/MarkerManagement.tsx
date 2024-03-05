@@ -161,7 +161,6 @@ const MarkerManagement: React.FC = () => {
         canGoBack={canGoBack}
         color={colors.red}
         label={'Відмінити'}
-        backRoute={'map'}
       />
     ),
     [colors.red],
@@ -174,7 +173,6 @@ const MarkerManagement: React.FC = () => {
         label={isCreateMode ? 'Створити' : 'Зберегти'}
         loading={isProcessing}
         onPress={async () => await onSubmit(values)}
-        backRoute={'map'}
         disabled={!isValid}
       />
     ),

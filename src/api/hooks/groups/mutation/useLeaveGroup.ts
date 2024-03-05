@@ -24,7 +24,7 @@ export const useLeaveGroup = (groupId: string) => {
     mutationKey,
     mutationFn: GroupsService.leave,
     onError: defaultErrorHandler,
-    onSuccess: ({ message }, { group_id }) => {
+    onSuccess: ({ message }, { group_id, user_id }) => {
       showToast('success', message);
 
       queryClient.refetchQueries({
@@ -36,6 +36,14 @@ export const useLeaveGroup = (groupId: string) => {
         exact: false,
         queryKey: [CacheKey.AllGroups],
       });
+
+      queryClient.setQueryData<Group>(
+        [CacheKey.Group, groupId],
+        (oldGroupData): any => ({
+          ...oldGroupData,
+          members: oldGroupData?.members.filter(({ id }) => id !== user_id),
+        }),
+      );
 
       queryClient.setQueriesData<InfiniteData<PaginationResponse<Group>>>(
         {
@@ -62,6 +70,22 @@ export const useLeaveGroup = (groupId: string) => {
           } as any;
         },
       );
+
+      const hasLoadedGroup =
+        queryClient.getQueriesData({
+          queryKey: [CacheKey.Group, group_id],
+          exact: true,
+        }).length > 0;
+
+      hasLoadedGroup &&
+        queryClient.setQueryData<Group>(
+          [CacheKey.Group, group_id],
+          (oldGroupData): any => ({
+            ...oldGroupData,
+            members: oldGroupData!.members.filter(({ id }) => id !== user_id),
+            is_member: false,
+          }),
+        );
     },
   });
 };
