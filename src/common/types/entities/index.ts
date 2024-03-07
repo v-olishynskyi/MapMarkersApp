@@ -59,6 +59,7 @@ export type PublicFile = {
 export type Group = {
   id: string;
   name: string;
+  description: string;
   owner_id: string;
   owner: User;
   avatar: PublicFile | null;

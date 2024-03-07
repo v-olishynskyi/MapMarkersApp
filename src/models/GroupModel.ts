@@ -12,6 +12,7 @@ const groupPrivacyCodeLabels: Record<GroupPrivacyCodes, string> = {
 class GroupModel {
   id: Group['id'];
   name: Group['name'];
+  description: Group['description'];
   owner_id: Group['owner_id'];
   owner: UserModel;
   avatar: PublicFileModel | null;

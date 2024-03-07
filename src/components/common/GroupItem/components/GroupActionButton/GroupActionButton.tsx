@@ -67,7 +67,8 @@ const GroupActionButton: React.FC<GroupActionButtonProps> = ({
     menuActions.push(group.is_member ? leaveAction : joinAction);
   }
 
-  const goToEditGroup = () => navigate('edit-group', { groupId: group.id });
+  const goToEditGroup = () =>
+    navigate('groups', { screen: 'edit-group', params: { groupId: group.id } });
 
   const handlePressMenuAction = async ({ nativeEvent }: NativeActionEvent) => {
     switch (nativeEvent.event) {

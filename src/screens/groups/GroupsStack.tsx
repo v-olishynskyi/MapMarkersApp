@@ -20,6 +20,7 @@ const GroupsStack = () => {
           presentation: 'modal',
           headerShown: true,
           gestureEnabled: false,
+          headerTitle: 'Редагування групи',
         }}
       />
       <Stack.Screen name="create-group" component={CreateGroup} />
