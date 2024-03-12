@@ -14,4 +14,5 @@ export enum MutationKey {
 
   JoinGroup = 'join-group',
   LeaveGroup = 'leave-group',
+  CreateGroup = 'create-group',
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, LoaderRefresh } from '@components';
+import { Button, HeaderButton, LoaderRefresh } from '@components';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { AppStackParamsList } from '@navigation';
 import { ScrollView, Text, View } from 'react-native';
@@ -13,7 +13,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 const UserGroups = () => {
   const styles = useStyles();
   const { params } = useRoute<RouteProp<AppStackParamsList, 'user-groups'>>();
-  const { navigate } =
+  const { navigate, setOptions } =
     useNavigation<
       NativeStackNavigationProp<AppStackParamsList, 'tabs', 'tabs-navigator"'>
     >();
@@ -38,6 +38,11 @@ const UserGroups = () => {
     [navigate],
   );
 
+  const navigateToAddGroup = React.useCallback(
+    () => navigate('create-group'),
+    [navigate],
+  );
+
   const ownGroups = groups?.filter(group => group.owner_id === user.id) || [];
   const memberGroups =
     groups?.filter(group => group.owner_id !== user.id) || [];
@@ -57,6 +62,21 @@ const UserGroups = () => {
     ),
     [styles],
   );
+
+  const HeaderRightButton = React.useCallback(
+    () => (
+      <HeaderButton
+        icon="add"
+        onPress={navigateToAddGroup}
+        shouldGoBack={false}
+      />
+    ),
+    [navigateToAddGroup],
+  );
+
+  React.useLayoutEffect(() => {
+    setOptions({ headerRight: HeaderRightButton });
+  }, [setOptions, HeaderRightButton]);
 
   const emptyUserGroupsListComponent = React.useMemo(
     () => (

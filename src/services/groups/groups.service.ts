@@ -1,7 +1,12 @@
 import api from '@api/axios';
 import { MessageResponse, PaginationResponse } from '@common/types';
 import { Group } from '@common/types/entities';
-import { GetGroupsParams, JoinLeaveGroupParams } from '@services/groups/types';
+import {
+  CreateGroupParams,
+  CreateGroupResponse,
+  GetGroupsParams,
+  JoinLeaveGroupParams,
+} from '@services/groups/types';
 
 export default class GroupsService {
   public static async paginatedGroups(params: GetGroupsParams) {
@@ -38,6 +43,29 @@ export default class GroupsService {
       `groups/${group_id}/leave`,
       { user_id },
     );
+
+    return data;
+  }
+
+  public static async create(body: CreateGroupParams) {
+    const formData = new FormData();
+
+    if (body.avatar) {
+      formData.append('avatar', {
+        name: body.avatar.key || '',
+        type: body.avatar.mime || 'image/jpg',
+        uri: body.avatar.url,
+      } as unknown as Blob);
+    }
+
+    formData.append('group', JSON.stringify(body.data));
+
+    const { data } = await api.post<CreateGroupResponse>('groups', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log(JSON.stringify(data, null, 2));
 
     return data;
   }

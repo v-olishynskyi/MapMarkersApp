@@ -3,3 +3,4 @@ export * from './queries/useAllGroups';
 export * from './queries/useGroup';
 export * from './mutation/useJoinGroup';
 export * from './mutation/useLeaveGroup';
+export * from './mutation/useCreateGroup';

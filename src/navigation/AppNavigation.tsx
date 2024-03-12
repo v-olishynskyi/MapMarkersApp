@@ -11,7 +11,9 @@ import {
   Settings,
   UserMarkers,
   UserGroups,
-  GroupsStack,
+  GroupView,
+  EditGroup,
+  CreateGroup,
 } from '@screens';
 import { IconButton } from '@components';
 import { observer } from 'mobx-react-lite';
@@ -106,11 +108,33 @@ const AppNavigation: React.FC = () => {
             headerLeft: locationHeaderLeft,
           }}
         />
-        <Stack.Screen
-          name="groups"
-          component={GroupsStack}
-          options={{ headerShown: false }}
-        />
+        <Stack.Group>
+          <Stack.Screen
+            name="group-view"
+            component={GroupView}
+            options={{ headerShown: true, presentation: 'card' }}
+          />
+          <Stack.Screen
+            name="edit-group"
+            component={EditGroup}
+            options={{
+              presentation: 'modal',
+              headerShown: true,
+              gestureEnabled: false,
+              headerTitle: 'Редагування групи',
+            }}
+          />
+          <Stack.Screen
+            name="create-group"
+            component={CreateGroup}
+            options={{
+              presentation: 'modal',
+              headerShown: true,
+              gestureEnabled: false,
+              headerTitle: 'Створення групи',
+            }}
+          />
+        </Stack.Group>
       </Stack.Navigator>
       <MarkerBottomSheet />
     </>

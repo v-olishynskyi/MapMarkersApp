@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { AppStackParamsList, GroupsStackParamsList } from '@navigation';
+import { AppStackParamsList } from '@navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { HeaderButton, Loader } from '@components';
@@ -18,7 +18,7 @@ const EditGroup: React.FC = () => {
   const { colors } = getTheme();
   const { setOptions } =
     useNavigation<NativeStackNavigationProp<AppStackParamsList>>();
-  const { params } = useRoute<RouteProp<GroupsStackParamsList, 'edit-group'>>();
+  const { params } = useRoute<RouteProp<AppStackParamsList, 'edit-group'>>();
 
   const { data: group, isFetching } = useGroup(params.groupId);
 

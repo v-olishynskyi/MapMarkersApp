@@ -6,12 +6,7 @@ import {
   Loader,
   LoaderRefresh,
 } from '@components';
-import { GroupsStackParamsList } from '@navigation';
-import {
-  HeaderBackButton,
-  HeaderBackButtonProps,
-  HeaderButtonProps,
-} from '@react-navigation/elements';
+import { HeaderButtonProps } from '@react-navigation/elements';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
@@ -20,6 +15,7 @@ import useStyles from './styles';
 import { GroupMembers } from './components';
 import { getTheme } from '@common/helpers';
 import { useStores } from '@store';
+import { AppStackParamsList } from '@navigation';
 
 const defaultGroupImage = require('../../../assets/images/group.jpeg');
 
@@ -31,9 +27,9 @@ const GroupView: React.FC = () => {
       user: { id: userId },
     },
   } = useStores();
-  const { setOptions, goBack, navigate } =
-    useNavigation<NativeStackNavigationProp<GroupsStackParamsList>>();
-  const { params } = useRoute<RouteProp<GroupsStackParamsList, 'group-view'>>();
+  const { setOptions, navigate } =
+    useNavigation<NativeStackNavigationProp<AppStackParamsList>>();
+  const { params } = useRoute<RouteProp<AppStackParamsList, 'group-view'>>();
 
   const {
     data: group,
@@ -48,13 +44,6 @@ const GroupView: React.FC = () => {
   const goToEditGroup = React.useCallback(
     () => navigate('edit-group', { groupId: params.groupId }),
     [navigate, params.groupId],
-  );
-
-  const headerLeftButton = React.useCallback(
-    (props: HeaderBackButtonProps) => (
-      <HeaderBackButton {...props} onPress={goBack} />
-    ),
-    [goBack],
   );
 
   const headerRightButton = React.useCallback(
@@ -74,10 +63,9 @@ const GroupView: React.FC = () => {
 
     setOptions({
       headerTitle: group?.name || '',
-      headerLeft: headerLeftButton,
       headerRight: rightButton,
     });
-  }, [setOptions, group, headerLeftButton, headerRightButton]);
+  }, [setOptions, group, headerRightButton]);
 
   const groupMembersAvatars = React.useMemo(
     () => group?.members.items.map(member => member.avatar_url) || [],

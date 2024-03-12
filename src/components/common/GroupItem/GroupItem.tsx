@@ -30,7 +30,7 @@ import { AppStackParamsList } from '@navigation';
 const GroupItem: React.FC<GroupItemProps> = ({ group }) => {
   const styles = useStyles();
   const { navigate } =
-    useNavigation<NativeStackNavigationProp<AppStackParamsList, 'groups'>>();
+    useNavigation<NativeStackNavigationProp<AppStackParamsList>>();
 
   const {
     userStore: { user },
@@ -39,11 +39,7 @@ const GroupItem: React.FC<GroupItemProps> = ({ group }) => {
   const isOwner = group.owner_id === user.id;
 
   const goToGroupView = React.useCallback(
-    () =>
-      navigate('groups', {
-        screen: 'group-view',
-        params: { groupId: group.id },
-      }),
+    () => navigate('group-view', { groupId: group.id }),
     [navigate, group.id],
   );
 

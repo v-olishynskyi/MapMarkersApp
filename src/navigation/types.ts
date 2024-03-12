@@ -18,12 +18,6 @@ export type ProfileStackParamsList = {
   'edit-profile': undefined;
 };
 
-export type GroupsStackParamsList = {
-  'group-view': { groupId: string };
-  'edit-group': { groupId: string };
-  'create-group': undefined;
-};
-
 export type AppStackParamsList = {
   tabs: NavigatorScreenParams<TabsStackParamsList>;
   support: undefined;
@@ -36,7 +30,11 @@ export type AppStackParamsList = {
   'edit-profile': undefined;
   'marker-management': { mode: MarkerManagementModes };
   location: undefined;
-  groups: NavigatorScreenParams<GroupsStackParamsList>;
+
+  // groups
+  'group-view': { groupId: string };
+  'edit-group': { groupId: string };
+  'create-group': undefined;
 };
 
 export enum MarkerManagementModes {

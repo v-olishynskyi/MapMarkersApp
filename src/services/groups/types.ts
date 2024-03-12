@@ -1,3 +1,7 @@
+import { GroupPrivacyCodes } from '@common/types';
+import { Group } from '@common/types/entities';
+import { PublicFileModel } from '@models';
+
 export type GetAllGroupsParams = {
   search?: string;
   filter_by?: GroupsFilterBy;
@@ -22,4 +26,18 @@ export enum GroupsFilterBy {
 export type JoinLeaveGroupParams = {
   user_id: string;
   group_id: string;
+};
+
+export type CreateGroupParams = {
+  data: {
+    name: string;
+    description?: string;
+    privacy_code: GroupPrivacyCodes;
+  };
+  avatar: PublicFileModel | null;
+};
+
+export type CreateGroupResponse = {
+  message: string;
+  data: Group;
 };
